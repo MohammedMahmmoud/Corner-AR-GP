@@ -2,7 +2,8 @@ import 'package:corner_ar_gp/authentication/registration/registration_screen.dar
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'login/LoginPage.dart';
+import 'authentication/login/LoginPage.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
