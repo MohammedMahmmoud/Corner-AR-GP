@@ -1,18 +1,25 @@
+import 'package:corner_ar_gp/authentication/registration/registration_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'login/LoginPage.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
 
+class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:Login()
+      routes: {
+        RegistrationScreen.routeName: (context) => RegistrationScreen(),
+      },
+      home: Login()//RegistrationScreen(),
     );
   }
 }
