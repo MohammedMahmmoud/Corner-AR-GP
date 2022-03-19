@@ -1,29 +1,26 @@
+import 'package:corner_ar_gp/person/Admin.dart';
+import 'package:corner_ar_gp/person/Person.dart';
+import 'package:corner_ar_gp/person/User.dart';
 import 'package:flutter/material.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Login extends StatefulWidget {
+  static const routeName = 'login';
+  bool isAdmin;
+  Login({this.isAdmin = false});
   @override
-  _LoginState createState() => _LoginState();
+  _LoginState createState() => _LoginState(isAdmin);
 }
 
 class _LoginState extends State<Login> {
   final _loginFormKey = GlobalKey<FormState>();
+  Person person = Person();
   late String email;
   late String password;
   late bool isPasswordHidden = true;
-  //FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-
-  void logIn() async{
-    try{
-      //UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-
-
-    }catch(e){
-
-    }
-
+  _LoginState(bool isAdmin){
+    person = isAdmin? Admin() : User();
   }
 
   @override
@@ -87,7 +84,7 @@ class _LoginState extends State<Login> {
                 child: ElevatedButton(
                   onPressed: () {
                     if(_loginFormKey.currentState?.validate() == true){
-                      logIn();
+                      person.logIn(password);
                     }
                   },
                   child: const Text(

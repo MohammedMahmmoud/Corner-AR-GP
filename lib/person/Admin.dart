@@ -1,20 +1,21 @@
-class Admin{
-  String id;
-  String adminName;
-  String email;
+import 'package:corner_ar_gp/person/Person.dart';
+
+class Admin extends Person{
+
   static const String CollectionName = 'Admin';
-  Admin({required this.email,required this.id,required this.adminName});
+  Admin(): super();
+
   Admin.fromJson(Map<String, Object?> json)
-      : this(
+      : super(
     id: json['id']! as String,
-    adminName: json['adminName']! as String,
+    name: json['adminName']! as String,
     email: json['email']! as String,
   );
 
   Map<String, Object?> toJson() {
     return {
       'id': id,
-      'adminName': adminName,
+      'adminName': name,
       'email' : email,
     };
   }

@@ -18,9 +18,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        RegistrationScreen.routeName: (context) => RegistrationScreen(),
+        RegistrationScreen.routeName: (context) => RegistrationScreen(isAdmin: false),
+        Login.routeName: (context) => Login(isAdmin: false),
       },
-      home: Login()//RegistrationScreen(),
+      home: RegistrationScreen(isAdmin: false),
     );
   }
 }

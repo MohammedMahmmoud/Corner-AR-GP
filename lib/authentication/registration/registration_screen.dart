@@ -1,4 +1,6 @@
-import 'package:corner_ar_gp/authentication/preson_class.dart';
+import 'package:corner_ar_gp/person/Admin.dart';
+import 'package:corner_ar_gp/person/Person.dart';
+import 'package:corner_ar_gp/person/User.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatelessWidget {
@@ -6,6 +8,12 @@ class RegistrationScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   Person person = Person();
   String firstName = '', lastName = '', email = '', password = '';
+  bool isAdmin;
+  RegistrationScreen({this.isAdmin  = false}){
+   person = isAdmin? Admin() : User();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +86,7 @@ class RegistrationScreen extends StatelessWidget {
                     },
                   ),
                   ElevatedButton(
-                    onPressed: ()=>person.registration(_formKey, password),
+                    onPressed: ()=>person.registration(_formKey, password, isAdmin),
                     child: const Text('Sign Up'),
                   ),
                 ],
