@@ -9,6 +9,8 @@ import '../home_screen/user_homescreen.dart';
 
 class Person{
   late String name, email, id, lstName;
+  var errorMsg = null;
+
 
   Person({String name = '', String email = '', String id = ''}){
     this.name = name;
@@ -45,7 +47,6 @@ class Person{
 
   Future<bool> registration(GlobalKey<FormState> formKey, String password, bool isAdmin) async {
     if(formKey.currentState?.validate() == true){
-      final personRef = isAdmin? getAdminsCollectionWithConverter() : getUsersCollectionWithConverter();
       final personRef_2 = getPersonCollectionWithConverter(isAdmin? Admin.CollectionName :
                           user.User.CollectionName);
       try {
@@ -62,9 +63,11 @@ class Person{
               id: id
             )
         );
+        print('done --------------------------------------------------------------');
         return true;
       } on FirebaseAuthException catch (e) {
-        // errorFun()
+        errorMsg = e;
+        formKey.currentState?.validate();
       } catch (e) {
         // somethingWentWrong()
       }
@@ -72,52 +75,49 @@ class Person{
     return false;
   }
 
-  Future<bool> logIn(String password, BuildContext context) async{
-    print("loooooged11111");
-    try {
-      print("loooooged222222222222333333333");
-      print(email);
-      print(password);
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-          email: email,
-          password: password
-      );
-      if (userCredential.user == null) {
-        print("invalid creditional no user exist with this email");
-      }else {
-        final db = FirebaseFirestore.instance;
-        final userRef = getUsersCollectionWithConverter()
-            .doc(userCredential.user!.uid)
-            .get()
-            .then((retrievedUser) {
-          /*print(retrievedUser.data()!.email);
+  Future<bool> logIn(GlobalKey<FormState> formKey, String password, BuildContext context) async{
+    if(formKey.currentState?.validate() == true) {
+      try {
+        print("loooooged222222222222333333333");
+        print(email);
+        print(password);
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+            email: email,
+            password: password
+        );
+        if (userCredential.user == null) {
+          print("invalid creditional no user exist with this email");
+        } else {
+          final db = FirebaseFirestore.instance;
+          final userRef = getUsersCollectionWithConverter()
+              .doc(userCredential.user!.uid)
+              .get()
+              .then((retrievedUser) {
+            /*print(retrievedUser.data()!.email);
           print(retrievedUser.data()!.id);
           print(retrievedUser.data()!.name);*/
-          //provider.updateUser(retrievedUser.data());
-          Navigator.pushReplacement<void, void>(
-            context,
-            MaterialPageRoute<void>(
-              builder: (BuildContext context) => UserHomeScreen(userCredential.user!.uid),
-            ),
-          );
-          /*Navigator.pushReplacementNamed<void, void>(context,
+            //provider.updateUser(retrievedUser.data());
+            Navigator.pushReplacement<void, void>(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) =>
+                    UserHomeScreen(userCredential.user!.uid),
+              ),
+            );
+            /*Navigator.pushReplacementNamed<void, void>(context,
               UserHomeScreen.routeName,
               ));*/
-        });
+          });
+        }
+        print("loooooged222222222222");
+      } on FirebaseAuthException catch (e) {
+        errorMsg = e;
+        formKey.currentState?.validate();
+      } catch (e) {
+        print(e);
+        print("errrrrrrrrrrrrrrrrrrorr");
       }
-      print("loooooged222222222222");
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }
-      print(e);
-      print("errrrrrrrrrrrrrrrrrrorr2222222222");
-    }catch(e){
-      print(e);
-      print("errrrrrrrrrrrrrrrrrrorr");
     }
     return false;
   }
@@ -139,21 +139,45 @@ class Person{
         });
   }*/
 
-  String? validator([String? value])
+  String? mailValidator([String? value])
   {
     if (value == null || value.isEmpty) {
       return 'Please enter an email address';
+    }else if(errorMsg != null) {
+      if(errorMsg.code != 'weak-password' && errorMsg.code != 'wrong-password') {
+        if(errorMsg.code == 'user-not-found') {
+          errorMsg = null;
+          return 'No user found for that email.';
+        }else {
+          String msg = errorMsg.message;
+          errorMsg = null;
+          return msg;
+        }
+      }
+    }
+    return null;
+  }
+
+  String? passwordValidator([String? value]){
+    if(value == null || value.isEmpty){
+      return 'Please enter a password';
+    }else if(errorMsg != null){
+      if(errorMsg.code == 'weak-password' || errorMsg.code == 'wrong-password') {
+        if(errorMsg.code == 'wrong-password'){
+          errorMsg = null;
+          return 'The password provided for this account is wrong';
+        }else {
+          String msg = errorMsg.message;
+          errorMsg = null;
+          return msg;
+        }
+      }
     }
     return null;
   }
 
 }
 
-// if (e.code == 'weak-password') {
-// print('The password provided is too weak.');
-// } else if (e.code == 'email-already-in-use') {
-// print('The account already exists for that email.');
-// }
-// print(e);
+
 
 

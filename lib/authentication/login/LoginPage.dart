@@ -17,8 +17,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _loginFormKey = GlobalKey<FormState>();
   Person person = Person();
-  late String password;
-  late bool isPasswordHidden = true;
+  String password = '';
+  bool isPasswordHidden = true;
   _LoginState(bool isAdmin){
     person = isAdmin? Admin() : User();
   }
@@ -43,12 +43,7 @@ class _LoginState extends State<Login> {
                       decoration: InputDecoration(
                         hintText: "Email",
                       ),
-                      validator: (value){
-                        if(value == null || value.isEmpty){
-                          return "please enter your email";
-                        }
-                        return null;
-                      },
+                      validator: (value) => person.mailValidator(value),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
@@ -69,12 +64,7 @@ class _LoginState extends State<Login> {
                         ),
 
                       ),
-                      validator: (value){
-                        if(value == null || value.isEmpty){
-                          return "please enter your password";
-                        }
-                        return null;
-                      },
+                      validator: (value) => person.passwordValidator(value),
                     ),
                   ],
                 ),
@@ -82,13 +72,7 @@ class _LoginState extends State<Login> {
               Container(
                 padding: const EdgeInsets.fromLTRB(70,80,70,0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-                    if(_loginFormKey.currentState?.validate() == true){
-                      print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss222");
-                      person.logIn(password,context);
-                    }
-                  },
+                  onPressed: () => person.logIn(_loginFormKey, password,context),
                   child: const Text(
                     "Log In",
                     style: TextStyle(

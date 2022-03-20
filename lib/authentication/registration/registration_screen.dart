@@ -68,9 +68,7 @@ class _registrationScreenState extends State<RegistrationScreen> {
                     onChanged: (value){
                       person.setEmail(value);
                     },
-                    validator: (value){
-
-                    },
+                    validator: (value) => person.mailValidator(value),
                   ),
                   TextFormField(
                     obscureText: isPasswordHidden? true : false,
@@ -90,12 +88,7 @@ class _registrationScreenState extends State<RegistrationScreen> {
                     onChanged: (value){
                       password = value;
                     },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a password';
-                      }
-                      return null;
-                    },
+                    validator: (value) => person.passwordValidator(value),
                   ),
                   ElevatedButton(
                     onPressed: ()=>person.registration(_formKey, password, isAdmin),
