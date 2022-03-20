@@ -3,17 +3,24 @@ import 'package:corner_ar_gp/person/Person.dart';
 import 'package:corner_ar_gp/person/User.dart';
 import 'package:flutter/material.dart';
 
-class RegistrationScreen extends StatelessWidget {
+class RegistrationScreen extends StatefulWidget {
   static const routeName = 'registration';
+  bool isAdmin;
+  RegistrationScreen({this.isAdmin = false});
+  @override
+  _registrationScreenState createState() => _registrationScreenState(isAdmin);
+}
+
+class _registrationScreenState extends State<RegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
   Person person = Person();
-  String firstName = '', lastName = '', email = '', password = '';
+  String password = '';
   bool isAdmin;
-  RegistrationScreen({this.isAdmin  = false}){
-   person = isAdmin? Admin() : User();
+  bool isPasswordHidden = true;
+
+  _registrationScreenState(this.isAdmin) {
+    person = isAdmin? Admin() : User();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +38,6 @@ class RegistrationScreen extends StatelessWidget {
                       labelText: 'First Name'
                     ),
                     onChanged: (value){
-                      firstName = value;
                       person.setFirstName(value);
                     },
                     validator: (value) {
@@ -46,7 +52,6 @@ class RegistrationScreen extends StatelessWidget {
                         labelText: 'Last Name'
                     ),
                     onChanged: (value){
-                      lastName = value;
                       person.setLastName(value);
                     },
                     validator: (value) {
@@ -61,19 +66,26 @@ class RegistrationScreen extends StatelessWidget {
                         labelText: 'Email Address'
                     ),
                     onChanged: (value){
-                      email = value;
                       person.setEmail(value);
                     },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter an email address';
-                      }
-                      return null;
+                    validator: (value){
+
                     },
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(
-                        labelText: 'Password'
+                    obscureText: isPasswordHidden? true : false,
+
+                    decoration: InputDecoration(
+                      hintText: "Password",
+                      suffixIcon: IconButton(
+                        icon: Icon(isPasswordHidden?
+                        Icons.visibility_off_outlined:
+                        Icons.visibility_outlined),
+                        onPressed: (){
+                          isPasswordHidden = !isPasswordHidden;
+                          setState(() {});
+                        },
+                      ),
                     ),
                     onChanged: (value){
                       password = value;
@@ -86,7 +98,7 @@ class RegistrationScreen extends StatelessWidget {
                     },
                   ),
                   ElevatedButton(
-                    onPressed: ()=>person.registration(_formKey, password, isAdmin,email),
+                    onPressed: ()=>person.registration(_formKey, password, isAdmin),
                     child: const Text('Sign Up'),
                   ),
                 ],

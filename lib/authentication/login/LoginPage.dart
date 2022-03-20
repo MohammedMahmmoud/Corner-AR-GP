@@ -17,7 +17,6 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _loginFormKey = GlobalKey<FormState>();
   Person person = Person();
-  late String email;
   late String password;
   late bool isPasswordHidden = true;
   _LoginState(bool isAdmin){
@@ -39,7 +38,7 @@ class _LoginState extends State<Login> {
                   children: [
                     TextFormField(
                       onChanged: (newValue){
-                        email=newValue;
+                        person.setEmail(newValue);
                       },
                       decoration: InputDecoration(
                         hintText: "Email",
@@ -87,7 +86,7 @@ class _LoginState extends State<Login> {
                     print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
                     if(_loginFormKey.currentState?.validate() == true){
                       print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss222");
-                      person.logIn(password,email);
+                      person.logIn(password);
                     }
                   },
                   child: const Text(

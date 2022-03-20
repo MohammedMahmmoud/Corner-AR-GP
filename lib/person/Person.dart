@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corner_ar_gp/database/DatabaseHelper.dart';
 import 'package:corner_ar_gp/person/Admin.dart';
+import 'package:corner_ar_gp/person/User.dart' as user;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Person{
-  late String name, email, id;
+  late String name, email, id, lstName;
 
   Person({String name = '', String email = '', String id = ''}){
     this.name = name;
@@ -15,71 +15,61 @@ class Person{
   }
 
   void setFirstName(String fName){
-    name = fName;
+    this.name = fName;
   }
   void setLastName(String lName){
-    name += ' ' + lName;
+    lstName = lName;
   }
   void setEmail(String email){
-    email = email;
+    this.email = email;
   }
 
-  Future<bool> registration(GlobalKey<FormState> formKey, String password, bool isAdmin,String email) async {
+  Person.fromJson(Map<String, Object?> json)
+      : this(
+    id: json['id']! as String,
+    name: json['name']! as String,
+    email: json['email']! as String,
+  );
+
+  //to write in db
+  Map<String, Object?> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'email' : email,
+    };
+  }
+
+  Future<bool> registration(GlobalKey<FormState> formKey, String password, bool isAdmin) async {
     if(formKey.currentState?.validate() == true){
       final personRef = isAdmin? getAdminsCollectionWithConverter() : getUsersCollectionWithConverter();
+      final personRef_2 = getPersonCollectionWithConverter(isAdmin? Admin.CollectionName :
+                          user.User.CollectionName);
       try {
-        print("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-        print(email);
-        print(password);
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: email,
             password: password
         );
-        print("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee2222222222222222222222");
         id = userCredential.user!.uid;
-        //id = userCredential.additionalUserInfo?.providerId as String;
-        print(id);
 
-        /*User myuser = Person(
-            id: id,
-            name: name,
-            email: email)as User;
-
-        Person per = myuser as Person;
-
-        personRef.add(per);*/
-
-        /*final per = Person(
-            id: id,
-            name: name,
-            email: email
-        );
-        personRef.add(per);*/
-        personRef.add(
+        personRef_2.add(
             Person(
-                id: id,
-                name: name,
-                email: email
+              name: name + ' ' + lstName,
+              email: email,
+              id: id
             )
         );
-        
+        return true;
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          print('The password provided is too weak.');
-        } else if (e.code == 'email-already-in-use') {
-          print('The account already exists for that email.');
-        }
-        print(e);
-        print("errrrrrrrrrrrrrrrrrrorr2222222222");
+        // errorFun()
       } catch (e) {
-        print(e);
-        print("errrrrrrrrrrrrrrrrrrorr");
+        // somethingWentWrong()
       }
     }
     return false;
   }
 
-  Future<bool> logIn(String password, String email) async{
+  Future<bool> logIn(String password) async{
     print("loooooged11111");
     try {
       print("loooooged222222222222333333333");
@@ -136,4 +126,21 @@ class Person{
         });
   }*/
 
+  String? validator([String? value])
+  {
+    if (value == null || value.isEmpty) {
+      return 'Please enter an email address';
+    }
+    return null;
+  }
+
 }
+
+// if (e.code == 'weak-password') {
+// print('The password provided is too weak.');
+// } else if (e.code == 'email-already-in-use') {
+// print('The account already exists for that email.');
+// }
+// print(e);
+
+
