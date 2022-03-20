@@ -5,6 +5,8 @@ import 'package:corner_ar_gp/person/User.dart' as user;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../home_screen/user_homescreen.dart';
+
 class Person{
   late String name, email, id, lstName;
 
@@ -13,6 +15,7 @@ class Person{
     this.email = email;
     this.id = id;
   }
+
 
   void setFirstName(String fName){
     this.name = fName;
@@ -69,7 +72,7 @@ class Person{
     return false;
   }
 
-  Future<bool> logIn(String password) async{
+  Future<bool> logIn(String password, BuildContext context) async{
     print("loooooged11111");
     try {
       print("loooooged222222222222333333333");
@@ -88,9 +91,19 @@ class Person{
             .doc(userCredential.user!.uid)
             .get()
             .then((retrievedUser) {
-          print(retrievedUser.data());
+          /*print(retrievedUser.data()!.email);
+          print(retrievedUser.data()!.id);
+          print(retrievedUser.data()!.name);*/
           //provider.updateUser(retrievedUser.data());
-          //Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+          Navigator.pushReplacement<void, void>(
+            context,
+            MaterialPageRoute<void>(
+              builder: (BuildContext context) => UserHomeScreen(userCredential.user!.uid),
+            ),
+          );
+          /*Navigator.pushReplacementNamed<void, void>(context,
+              UserHomeScreen.routeName,
+              ));*/
         });
       }
       print("loooooged222222222222");

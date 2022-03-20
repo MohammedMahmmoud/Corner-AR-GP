@@ -1,4 +1,5 @@
 import 'package:corner_ar_gp/authentication/registration/registration_screen.dart';
+import 'package:corner_ar_gp/home_screen/user_homescreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         RegistrationScreen.routeName: (context) => RegistrationScreen(isAdmin: false),
         Login.routeName: (context) => Login(isAdmin: false),
+        //UserHomeScreen.routeName: (context) => UserHomeScreen(),
       },
       home: Login(isAdmin: false),
     );
