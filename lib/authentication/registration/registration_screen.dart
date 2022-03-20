@@ -86,7 +86,7 @@ class RegistrationScreen extends StatelessWidget {
                     },
                   ),
                   ElevatedButton(
-                    onPressed: ()=>person.registration(_formKey, password, isAdmin),
+                    onPressed: ()=>person.registration(_formKey, password, isAdmin,email),
                     child: const Text('Sign Up'),
                   ),
                 ],

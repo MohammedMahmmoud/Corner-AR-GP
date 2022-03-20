@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         RegistrationScreen.routeName: (context) => RegistrationScreen(isAdmin: false),
         Login.routeName: (context) => Login(isAdmin: false),
       },
-      home: RegistrationScreen(isAdmin: false),
+      home: Login(isAdmin: false),
     );
   }
 }

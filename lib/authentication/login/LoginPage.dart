@@ -1,3 +1,4 @@
+import 'package:corner_ar_gp/authentication/registration/registration_screen.dart';
 import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:corner_ar_gp/person/Person.dart';
 import 'package:corner_ar_gp/person/User.dart';
@@ -83,8 +84,10 @@ class _LoginState extends State<Login> {
                 padding: const EdgeInsets.fromLTRB(70,80,70,0),
                 child: ElevatedButton(
                   onPressed: () {
+                    print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
                     if(_loginFormKey.currentState?.validate() == true){
-                      person.logIn(password);
+                      print("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss222");
+                      person.logIn(password,email);
                     }
                   },
                   child: const Text(
@@ -115,7 +118,10 @@ class _LoginState extends State<Login> {
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 50, 15, 12),
                 child: TextButton(
-                  onPressed: () {  },
+                  onPressed: () {
+                    Navigator.pushNamed(
+                        context, RegistrationScreen.routeName);
+                  },
                   child: const Text(
                     "Sign up",
                     style: TextStyle(
