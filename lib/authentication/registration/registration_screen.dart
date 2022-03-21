@@ -25,80 +25,128 @@ class _registrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Form(
-              key: _formKey,
+      body: Stack(
+        children: [
+          Container(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Image.asset(
+                'assets/backgroundBottom.png',
+                fit: BoxFit.fill,
+                width: double.infinity,
+              ),
+            ),
+          ),
+          Container(
+            child: Image.asset(
+              'assets/backgroundTop.png',
+              fit: BoxFit.fill,
+              width: double.infinity,
+            ),
+          ),
+          Container(
+              padding: const EdgeInsets.fromLTRB(30, 80, 30, 12),
+            child: SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'First Name'
-                    ),
-                    onChanged: (value){
-                      person.setFirstName(value);
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter first name';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                        labelText: 'Last Name'
-                    ),
-                    onChanged: (value){
-                      person.setLastName(value);
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter last name';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                        labelText: 'Email Address'
-                    ),
-                    onChanged: (value){
-                      person.setEmail(value);
-                    },
-                    validator: (value) => person.mailValidator(value),
-                  ),
-                  TextFormField(
-                    obscureText: isPasswordHidden? true : false,
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Container(
+                          child: Image.asset('assets/logAndRegisterIcon.png'),
+                        ),
+                        const SizedBox(height: 70),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            hintText: 'First Name'
+                          ),
+                          onChanged: (value){
+                            person.setFirstName(value);
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter first name';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                              hintText: 'Last Name'
+                          ),
+                          onChanged: (value){
+                            person.setLastName(value);
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter last name';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                              hintText: 'Email Address'
+                          ),
+                          onChanged: (value){
+                            person.setEmail(value);
+                          },
+                          validator: (value) => person.mailValidator(value),
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          obscureText: isPasswordHidden? true : false,
 
-                    decoration: InputDecoration(
-                      hintText: "Password",
-                      suffixIcon: IconButton(
-                        icon: Icon(isPasswordHidden?
-                        Icons.visibility_off_outlined:
-                        Icons.visibility_outlined),
-                        onPressed: (){
-                          isPasswordHidden = !isPasswordHidden;
-                          setState(() {});
-                        },
-                      ),
+                          decoration: InputDecoration(
+                            hintText: "Password",
+                            suffixIcon: IconButton(
+                              icon: Icon(isPasswordHidden?
+                              Icons.visibility_off_outlined:
+                              Icons.visibility_outlined),
+                              onPressed: (){
+                                isPasswordHidden = !isPasswordHidden;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          onChanged: (value){
+                            password = value;
+                          },
+                          validator: (value) => person.passwordValidator(value),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(70,80,70,0),
+                          child: ElevatedButton(
+                            onPressed: ()=>person.registration(_formKey, password, isAdmin),
+                            child: const Text('Sign Up',
+                              style: TextStyle(
+                                  fontSize: 22,
+                                //color: Color(0xFF71A2B5)
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              onPrimary: Color(0xFF71A2B5),
+                              fixedSize: const Size(200, 50),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30)),
+                            ),
+
+                          ),
+                        ),
+
+                      ],
                     ),
-                    onChanged: (value){
-                      password = value;
-                    },
-                    validator: (value) => person.passwordValidator(value),
-                  ),
-                  ElevatedButton(
-                    onPressed: ()=>person.registration(_formKey, password, isAdmin),
-                    child: const Text('Sign Up'),
-                  ),
+                  )
                 ],
               ),
             )
-          ],
-        )
+          ),
+        ],
       )
     );
   }
