@@ -3,6 +3,8 @@ import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:corner_ar_gp/person/Person.dart';
 import 'package:corner_ar_gp/person/User.dart';
 import 'package:flutter/material.dart';
+import '../../components/buttons_components.dart';
+import '../../components/textField_components.dart';
 
 
 class Login extends StatefulWidget {
@@ -41,6 +43,7 @@ class _LoginState extends State<Login> {
               child: Image.asset(
                 'assets/backgroundTop.png',
                 fit: BoxFit.fill,
+                //height: double.infinity,
                 width: double.infinity,
               ),
             ),
@@ -58,15 +61,10 @@ class _LoginState extends State<Login> {
                               child: Image.asset('assets/logAndRegisterIcon.png'),
                             ),
                             const SizedBox(height: 70),
-                            TextFormField(
-                              onChanged: (newValue){
-                                person.setEmail(newValue);
-                              },
-                              decoration: const InputDecoration(
-                                hintText: "Email",
-                              ),
-                              validator: (value) => person.mailValidator(value),
-                              style: TextStyle(color: const Color(0xFFbdc6cf)),
+                            textFormFieldComponent(
+                                hintText:"Email",
+                                onChangedText: person.setEmail,
+                                validator:  person.mailValidator
                             ),
                             const SizedBox(height: 20),
                             TextFormField(
@@ -76,10 +74,16 @@ class _LoginState extends State<Login> {
                               },
                               decoration: InputDecoration(
                                 hintText: "Password",
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Color(0xFFbdc6cf)),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Color(0xFFbdc6cf)),
+                                ),
                                 suffixIcon: IconButton(
                                   icon: Icon(isPasswordHidden?
                                   Icons.visibility_off_outlined:
-                                  Icons.visibility_outlined),
+                                  Icons.visibility_outlined,color: Color(0xFFbdc6cf),),
                                   onPressed: (){
                                     isPasswordHidden = !isPasswordHidden;
                                     setState(() {});
@@ -88,28 +92,16 @@ class _LoginState extends State<Login> {
 
                               ),
                               validator: (value) => person.passwordValidator(value),
+                              style: TextStyle(color: const Color(0xFFbdc6cf)),
                             ),
                           ],
                         ),
                       ),
                       Container(
                         padding: const EdgeInsets.fromLTRB(70,80,70,0),
-                        child: ElevatedButton(
-                          onPressed: () => person.logIn(_loginFormKey, password,context),
-                          child: const Text(
-                            "Log In",
-                            style: TextStyle(
-                                fontSize: 22
-                            ),
-                          ),
-
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            onPrimary: Color(0xFF71A2B5),
-                            fixedSize: const Size(200, 50),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                          ),
+                        child: LogAndRegisterButton(
+                            buttonText: "Log In",
+                            onPressedButton:  ()=>person.logIn(_loginFormKey, password,context)
                         ),
                       ),
                       Container(
