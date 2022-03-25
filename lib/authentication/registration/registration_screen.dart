@@ -123,7 +123,7 @@ class _registrationScreenState extends State<RegistrationScreen> {
                           padding: const EdgeInsets.fromLTRB(70,80,70,0),
                             child: LogAndRegisterButton(
                                 buttonText: "Sign Up",
-                                onPressedButton:  ()=>person.registration(_formKey, password, isAdmin)
+                                onPressedButton:  ()=>person.registration(_formKey, password, isAdmin, context)
                             )
                         ),
 

@@ -1,22 +1,26 @@
+import 'package:corner_ar_gp/person/Person.dart';
+import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserHomeScreen extends StatefulWidget {
   static const routeName = 'userHomeScreen';
-
-  String uid;
-  UserHomeScreen(this.uid);
+  UserHomeScreen();
   @override
-  _UserHomeScreenState createState() => _UserHomeScreenState(uid);
+  _UserHomeScreenState createState() => _UserHomeScreenState();
 }
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
+  late Person loggedUser;
+  late String sideMenuContent;
 
-  String uid;
-  _UserHomeScreenState(this.uid);
-  late String sideMenuContent=uid;
 
   @override
   Widget build(BuildContext context) {
+    late final _myAppProvider =  Provider.of<AppProvider>(context);
+    loggedUser = _myAppProvider.getLoggedUser();
+    sideMenuContent = loggedUser.id;
+
     return Scaffold(
       drawer: Drawer(
         child: ListView(

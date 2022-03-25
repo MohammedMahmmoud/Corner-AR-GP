@@ -9,7 +9,7 @@ class User extends Person{
   User.fromJson(Map<String, Object?> json)
       : super(
     id: json['id']! as String,
-    name: json['userName']! as String,
+    name: json['name']! as String,
     email: json['email']! as String,
   );
 
@@ -17,7 +17,7 @@ class User extends Person{
   Map<String, Object?> toJson() {
     return {
       'id': id,
-      'userName': name,
+      'name': name,
       'email' : email,
     };
   }

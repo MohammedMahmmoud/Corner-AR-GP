@@ -19,8 +19,8 @@ class _LoginState extends State<Login> {
   final _loginFormKey = GlobalKey<FormState>();
   Person person = Person();
   String password = '';
-  bool isPasswordHidden = true;
-  _LoginState(bool isAdmin){
+  bool isPasswordHidden = true, isAdmin;
+  _LoginState(this.isAdmin){
     person = isAdmin? Admin() : User();
   }
 
@@ -101,7 +101,7 @@ class _LoginState extends State<Login> {
                         padding: const EdgeInsets.fromLTRB(70,80,70,0),
                         child: LogAndRegisterButton(
                             buttonText: "Log In",
-                            onPressedButton:  ()=>person.logIn(_loginFormKey, password,context)
+                            onPressedButton:  ()=>person.logIn(_loginFormKey, password, isAdmin ,context)
                         ),
                       ),
                       Container(
