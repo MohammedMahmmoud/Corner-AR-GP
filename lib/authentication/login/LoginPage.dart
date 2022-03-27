@@ -101,7 +101,7 @@ class _LoginState extends State<Login> {
                         padding: const EdgeInsets.fromLTRB(70,80,70,0),
                         child: LogAndRegisterButton(
                             buttonText: "Log In",
-                            onPressedButton:  ()=>person.logIn(_loginFormKey, password, isAdmin ,context)
+                            onPressedButton:  ()=>person.logIn(_loginFormKey, password,context)
                         ),
                       ),
                       Container(

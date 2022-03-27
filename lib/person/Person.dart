@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corner_ar_gp/database/DatabaseHelper.dart';
+import 'package:corner_ar_gp/home_screen/admin_homescreen.dart';
 import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:corner_ar_gp/person/User.dart' as app_user;
 import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
@@ -79,7 +80,7 @@ class Person{
     return false;
   }
 
-  Future<bool> logIn(GlobalKey<FormState> formKey, String password, bool isAdmin, BuildContext context) async{
+  Future<bool> logIn(GlobalKey<FormState> formKey, String password, BuildContext context) async{
     if(formKey.currentState?.validate() == true) {
       try {
         print("loooooged222222222222333333333");
@@ -95,21 +96,32 @@ class Person{
         } else {
           final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
           //final db = FirebaseFirestore.instance;
-          final userRefrence = await getPersonCollectionWithConverter(app_user.User.CollectionName);
-          final userRef = await getPersonCollectionWithConverter(isAdmin? Admin.CollectionName :
+          final adminRefrence =
+            await getPersonCollectionWithConverter(Admin.CollectionName).doc(userCredential.user!.uid).get();
+          final adminRefrence2 =
+          await getPersonCollectionWithConverter(Admin.CollectionName).get();
+          print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa   ${adminRefrence.exists}");
+          print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa   ${adminRefrence2.size}");
+          final userRef = await getPersonCollectionWithConverter(adminRefrence.exists? Admin.CollectionName :
           app_user.User.CollectionName)
               .doc(userCredential.user!.uid)
               .get()
               .then((retrievedUser) async{
-                email = await retrievedUser.data()!.email;
+            print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+
+            email = await retrievedUser.data()!.email;
                 id = await retrievedUser.data()!.id;
                 name = await retrievedUser.data()!.name;
-                _myAppProvider.updateLoggedUser(this);
-                print("ID $id");
-                print("is ussssssssssssser or Adddddmin ${_myAppProvider.checkAdmin(id)}");
+            print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+
+            _myAppProvider.updateLoggedUser(this);
+
                 Navigator.pushReplacement<void, void>(
                   context,
-                  MaterialPageRoute<void>(
+                  adminRefrence.exists?MaterialPageRoute<void>(
+                    builder: (BuildContext context) =>
+                        AdminHomeScreen(),
+                  ):MaterialPageRoute<void>(
                     builder: (BuildContext context) =>
                         UserHomeScreen(),
                   ),
