@@ -1,16 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corner_ar_gp/database/DatabaseHelper.dart';
 import 'package:corner_ar_gp/person/Admin.dart';
-import 'package:corner_ar_gp/person/User.dart' as user;
+import 'package:corner_ar_gp/person/User.dart' as app_user;
+import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../home_screen/user_homescreen.dart';
 
 class Person{
   late String name, email, id, lstName;
-  var errorMsg = null;
-
+  var _errorMsg = null;
 
   Person({String name = '', String email = '', String id = ''}){
     this.name = name;
@@ -45,28 +46,30 @@ class Person{
     };
   }
 
-  Future<bool> registration(GlobalKey<FormState> formKey, String password, bool isAdmin) async {
+  Future<bool> registration(GlobalKey<FormState> formKey, String password, bool isAdmin, BuildContext context) async {
     if(formKey.currentState?.validate() == true){
-      final personRef_2 = getPersonCollectionWithConverter(isAdmin? Admin.CollectionName :
-                          user.User.CollectionName);
+      final personRef = getPersonCollectionWithConverter(isAdmin? Admin.CollectionName :
+                          app_user.User.CollectionName);
       try {
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: email,
             password: password
         );
+        final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
         id = userCredential.user!.uid;
 
-        personRef_2.add(
+        personRef.doc(id).set(
             Person(
               name: name + ' ' + lstName,
               email: email,
               id: id
             )
         );
+        _myAppProvider.updateLoggedUser(this);
         print('done --------------------------------------------------------------');
         return true;
       } on FirebaseAuthException catch (e) {
-        errorMsg = e;
+        _errorMsg = e;
         formKey.currentState?.validate();
       } catch (e) {
         // somethingWentWrong()
@@ -75,7 +78,7 @@ class Person{
     return false;
   }
 
-  Future<bool> logIn(GlobalKey<FormState> formKey, String password, BuildContext context) async{
+  Future<bool> logIn(GlobalKey<FormState> formKey, String password, bool isAdmin, BuildContext context) async{
     if(formKey.currentState?.validate() == true) {
       try {
         print("loooooged222222222222333333333");
@@ -89,22 +92,24 @@ class Person{
         if (userCredential.user == null) {
           print("invalid creditional no user exist with this email");
         } else {
+          final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
           final db = FirebaseFirestore.instance;
-          final userRef = getUsersCollectionWithConverter()
+          final userRef = await getPersonCollectionWithConverter(isAdmin? Admin.CollectionName :
+          app_user.User.CollectionName)
               .doc(userCredential.user!.uid)
               .get()
-              .then((retrievedUser) {
-            /*print(retrievedUser.data()!.email);
-          print(retrievedUser.data()!.id);
-          print(retrievedUser.data()!.name);*/
-            //provider.updateUser(retrievedUser.data());
-            Navigator.pushReplacement<void, void>(
-              context,
-              MaterialPageRoute<void>(
-                builder: (BuildContext context) =>
-                    UserHomeScreen(userCredential.user!.uid),
-              ),
-            );
+              .then((retrievedUser) async{
+                email = await retrievedUser.data()!.email;
+                id = await retrievedUser.data()!.id;
+                name = await retrievedUser.data()!.name;
+                _myAppProvider.updateLoggedUser(this);
+                Navigator.pushReplacement<void, void>(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) =>
+                        UserHomeScreen(),
+                  ),
+                );
             /*Navigator.pushReplacementNamed<void, void>(context,
               UserHomeScreen.routeName,
               ));*/
@@ -112,7 +117,7 @@ class Person{
         }
         print("loooooged222222222222");
       } on FirebaseAuthException catch (e) {
-        errorMsg = e;
+        _errorMsg = e;
         formKey.currentState?.validate();
       } catch (e) {
         print(e);
@@ -120,6 +125,10 @@ class Person{
       }
     }
     return false;
+  }
+
+  Future<void> logOut() async{
+    await FirebaseAuth.instance.signOut();
   }
 
   /*void showErrorMessage(String message) {
@@ -143,14 +152,14 @@ class Person{
   {
     if (value == null || value.isEmpty) {
       return 'Please enter an email address';
-    }else if(errorMsg != null) {
-      if(errorMsg.code != 'weak-password' && errorMsg.code != 'wrong-password') {
-        if(errorMsg.code == 'user-not-found') {
-          errorMsg = null;
+    }else if(_errorMsg != null) {
+      if(_errorMsg.code != 'weak-password' && _errorMsg.code != 'wrong-password') {
+        if(_errorMsg.code == 'user-not-found') {
+          _errorMsg = null;
           return 'No user found for that email.';
         }else {
-          String msg = errorMsg.message;
-          errorMsg = null;
+          String msg = _errorMsg.message;
+          _errorMsg = null;
           return msg;
         }
       }
@@ -161,14 +170,14 @@ class Person{
   String? passwordValidator([String? value]){
     if(value == null || value.isEmpty){
       return 'Please enter a password';
-    }else if(errorMsg != null){
-      if(errorMsg.code == 'weak-password' || errorMsg.code == 'wrong-password') {
-        if(errorMsg.code == 'wrong-password'){
-          errorMsg = null;
+    }else if(_errorMsg != null){
+      if(_errorMsg.code == 'weak-password' || _errorMsg.code == 'wrong-password') {
+        if(_errorMsg.code == 'wrong-password'){
+          _errorMsg = null;
           return 'The password provided for this account is wrong';
         }else {
-          String msg = errorMsg.message;
-          errorMsg = null;
+          String msg = _errorMsg.message;
+          _errorMsg = null;
           return msg;
         }
       }
