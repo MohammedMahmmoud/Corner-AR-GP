@@ -1,3 +1,4 @@
+import 'package:corner_ar_gp/components/drawer_component.dart';
 import 'package:flutter/material.dart';
 
 class UserHomeScreen extends StatefulWidget {
@@ -18,21 +19,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Text(
-                sideMenuContent,
-                style: TextStyle(color: Colors.white, fontSize: 25),
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.green,
-              ),
-            )
-          ],
-        ),
-      ),
+      drawer: sideMenu(isAdmin: false,userName: sideMenuContent),
       appBar: AppBar(
         title: Text("User"),
       ),
