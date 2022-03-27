@@ -14,7 +14,7 @@ class AppProvider extends ChangeNotifier {
     //FirebaseAuth.instance.signOut();
     final firebaseCurrentUser = FirebaseAuth.instance.currentUser;
     if (firebaseCurrentUser != null) {
-      String _collectionName = _checkAdmin(firebaseCurrentUser.uid)? Admin.CollectionName : app_user.User.CollectionName;
+      String _collectionName = checkAdmin(firebaseCurrentUser.uid)? Admin.CollectionName : app_user.User.CollectionName;
       //_checkAdmin(firebaseCurrentUser.uid).then((value) => _collectionName = Admin.CollectionName);
       print(_collectionName);
       _fetchUsers(_collectionName, firebaseCurrentUser);
@@ -28,7 +28,7 @@ class AppProvider extends ChangeNotifier {
         .get()
         .then((user) {
           if (user.data() != null) {
-            loggedUser = _checkAdmin(firebaseCurrentUser.uid) ? Admin() : app_user.User();
+            loggedUser = checkAdmin(firebaseCurrentUser.uid) ? Admin() : app_user.User();
             //_checkAdmin(firebaseCurrentUser.uid).then((value) => loggedUser = Admin());
             loggedUser = user.data()!;
           }
@@ -45,12 +45,13 @@ class AppProvider extends ChangeNotifier {
     return loggedUser ?? Person();
   }
 
-  bool _checkAdmin(String id)  {
+  bool checkAdmin(String id)  {
     FirebaseFirestore.instance
         .collection(Admin.CollectionName)
         .where('id', isEqualTo: id)
         .get()
         .then((value) {
+          print("checccccccccccccccccccccccccccccckijng  ${value.size}");
             return value.size != 0;
       },
     );

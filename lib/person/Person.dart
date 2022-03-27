@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../authentication/login/LoginPage.dart';
 import '../home_screen/user_homescreen.dart';
 
 class Person{
@@ -93,7 +94,8 @@ class Person{
           print("invalid creditional no user exist with this email");
         } else {
           final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
-          final db = FirebaseFirestore.instance;
+          //final db = FirebaseFirestore.instance;
+          final userRefrence = await getPersonCollectionWithConverter(app_user.User.CollectionName);
           final userRef = await getPersonCollectionWithConverter(isAdmin? Admin.CollectionName :
           app_user.User.CollectionName)
               .doc(userCredential.user!.uid)
@@ -103,6 +105,8 @@ class Person{
                 id = await retrievedUser.data()!.id;
                 name = await retrievedUser.data()!.name;
                 _myAppProvider.updateLoggedUser(this);
+                print("ID $id");
+                print("is ussssssssssssser or Adddddmin ${_myAppProvider.checkAdmin(id)}");
                 Navigator.pushReplacement<void, void>(
                   context,
                   MaterialPageRoute<void>(
@@ -127,8 +131,10 @@ class Person{
     return false;
   }
 
-  Future<void> logOut() async{
+  Future<void> logOut(context) async{
+    print("logggggoutttttttttttperson");
     await FirebaseAuth.instance.signOut();
+    Navigator.pushNamed(context, Login.routeName);
   }
 
   /*void showErrorMessage(String message) {
