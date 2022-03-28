@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corner_ar_gp/database/DatabaseHelper.dart';
 import 'package:corner_ar_gp/home_screen/admin_homescreen.dart';
 import 'package:corner_ar_gp/person/Admin.dart';
@@ -7,7 +6,6 @@ import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../authentication/login/LoginPage.dart';
 import '../home_screen/user_homescreen.dart';
 
@@ -66,8 +64,19 @@ class Person{
               email: email,
               id: id
             )
-        );
-        _myAppProvider.updateLoggedUser(this);
+        ).then((user)async{
+          _myAppProvider.updateLoggedUser(this);
+          Navigator.pushReplacement<void, void>(
+            context,
+            isAdmin?MaterialPageRoute<void>(
+              builder: (BuildContext context) =>
+                  AdminHomeScreen(),
+            ):MaterialPageRoute<void>(
+              builder: (BuildContext context) =>
+                  UserHomeScreen(),
+            ),
+          );
+        });
         print('done --------------------------------------------------------------');
         return true;
       } on FirebaseAuthException catch (e) {
@@ -98,23 +107,17 @@ class Person{
           //final db = FirebaseFirestore.instance;
           final adminRefrence =
             await getPersonCollectionWithConverter(Admin.CollectionName).doc(userCredential.user!.uid).get();
-          final adminRefrence2 =
-          await getPersonCollectionWithConverter(Admin.CollectionName).get();
-          print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa   ${adminRefrence.exists}");
-          print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa   ${adminRefrence2.size}");
+
           final userRef = await getPersonCollectionWithConverter(adminRefrence.exists? Admin.CollectionName :
           app_user.User.CollectionName)
               .doc(userCredential.user!.uid)
               .get()
               .then((retrievedUser) async{
-            print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-
-            email = await retrievedUser.data()!.email;
+                email = await retrievedUser.data()!.email;
                 id = await retrievedUser.data()!.id;
                 name = await retrievedUser.data()!.name;
-            print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
 
-            _myAppProvider.updateLoggedUser(this);
+                _myAppProvider.updateLoggedUser(this);
 
                 Navigator.pushReplacement<void, void>(
                   context,
@@ -126,10 +129,7 @@ class Person{
                         UserHomeScreen(),
                   ),
                 );
-            /*Navigator.pushReplacementNamed<void, void>(context,
-              UserHomeScreen.routeName,
-              ));*/
-          });
+              });
         }
         print("loooooged222222222222");
       } on FirebaseAuthException catch (e) {

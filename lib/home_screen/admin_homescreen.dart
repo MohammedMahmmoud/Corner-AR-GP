@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../components/drawer_component.dart';
+import '../list_page/ListPage.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   static const routeName = 'adminHomeScreen';
@@ -27,8 +28,41 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       drawer: sideMenu(isAdmin: true,userName: sideMenuContent,buildContext: context, personObject: loggedUser),
       appBar: AppBar(
         title: Text("Admin"),
+        backgroundColor: Colors.blueGrey,
       ),
-
+        body: Stack(
+          children: [
+            Container(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Image.asset(
+                  'assets/backgroundBottom.png',
+                  fit: BoxFit.fill,
+                  width: double.infinity,
+                ),
+              ),
+            ),
+            Container(
+              child: Image.asset(
+                'assets/backgroundTop.png',
+                fit: BoxFit.fill,
+                //height: double.infinity,
+                width: double.infinity,
+              ),
+            ),
+            Column(
+              children: [
+                ElevatedButton(onPressed: (){
+                  Navigator.pushReplacement<void, void>(
+                  context,
+                  MaterialPageRoute<void>(
+                  builder: (BuildContext context) =>
+                  ListPage(),));
+                }, child: Text("admin list"))
+              ],
+            )
+          ],
+        )
 
     );
   }

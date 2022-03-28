@@ -28,7 +28,30 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       drawer: sideMenu(isAdmin: false,userName: sideMenuContent,buildContext:context,personObject: loggedUser),
       appBar: AppBar(
         title: Text("User"),
+        backgroundColor: Colors.blueGrey,
       ),
+      body: Stack(
+        children: [
+          Container(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Image.asset(
+                'assets/backgroundBottom.png',
+                fit: BoxFit.fill,
+                width: double.infinity,
+              ),
+            ),
+          ),
+          Container(
+            child: Image.asset(
+              'assets/backgroundTop.png',
+              fit: BoxFit.fill,
+              //height: double.infinity,
+              width: double.infinity,
+            ),
+          ),
+        ],
+      )
 
 
     );

@@ -29,12 +29,12 @@ Drawer sideMenu(
         Container(child: ElevatedButton(onPressed: (){}, child: Text("Edit Profile"),style:ElevatedButton.styleFrom(
         primary: Colors.white,
         onPrimary: Color(0xFF71A2B5),))),
-        Container(child: ElevatedButton(onPressed: (){}, child: Text("Edit Profile"),style:ElevatedButton.styleFrom(
+        //if user show saved furniture button
+        isAdmin?Container(child:null):
+        Container(child: ElevatedButton(onPressed: (){}, child: Text("Saved Furniture"),style:ElevatedButton.styleFrom(
           primary: Colors.white,
           onPrimary: Color(0xFF71A2B5),))),
-        Container(child: ElevatedButton(onPressed: (){}, child: Text("Edit Profile"),style:ElevatedButton.styleFrom(
-          primary: Colors.white,
-          onPrimary: Color(0xFF71A2B5),))),
+
         Container(child: ElevatedButton(onPressed: (){
 
           personObject.logOut(buildContext);
