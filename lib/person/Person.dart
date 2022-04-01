@@ -1,3 +1,4 @@
+import 'package:corner_ar_gp/components/getdata_components.dart';
 import 'package:corner_ar_gp/database/DatabaseHelper.dart';
 import 'package:corner_ar_gp/home_screen/admin_homescreen.dart';
 import 'package:corner_ar_gp/person/Admin.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../authentication/login/LoginPage.dart';
 import '../home_screen/user_homescreen.dart';
+import '../list_page/ListPage.dart';
 
 class Person{
   late String name, email, id, lstName;
@@ -67,11 +69,17 @@ class Person{
             )
         ).then((user)async{
           _myAppProvider.updateLoggedUser(this);
+          var data = await getData(Admin.CollectionName);
           Navigator.pushReplacement<void, void>(
             context,
             isAdmin?MaterialPageRoute<void>(
               builder: (BuildContext context) =>
-                  AdminHomeScreen(),
+                  ListPage(
+                    title: "Add Admin",
+                    collectionName: Admin.CollectionName,
+                    Data: data,
+                    dataLength: data.length,
+                  ),
             ):MaterialPageRoute<void>(
               builder: (BuildContext context) =>
                   UserHomeScreen(),

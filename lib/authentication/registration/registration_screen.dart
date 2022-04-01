@@ -28,6 +28,10 @@ class _registrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: isAdmin?AppBar(
+        title: Text("Add Admin"),
+        backgroundColor: Colors.blueGrey,
+      ):null,
       body: Stack(
         children: [
           Container(
@@ -58,11 +62,8 @@ class _registrationScreenState extends State<RegistrationScreen> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        Container(
-                          child: Image.asset('assets/logAndRegisterIcon.png'),
-                        ),
-                        const SizedBox(height: 70),
-
+                        isAdmin?Container(child:null):Image.asset('assets/logAndRegisterIcon.png'),
+                        isAdmin?Container(child:null):const SizedBox(height: 70),
                         textFormFieldComponent(
                             hintText:'First Name',
                             onChangedText: person.setFirstName,
@@ -122,7 +123,7 @@ class _registrationScreenState extends State<RegistrationScreen> {
                         Container(
                           padding: const EdgeInsets.fromLTRB(70,80,70,0),
                             child: LogAndRegisterButton(
-                                buttonText: "Sign Up",
+                                buttonText: isAdmin?"Add Admin":"Sign Up",
                                 onPressedButton:  ()=>person.registration(_formKey, password, isAdmin, context)
                             )
                         ),

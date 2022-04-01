@@ -16,7 +16,7 @@ Drawer sideMenu(
     ){
   return Drawer(
     backgroundColor: Color(0xFF73929F),
-    child: ListView(
+    child: Column(
       children: [
         DrawerHeader(
           child: Row(
@@ -48,20 +48,21 @@ Drawer sideMenu(
             buttonName: 'Saved Furniture',
           onPressedButton: (){}
         ),
-        ElevatedButton(
+        TextButton.icon(
             onPressed: (){
               personObject.logOut(buildContext);
             },
-            child: Text("Log out"),style:ElevatedButton.styleFrom(
-            primary: Colors.white,
-            onPrimary: Color(0xFF71A2B5),)),
-
+            icon: ImageIcon(
+              AssetImage("assets/log_out.png"),
+              color: Colors.white,
+              size: 40,
+            ),
+            label: Text("Log out",style: TextStyle(fontSize: 20),),
+            style:TextButton.styleFrom(
+              primary: Colors.white,
+            )
+        ),
       ],
     ),
   );
 }
-
-
-//4F6E7B
-
-//73929F

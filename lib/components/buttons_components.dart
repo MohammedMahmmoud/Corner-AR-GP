@@ -61,6 +61,7 @@ Container listMenuButtons(
     ){
   return Container(
     height: 50,
+    width: double.infinity,
     child: ElevatedButton(
         onPressed: onPressedButton,
         child: Text(buttonName,style: TextStyle(fontSize: 20),),

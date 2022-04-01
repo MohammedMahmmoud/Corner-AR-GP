@@ -150,6 +150,7 @@ class _ListPageState extends State<ListPage> {
                 builder: (BuildContext context) =>RegistrationScreen(isAdmin: true),));
         },
         child: Icon(Icons.add),
+        backgroundColor: Colors.blueGrey,
       ),
     );
   }
