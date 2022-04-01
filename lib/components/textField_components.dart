@@ -5,11 +5,13 @@ TextFormField textFormFieldComponent(
   required String hintText,
   required Function onChangedText,
   required Function validator,
-  /*required bool passwordIcon,
-  bool? isPasswordHidden,*/
+  required bool isPasswordTextForm,
+  bool isPasswordHidden = false,
+  Function? togglePasswordVisibility
 }
     ){
   return TextFormField(
+    obscureText: isPasswordHidden,
     onChanged: (newValue){
       onChangedText(newValue);
     },
@@ -21,15 +23,16 @@ TextFormField textFormFieldComponent(
       focusedBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color:Color(0xFFbdc6cf)),
       ),
-        /*suffixIcon: IconButton(
+        suffixIcon: isPasswordTextForm? IconButton(
           icon: Icon(isPasswordHidden?
           Icons.visibility_off_outlined:
           Icons.visibility_outlined,color: Color(0xFFbdc6cf),),
-          onPressed: (){
-            isPasswordHidden = !isPasswordHidden;
-            setState(() {});
-          },
-        )*/
+          onPressed: () => togglePasswordVisibility!()
+        ) : const Icon(
+          Icons.import_contacts_sharp,
+          color: Colors.transparent,
+          size: 0,
+        )
     ),
     validator: (value) => validator(value),
     style: const TextStyle(color: Color(0xFFbdc6cf)),

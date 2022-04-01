@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:corner_ar_gp/components/drawer_component.dart';
+import 'package:corner_ar_gp/list_page/ListPage.dart';
 import 'package:corner_ar_gp/person/Person.dart';
 import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:flutter/material.dart';
@@ -20,17 +22,6 @@ class AdminHomeScreen extends StatefulWidget {
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   late Person loggedUser;
   late String sideMenuContent;
-  final _fireStore = FirebaseFirestore.instance;
-  var Data;
-
-  Future<void> getData(collectionName) async{
-    QuerySnapshot querySnapshot = await _fireStore.collection(collectionName).get();
-    //querySnapshot.docs
-    // Get data from docs and convert map to List
-    Data = await querySnapshot.docs.map((doc) => doc.data()).toList();
-    //print(Data);
-    print("innnnaddddmin paaage daaaata");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +30,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     sideMenuContent = loggedUser.name;
 
     return Scaffold(
-      drawer: sideMenu(isAdmin: true,userName: sideMenuContent,buildContext: context, personObject: loggedUser),
+      drawer: sideMenu(changeToEditPage: (){}, isAdmin: true,userName: sideMenuContent,buildContext: context, personObject: loggedUser),
       appBar: AppBar(
         title: Text("Admin"),
         backgroundColor: Colors.blueGrey,

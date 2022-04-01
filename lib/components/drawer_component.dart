@@ -1,4 +1,5 @@
 import 'package:corner_ar_gp/components/buttons_components.dart';
+import 'package:corner_ar_gp/main_screens/edit_info/edit_person_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,8 @@ import '../person/Person.dart';
 
 Drawer sideMenu(
 {
+  //required BuildContext context,
+  required Function changeToEditPage,
   required String userName,
   required bool isAdmin,
   required BuildContext buildContext,
@@ -15,7 +18,7 @@ Drawer sideMenu(
 }
     ){
   return Drawer(
-    backgroundColor: Color(0xFF73929F),
+    backgroundColor: Color(0xFF71A2B5),
     child: Column(
       children: [
         DrawerHeader(
@@ -39,7 +42,7 @@ Drawer sideMenu(
         ),
         listMenuButtons(
             buttonName: 'Edit Profile',
-            onPressedButton: (){}
+            onPressedButton: ()=>changeToEditPage()
         ),
         const SizedBox(height: 5,),
         //if user show saved furniture button

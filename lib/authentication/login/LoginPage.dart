@@ -59,7 +59,8 @@ class _LoginState extends State<Login> {
                             textFormFieldComponent(
                                 hintText:"Email",
                                 onChangedText: person.setEmail,
-                                validator:  person.mailValidator
+                                validator:  person.mailValidator,
+                                isPasswordTextForm: false
                             ),
                             const SizedBox(height: 20),
                             TextFormField(
