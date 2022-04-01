@@ -1,10 +1,10 @@
+import 'package:corner_ar_gp/components/drawer_component.dart';
+import 'package:corner_ar_gp/list_page/ListPage.dart';
 import 'package:corner_ar_gp/person/Person.dart';
 import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../components/drawer_component.dart';
-import '../list_page/ListPage.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   static const routeName = 'adminHomeScreen';
@@ -25,7 +25,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     sideMenuContent = loggedUser.name;
 
     return Scaffold(
-      drawer: sideMenu(isAdmin: true,userName: sideMenuContent,buildContext: context, personObject: loggedUser),
+      drawer: sideMenu(changeToEditPage: (){}, isAdmin: true,userName: sideMenuContent,buildContext: context, personObject: loggedUser),
       appBar: AppBar(
         title: Text("Admin"),
         backgroundColor: Colors.blueGrey,

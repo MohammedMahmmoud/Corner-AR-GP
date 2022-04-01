@@ -71,7 +71,8 @@ class _registrationScreenState extends State<RegistrationScreen> {
                                 return 'Please enter first name';
                               }
                               return null;
-                            }
+                            },
+                          isPasswordTextForm: false
                         ),
                         const SizedBox(height: 5),
                         textFormFieldComponent(
@@ -83,13 +84,15 @@ class _registrationScreenState extends State<RegistrationScreen> {
                               }
                               return null;
                             },
+                            isPasswordTextForm: false
                         ),
 
                         const SizedBox(height: 5),
                         textFormFieldComponent(
                           hintText:'Email Address',
                           onChangedText: person.setEmail,
-                          validator:  person.mailValidator
+                          validator:  person.mailValidator,
+                          isPasswordTextForm: false
                         ),
 
                         const SizedBox(height: 5),
