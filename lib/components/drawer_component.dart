@@ -1,3 +1,4 @@
+import 'package:corner_ar_gp/components/buttons_components.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -14,35 +15,53 @@ Drawer sideMenu(
 }
     ){
   return Drawer(
-    backgroundColor: Color(0xFF71A2B5),
+    backgroundColor: Color(0xFF73929F),
     child: ListView(
       children: [
         DrawerHeader(
-          child: Text(
-            userName,
-            style: TextStyle(color: Colors.white, fontSize: 25),
-          ),
-          decoration: BoxDecoration(
-            //color: Color(0xFFbdc6cf),
+          child: Row(
+            children: [
+              Container(
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Image.asset(
+                    'assets/profile.png',
+                  ),
+                ),
+              ),
+              const SizedBox(width: 15),
+              Text(
+                userName,
+                style: TextStyle(color: Colors.white, fontSize: 25),
+              ),
+            ],
           ),
         ),
-        Container(child: ElevatedButton(onPressed: (){}, child: Text("Edit Profile"),style:ElevatedButton.styleFrom(
-        primary: Colors.white,
-        onPrimary: Color(0xFF71A2B5),))),
+        listMenuButtons(
+            buttonName: 'Edit Profile',
+            onPressedButton: (){}
+        ),
+        const SizedBox(height: 5,),
         //if user show saved furniture button
         isAdmin?Container(child:null):
-        Container(child: ElevatedButton(onPressed: (){}, child: Text("Saved Furniture"),style:ElevatedButton.styleFrom(
-          primary: Colors.white,
-          onPrimary: Color(0xFF71A2B5),))),
+        listMenuButtons(
+            buttonName: 'Saved Furniture',
+          onPressedButton: (){}
+        ),
+        ElevatedButton(
+            onPressed: (){
+              personObject.logOut(buildContext);
+            },
+            child: Text("Log out"),style:ElevatedButton.styleFrom(
+            primary: Colors.white,
+            onPrimary: Color(0xFF71A2B5),)),
 
-        Container(child: ElevatedButton(onPressed: (){
-
-          personObject.logOut(buildContext);
-        }//()=>logOut(buildContext)
-            , child: Text("Log out"),style:ElevatedButton.styleFrom(
-          primary: Colors.white,
-          onPrimary: Color(0xFF71A2B5),))),
       ],
     ),
   );
 }
+
+
+//4F6E7B
+
+//73929F

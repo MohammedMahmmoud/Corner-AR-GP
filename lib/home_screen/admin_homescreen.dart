@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corner_ar_gp/person/Person.dart';
 import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../components/buttons_components.dart';
 import '../components/drawer_component.dart';
 import '../list_page/ListPage.dart';
+import '../person/Admin.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   static const routeName = 'adminHomeScreen';
@@ -17,6 +20,17 @@ class AdminHomeScreen extends StatefulWidget {
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   late Person loggedUser;
   late String sideMenuContent;
+  final _fireStore = FirebaseFirestore.instance;
+  var Data;
+
+  Future<void> getData(collectionName) async{
+    QuerySnapshot querySnapshot = await _fireStore.collection(collectionName).get();
+    //querySnapshot.docs
+    // Get data from docs and convert map to List
+    Data = await querySnapshot.docs.map((doc) => doc.data()).toList();
+    //print(Data);
+    print("innnnaddddmin paaage daaaata");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +66,18 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             ),
             Column(
               children: [
-                ElevatedButton(onPressed: (){
-                  Navigator.pushReplacement<void, void>(
-                  context,
-                  MaterialPageRoute<void>(
-                  builder: (BuildContext context) =>
-                  ListPage(),));
-                }, child: Text("admin list"))
+                AdminHomeScreenButton(
+                    pageName: "Admins List",
+                    context: context,
+                    collectionName: Admin.CollectionName,
+                    buttonName: "Admins List"
+                ),
+                AdminHomeScreenButton(
+                  pageName: "Categorios List",
+                  context: context,
+                  collectionName: "Category",
+                  buttonName: "Category List"
+                )
               ],
             )
           ],

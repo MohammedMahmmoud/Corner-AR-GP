@@ -1,7 +1,5 @@
 import 'package:corner_ar_gp/authentication/registration/registration_screen.dart';
-import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:corner_ar_gp/person/Person.dart';
-import 'package:corner_ar_gp/person/User.dart';
 import 'package:flutter/material.dart';
 import '../../components/buttons_components.dart';
 import '../../components/textField_components.dart';
@@ -9,20 +7,17 @@ import '../../components/textField_components.dart';
 
 class Login extends StatefulWidget {
   static const routeName = 'login';
-  bool isAdmin;
-  Login({this.isAdmin = false});
+  Login();
   @override
-  _LoginState createState() => _LoginState(isAdmin);
+  _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
   final _loginFormKey = GlobalKey<FormState>();
   Person person = Person();
   String password = '';
-  bool isPasswordHidden = true, isAdmin;
-  _LoginState(this.isAdmin){
-    person = isAdmin? Admin() : User();
-  }
+  bool isPasswordHidden = true;
+  _LoginState();
 
   @override
   Widget build(BuildContext context) {

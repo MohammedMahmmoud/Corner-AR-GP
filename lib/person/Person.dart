@@ -47,6 +47,7 @@ class Person{
   }
 
   Future<bool> registration(GlobalKey<FormState> formKey, String password, bool isAdmin, BuildContext context) async {
+    print("is adddddmmmmmmmmmmmmmmmmmin $isAdmin");
     if(formKey.currentState?.validate() == true){
       final personRef = getPersonCollectionWithConverter(isAdmin? Admin.CollectionName :
                           app_user.User.CollectionName);

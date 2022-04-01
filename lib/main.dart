@@ -29,9 +29,8 @@ class MyApp extends StatelessWidget {
           routes: {
             RegistrationScreen.routeName: (context) =>
                 RegistrationScreen(isAdmin: false),
-            Login.routeName: (context) => Login(isAdmin: false),
+            Login.routeName: (context) => Login(),
             UserHomeScreen.routeName: (context) => UserHomeScreen(),
-            ListPage.routeName: (context)=> ListPage()
           },
           initialRoute: isUserLoggedIn?
           UserHomeScreen.routeName:
