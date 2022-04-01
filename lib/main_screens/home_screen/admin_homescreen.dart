@@ -1,15 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corner_ar_gp/components/drawer_component.dart';
-import 'package:corner_ar_gp/list_page/ListPage.dart';
 import 'package:corner_ar_gp/person/Person.dart';
 import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../components/buttons_components.dart';
+import '../../person/Admin.dart';
 
-import '../components/buttons_components.dart';
-import '../components/drawer_component.dart';
-import '../list_page/ListPage.dart';
-import '../person/Admin.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   static const routeName = 'adminHomeScreen';

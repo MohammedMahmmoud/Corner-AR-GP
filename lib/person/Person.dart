@@ -1,5 +1,4 @@
 import 'package:corner_ar_gp/components/getdata_components.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corner_ar_gp/database/DatabaseHelper.dart';
 import 'package:corner_ar_gp/main_screens/home_screen/admin_homescreen.dart';
 import 'package:corner_ar_gp/main_screens/home_screen/user_homescreen.dart';
@@ -10,8 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../authentication/login/LoginPage.dart';
-import '../home_screen/user_homescreen.dart';
-import '../list_page/ListPage.dart';
+import '../main_screens/list_page/ListPage.dart';
 
 class Person{
   late String name, email, id, lstName;
@@ -60,6 +58,7 @@ class Person{
     if(formKey.currentState?.validate() == true){
       final personRef = getPersonCollectionWithConverter(isAdmin? Admin.CollectionName :
                           app_user.User.CollectionName);
+      name = name + ' ' + lstName;
       try {
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: email,
@@ -70,7 +69,7 @@ class Person{
 
         personRef.doc(id).set(
             Person(
-              name: name + ' ' + lstName,
+              name: name,
               email: email,
               id: id
             )

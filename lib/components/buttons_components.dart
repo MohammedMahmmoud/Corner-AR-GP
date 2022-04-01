@@ -1,7 +1,5 @@
-import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:flutter/material.dart';
-
-import '../list_page/ListPage.dart';
+import '../main_screens/list_page/ListPage.dart';
 import 'getdata_components.dart';
 
 ElevatedButton LogAndRegisterButton(
@@ -46,7 +44,14 @@ ElevatedButton AdminHomeScreenButton(
             context,
             MaterialPageRoute<void>(
               builder: (BuildContext context) =>
-                  ListPage(title:pageName,collectionName:collectionName, Data: Data,dataLength: Data.length),));
+                  ListPage(
+                      title:pageName,
+                      collectionName:collectionName,
+                      Data: Data,
+                      dataLength: Data.length
+                  ),
+            )
+        );
       },
       child: Text(buttonName));
 }

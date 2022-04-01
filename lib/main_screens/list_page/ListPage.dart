@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corner_ar_gp/authentication/registration/registration_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../components/getdata_components.dart';
+import '../../components/getdata_components.dart';
 
 
 class ListPage extends StatefulWidget {

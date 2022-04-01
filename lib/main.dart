@@ -1,7 +1,4 @@
 import 'package:corner_ar_gp/authentication/registration/registration_screen.dart';
-import 'package:corner_ar_gp/home_screen/user_homescreen.dart';
-import 'package:corner_ar_gp/list_page/ListPage.dart';
-import 'package:corner_ar_gp/main_screens/edit_info/edit_person_info.dart';
 import 'package:corner_ar_gp/main_screens/home_screen/user_homescreen.dart';
 import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -36,7 +33,6 @@ class MyApp extends StatelessWidget {
                 RegistrationScreen(isAdmin: false),
             Login.routeName: (context) => Login(),
             UserHomeScreen.routeName: (context) => UserHomeScreen(),
-            ListPage.routeName: (context)=> ListPage()
           },
           initialRoute: isUserLoggedIn?
           UserHomeScreen.routeName:
