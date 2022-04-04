@@ -12,7 +12,7 @@ import '../authentication/login/LoginPage.dart';
 import '../main_screens/list_page/ListPage.dart';
 
 class Person{
-  late String name, email, id, lstName;
+  late String name, email, id, lstName = '';
   var _errorMsg = null;
 
   Person({String name = '', String email = '', String id = ''}){
@@ -164,33 +164,60 @@ class Person{
     Navigator.pushNamed(context, Login.routeName);
   }
 
-  Future<void> updateName(GlobalKey<FormState> formKey) async {
+  Future<bool> updateName(GlobalKey<FormState> formKey, String newName, String lastName, BuildContext context) async {
+    bool returnState = false;
     if(formKey.currentState?.validate() == true) {
       print('uupddaattiinngg nnaammee');
-      name += ' ' + lstName;
-      print(name + ' ______________________________________');
+      newName += ' ' + lastName;
+      print(newName + ' ______________________________________');
       print('-------------------------------' + id);
 
       final adminReference = await getPersonCollectionWithConverter(
           Admin.CollectionName).doc(id).get();
-      final userRef = await getPersonCollectionWithConverter(
+      print('after ref');
+      final userRef = getPersonCollectionWithConverter(
           adminReference.exists ? Admin.CollectionName :
           app_user.User.CollectionName);
 
+      print('wait');
       userRef.doc(id)
-          .update({'name': name})
-          .then((value) => print("User Updated"))
-          .catchError((error) => print("Failed to update user: $error"));
+          .update({'name': newName})
+          .then((value) => (){
+              name = newName;
+              final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
+              _myAppProvider.updateLoggedUser(this);
+              returnState = true;
+            })
+          .catchError((error){
+            _errorMsg = error;
+            formKey.currentState?.validate();
+            print("name can't be changed" + error.toString());
+      });
     }
+    return returnState;
   }
 
-  Future<void> updateEmail(GlobalKey<FormState> formKey, String newEmail, String currentPassword) async {
+  Future<bool> updateEmail(GlobalKey<FormState> formKey, String newEmail, String currentPassword, BuildContext context) async {
+    bool returnState = false;
     if(formKey.currentState?.validate() == true) {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: email,
-            password: currentPassword
-        );
+        AuthCredential credential = EmailAuthProvider.credential(email: email, password: currentPassword);
+        await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
+
+        final adminReference = await getPersonCollectionWithConverter(
+            Admin.CollectionName).doc(id).get();
+        final userRef = getPersonCollectionWithConverter(
+            adminReference.exists ? Admin.CollectionName :
+            app_user.User.CollectionName);
+
+        userRef.doc(id)
+            .update({'email': newEmail})
+            .then((value) => print("User Updated"))
+            .catchError((error){
+          _errorMsg = error;
+          formKey.currentState?.validate();
+          print("Email can't be changed" + error.toString());
+        });
       } on FirebaseAuthException catch (e) {
         _errorMsg = e;
         formKey.currentState?.validate();
@@ -198,35 +225,28 @@ class Person{
       print('uupddaattiinngg emaillllllllll');
       print('-------------------------------' + id);
 
-      final adminReference = await getPersonCollectionWithConverter(
-          Admin.CollectionName).doc(id).get();
-      final userRef = getPersonCollectionWithConverter(
-          adminReference.exists ? Admin.CollectionName :
-          app_user.User.CollectionName);
-
-      userRef.doc(id)
-          .update({'email': email})
-          .then((value) => print("User Updated"))
-          .catchError((error) => print("Failed to update user: $error"));
-
-      final firebaseCurrentUser = FirebaseAuth.instance.currentUser;
-      firebaseCurrentUser?.updateEmail(newEmail);
-      AuthCredential credential = EmailAuthProvider.credential(email: newEmail, password: currentPassword);
-      await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
+      var user = FirebaseAuth.instance.currentUser;
+      user?.updateEmail(newEmail).then((_) {
+        final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
+        _myAppProvider.updateLoggedUser(this);
+        print("Successfully changed Email");
+        returnState = true;
+      }).catchError((error) {
+        _errorMsg = error;
+        formKey.currentState?.validate();
+        print("Email can't be changed" + error.toString());
+      });
     }
+    return returnState;
   }
 
-  Future<void> updatePassword(GlobalKey<FormState> formKey, String currentPassword, String newerPassword) async {
+  Future<bool> updatePassword(GlobalKey<FormState> formKey, String currentPassword, String newerPassword) async {
+    bool returnState = false;
     if (formKey.currentState?.validate() == true) {
       print('hello');
       print(currentPassword);
       print(newerPassword);
       try {
-        // UserCredential userCredential = await FirebaseAuth.instance
-        //     .signInWithEmailAndPassword(
-        //     email: email,
-        //     password: currentPassword
-        // );
         AuthCredential credential = EmailAuthProvider.credential(email: email, password: currentPassword);
         await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
         print('passordCorrect');
@@ -238,14 +258,17 @@ class Person{
       }
       var user = FirebaseAuth.instance.currentUser;
 
-      //Pass in the password to updatePassword.
       user?.updatePassword(newerPassword).then((_) {
         print("Successfully changed password");
+        returnState = true;
       }).catchError((error) {
+        _errorMsg = error;
+        formKey.currentState?.validate();
         print("Password can't be changed" + error.toString());
         //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
       });
     }
+    return returnState;
   }
 
   Future<void> deleteAccount() async{

@@ -6,11 +6,13 @@ TextFormField textFormFieldComponent(
   required Function onChangedText,
   required Function validator,
   required bool isPasswordTextForm,
+  String? initialValue,
   bool isPasswordHidden = false,
   Function? togglePasswordVisibility
 }
     ){
   return TextFormField(
+    initialValue: initialValue,
     obscureText: isPasswordHidden,
     onChanged: (newValue){
       onChangedText(newValue);

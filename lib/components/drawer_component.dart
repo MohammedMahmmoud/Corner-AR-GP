@@ -33,16 +33,18 @@ Drawer sideMenu(
                 ),
               ),
               const SizedBox(width: 15),
-              Text(
-                userName,
-                style: TextStyle(color: Colors.white, fontSize: 25),
+              Expanded(
+                child: Text(
+                  userName,
+                  style: const TextStyle(color: Colors.white, fontSize: 25),
+                ),
               ),
             ],
           ),
         ),
         listMenuButtons(
             buttonName: 'Edit Profile',
-            onPressedButton: ()=>changeToEditPage()
+            onPressedButton: (){changeToEditPage(); Navigator.pop(buildContext);}
         ),
         const SizedBox(height: 5,),
         //if user show saved furniture button

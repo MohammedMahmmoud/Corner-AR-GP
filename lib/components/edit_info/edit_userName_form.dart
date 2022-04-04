@@ -1,11 +1,15 @@
 import 'package:corner_ar_gp/components/textField_components.dart';
-import 'package:corner_ar_gp/person/Person.dart';
 import 'package:flutter/cupertino.dart';
 
-Container EditUserNameForm({required Person person, required GlobalKey<FormState> formKey})
+Container EditUserNameForm({
+  required GlobalKey<FormState> formKey,
+  required Function nameReturner,
+  required Function lastNameReturner,
+  String? firstNameSavedValue,
+  String? lastNameSavedValue,
+})
 {
   _defaultValidator (value) {
-    print('========================='+person.id+'============================');
     if (value == null || value.isEmpty) {
       return 'Please enter last name';
     }
@@ -13,22 +17,25 @@ Container EditUserNameForm({required Person person, required GlobalKey<FormState
   }
 
   return Container(
+    padding: const EdgeInsets.only(top: 8, right: 18, left: 14, bottom: 10),
     child: Form(
       key: formKey,
       child: Column(
         children: [
           textFormFieldComponent(
             hintText: 'First Name',
-            onChangedText: person.setFirstName,
+            onChangedText: (value) => nameReturner(value),
             validator: _defaultValidator,
-            isPasswordTextForm: false
+            isPasswordTextForm: false,
+            initialValue: firstNameSavedValue
           ),
           const SizedBox(height: 5,),
           textFormFieldComponent(
             hintText: 'Last Name',
-            onChangedText: person.setLastName,
+            onChangedText: lastNameReturner,
             validator: _defaultValidator,
-            isPasswordTextForm: false
+            isPasswordTextForm: false,
+            initialValue: lastNameSavedValue
           ),
           const SizedBox(height: 5,),
         ],
