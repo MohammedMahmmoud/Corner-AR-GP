@@ -59,8 +59,11 @@ class AppProvider extends ChangeNotifier {
   }
 
   void updateLoggedUser(Person user) {
+    print("from ap provider update");
     loggedUser = user;
+    print('-----------------------to be notified---------------------');
     notifyListeners();
+    print('-----------------------to be notified---------------------');
   }
 
   Person getLoggedUser(){

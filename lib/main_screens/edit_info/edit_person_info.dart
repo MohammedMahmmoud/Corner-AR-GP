@@ -16,10 +16,11 @@ class EditPersonInformation extends StatefulWidget {
 class _EditPersonInformationState extends State<EditPersonInformation> {
   List<int> formsIconsStats = [0,0,0];
   late bool _editingUserName, _editingPassword, _editingEmail;
-  String? _newName, _currPass, _newPass, _newMail, _tempLastName;
   bool hidePassword = true, hideNewPassword = true;
   final _nameFormKey = GlobalKey<FormState>(), _passwordFormKey = GlobalKey<FormState>(),
   _currPassFormKey = GlobalKey<FormState>(), _emailFormKey = GlobalKey<FormState>();
+
+  final PersonParamToEdit _infoParameter = PersonParamToEdit();
 
   void initState(){
     _editingUserName = false;
@@ -43,18 +44,18 @@ class _EditPersonInformationState extends State<EditPersonInformation> {
              _editingUserName?
                 EditUserNameForm(
                     formKey: _nameFormKey,
-                    nameReturner: _getNewNameFromTextField,
-                    lastNameReturner: _setNameToFullName,
-                    firstNameSavedValue: _newName,
-                    lastNameSavedValue: _tempLastName
+                    nameReturner: _infoParameter.setNewName,
+                    lastNameReturner: _infoParameter.setNameToFullName,
+                    firstNameSavedValue: _infoParameter.getNewName(),
+                    lastNameSavedValue: _infoParameter.getLastNameTemp()
                 )
                 : const SizedBox(height: 10,),
              TileEditCard(cardTitle: 'Edit Password', onTapFunction: _toggleEditPasswordOntTap, iconState: formsIconsStats[1]),
              _editingPassword?
                   EditPasswordForm(
                       person: widget.loggedUser,
-                      passwordGetter: _getCurrPassFromTextField,
-                      newPasswordGetter: _getNewPassFromTextField,
+                      passwordGetter: _infoParameter.setCurrPass,
+                      newPasswordGetter: _infoParameter.setNewPass,
                       currentPasswordValidator: widget.loggedUser.passwordValidator,
                       hideCurrentPassword: hidePassword,
                       hideNewPassword: hideNewPassword,
@@ -68,13 +69,13 @@ class _EditPersonInformationState extends State<EditPersonInformation> {
              _editingEmail?
                  EditEmailForm(
                      formKey: _emailFormKey,
-                     emailReturner: _getNewEmailFromTextField,
-                     passReturner: _getCurrPassFromTextField,
+                     emailReturner: _infoParameter.setNewEmail,
+                     passReturner: _infoParameter.setCurrPass,
                      emailValidator: widget.loggedUser.mailValidator,
                      passwordValidator: widget.loggedUser.passwordValidator,
                      togglePasswordVisibility: _toggleCurrentPasswordVisibility,
                      hidePassword: hidePassword,
-                     emailSavedValue: _newMail
+                     emailSavedValue: _infoParameter.getNewMail()
                  ):const SizedBox(height: 0,),
             ],
         ),
@@ -88,7 +89,8 @@ class _EditPersonInformationState extends State<EditPersonInformation> {
                     const SizedBox(width: 10,),
                     Expanded(
                         child: ElevatedButton(
-                          onPressed: applyChanges,
+                          onPressed: ()=> _infoParameter.applyChanges(widget.loggedUser, _nameFormKey,
+                              _passwordFormKey, _emailFormKey, _iconResponseToApplyChanges, context),
                           child: const Text(
                             'Save Changes',
                             style: TextStyle(
@@ -137,7 +139,7 @@ class _EditPersonInformationState extends State<EditPersonInformation> {
   }
 
   _toggleEditNameOntTap(){
-    if(_newName!=null || _tempLastName!=null){
+    if(_infoParameter.getNewName()!=null || _infoParameter.getLastNameTemp()!=null){
       formsIconsStats[0]=1;
     }
     _hideAllPassword();
@@ -148,7 +150,7 @@ class _EditPersonInformationState extends State<EditPersonInformation> {
     });
   }
   _toggleEditPasswordOntTap(){
-    if(_newPass!=null && _currPass!=null){
+    if(!_infoParameter.doseCurrPassIsNull() && !_infoParameter.doseNewPassIsNull()){
       formsIconsStats[1]=1;
     }
     _hideAllPassword();
@@ -159,7 +161,7 @@ class _EditPersonInformationState extends State<EditPersonInformation> {
     });
   }
   _toggleEditEmailOntTap(){
-    if(_newMail!=null || _currPass!=null){
+    if(_infoParameter.getNewMail()!=null || !_infoParameter.doseCurrPassIsNull()){
       formsIconsStats[2]=1;
     }
     _hideAllPassword();
@@ -182,77 +184,86 @@ class _EditPersonInformationState extends State<EditPersonInformation> {
       hideNewPassword = !hideNewPassword;
     });
   }
-  void _getNewNameFromTextField(String value){
-    _newName = value;
-  }
-  void _getNewEmailFromTextField(String value){
-    _newMail = value;
-  }
-  void _getCurrPassFromTextField(String value){
-    _currPass = value;
-  }
-  void _getNewPassFromTextField(String value){
-    _newPass = value;
-  }
-  void _setNameToFullName(String value){
-    _tempLastName = value;
-  }
+
   void _hideAllPassword(){
     hidePassword = true;
     hideNewPassword = true;
   }
 
-  applyChanges() {
+  _iconResponseToApplyChanges(int index, int value){
+    setState(() {
+      formsIconsStats[index] = value;
+    });
+  }
+}
+
+class PersonParamToEdit {
+  String? _newName, _currPass, _newPass, _newToConfirmedPass, _newMail, _tempLastName;
+
+  void setNewName(String? value){
+    _newName = value;
+  }
+  void setNewEmail(String? value){
+    _newMail = value;
+  }
+  void setCurrPass(String? value){
+    _currPass = value;
+  }
+  void setNewPass(String? value){
+    _newPass = value;
+  }
+  void setToConfirmPass(String? value){
+    _newPass = value;
+  }
+  void setNameToFullName(String? value){
+    _tempLastName = value;
+  }
+
+  String? getNewName() => _newName;
+  String? getNewMail() => _newMail;
+  String? getLastNameTemp() => _tempLastName;
+
+  bool doseCurrPassIsNull() => _currPass == null;
+  bool doseNewPassIsNull() => _currPass == null;
+  bool doseConfirmedPassIsNull() => _currPass == null;
+
+  applyChanges(Person loggedUser, GlobalKey<FormState> nameFormKey, GlobalKey<FormState> passwordFormKey,
+      GlobalKey<FormState> emailFormKey, Function onUpdate, BuildContext context) {
     print(_newName??'//');
-    if(_nameFormKey.currentState?.validate()==true) {
-      widget.loggedUser.updateName(
-          _nameFormKey, _newName ?? '',
+    if(nameFormKey.currentState?.validate()==true) {
+      loggedUser.updateName(
+          nameFormKey, _newName ?? '',
           _tempLastName ?? '', context).then((value) {
-        !value ? setState(() {
-          formsIconsStats[0] = 2;
-        }) :
-        setState(() {
+        !value ? onUpdate(0, 2) :
+        () =>(){
           _newName = null;    _tempLastName = null;
-          formsIconsStats[0] = 3;
-        });
+          onUpdate(0, 3);
+        };
       });
     }
-    if(_passwordFormKey.currentState?.validate() == true) {
-      widget.loggedUser.updatePassword(
-          _currPassFormKey, _currPass ?? '', _newPass ?? '').then((value){
-        !value? setState((){
-          formsIconsStats[1]=2;
-        }):
-        setState((){
-          formsIconsStats[1]=3;
-        });
+    if(passwordFormKey.currentState?.validate() == true) {
+      loggedUser.updatePassword(
+          passwordFormKey, _currPass ?? '', _newPass ?? '').then((value){
+        !value? onUpdate(1, 2) : onUpdate(1, 3);
       });
     }else{
-      setState(() {
-        formsIconsStats[1]=2;
-      });
-      _currPass = null;   _newPass = null;
+      onUpdate(1, 2);
+      _currPass = null;
+      _newPass = null;
+      _newToConfirmedPass = null;
     }
-    if(_emailFormKey.currentState?.validate() == true) {
-      widget.loggedUser.updateEmail(
-          _emailFormKey, _newMail ?? '',
+    if(emailFormKey.currentState?.validate() == true) {
+      loggedUser.updateEmail(
+          emailFormKey, _newMail ?? '',
           _currPass ?? '', context).then((value) {
-        !value ? setState(() {
-          formsIconsStats[2] = 2;
-        }) :
-        setState(() {
+        !value ? onUpdate(2, 2) :
+        ()=> (){
           _newMail = null;
-          formsIconsStats[2] = 3;
-        })
-        ;
+          onUpdate(2, 3);
+        };
       });
       _currPass = null;
     }
   }
 
-}
-
-class PrimitiveWrapper {
-  var value;
-  PrimitiveWrapper(this.value);
 }

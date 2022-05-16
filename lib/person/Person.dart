@@ -182,7 +182,7 @@ class Person{
       print('wait');
       userRef.doc(id)
           .update({'name': newName})
-          .then((value) => (){
+          .then((value){
               name = newName;
               final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
               _myAppProvider.updateLoggedUser(this);
