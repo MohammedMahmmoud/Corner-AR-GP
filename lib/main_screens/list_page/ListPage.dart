@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corner_ar_gp/authentication/registration/registration_screen.dart';
+import 'package:corner_ar_gp/main_screens/add_category/AddCategoryPage.dart';
+import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/getdata_components.dart';
@@ -33,21 +35,7 @@ class _ListPageState extends State<ListPage> {
     print(dataLength);
     setState(() {});
     super.initState();
-    // getData();
-    // //print(adminsLength);
-    // //setState(() {});
-    // Future.delayed(Duration(milliseconds: 500),() async {
-    //   print(adminsLength);
-    //   setState(() {});
-    // });
   }
-
-  /*void getData() async {
-    querySnapshot = await _fireStore.collection(collectionName).get();
-    data = await querySnapshot.docs.map((doc) => doc.data()).toList();
-    dataLength = data.length;
-    print("getttt daaaata");
-  }*/
 
 
   @override
@@ -100,12 +88,6 @@ class _ListPageState extends State<ListPage> {
                           onPressed: ()async{
                             print(data[index]['id']);
 
-                            //var curruntAdmin = await FirebaseAuth.instance.currentUser!;
-                            //await FirebaseAuth.instance.signOut();
-
-                            //curruntAdmin
-                            //user.delete();
-
                             await FirebaseFirestore.instance.collection(collectionName)
                                 .doc(data[index]['id'])
                                 .delete()
@@ -143,12 +125,20 @@ class _ListPageState extends State<ListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.pushReplacement<void, void>(
-              context,
-              MaterialPageRoute<void>(
-                builder: (BuildContext context) =>RegistrationScreen(isAdmin: true),));
-        },
-        child: Icon(Icons.add),
+          if(collectionName == Admin.CollectionName){
+            Navigator.pushReplacement<void, void>(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) =>RegistrationScreen(isAdmin: true),));
+          }else{
+            Navigator.pushReplacement<void, void>(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) =>AddCategoryPage("Add Category"),));
+          }
+        }
+
+        ,child: Icon(Icons.add),
         backgroundColor: Colors.blueGrey,
       ),
     );
