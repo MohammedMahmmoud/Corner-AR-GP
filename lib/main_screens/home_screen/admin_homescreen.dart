@@ -64,6 +64,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                   context: context,
                   collectionName: "Category",
                   buttonName: "Category List"
+                ),
+                AdminHomeScreenButton(
+                    pageName: "Furnitures List",
+                    context: context,
+                    collectionName: "Furniture",
+                    buttonName: "Furnitures List"
                 )
               ],
             )

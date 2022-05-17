@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main_screens/list_page/FurnitureListPage.dart';
 import '../main_screens/list_page/ListPage.dart';
 import 'getdata_components.dart';
 
@@ -39,19 +40,38 @@ ElevatedButton AdminHomeScreenButton(
   return ElevatedButton(
       onPressed: ()async{
         Data = await getData(collectionName);
+        print(Data);
         print("innnnnnnished");
-        Navigator.push(
-            context,
-            MaterialPageRoute<void>(
-              builder: (BuildContext context) =>
-                  ListPage(
-                      title:pageName,
-                      collectionName:collectionName,
-                      Data: Data,
-                      dataLength: Data.length
-                  ),
-            )
-        );
+        if(collectionName == "Furniture"){
+          Data = await getDataFurniture(collectionName);
+          Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) =>
+                    FurnitureListPage(
+                        title:pageName,
+                        collectionName:collectionName,
+                        Data: Data,
+                        dataLength: Data.length
+                    ),
+              )
+          );
+        }else{
+          Data = await getData(collectionName);
+          Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) =>
+                    ListPage(
+                        title:pageName,
+                        collectionName:collectionName,
+                        Data: Data,
+                        dataLength: Data.length
+                    ),
+              )
+          );
+        }
+
       },
       child: Text(buttonName));
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corner_ar_gp/Category/Category.dart';
+import 'package:corner_ar_gp/Furniture/Furniture.dart';
 import 'package:corner_ar_gp/person/Person.dart';
 import '../person/Admin.dart';
 import '../person/User.dart';
@@ -32,5 +33,12 @@ CollectionReference<Category> getCategoryCollectionWithConverter(String collecti
   return FirebaseFirestore.instance.collection(collectionName).withConverter<Category>(
     fromFirestore: (snapshot, _) => Category.fromJson(snapshot.data()!),
     toFirestore: (category, _) => category.toJson(),
+  );
+}
+
+CollectionReference<Furniture> getFurnitureCollectionWithConverter(String collectionName){
+  return FirebaseFirestore.instance.collection(collectionName).withConverter<Furniture>(
+    fromFirestore: (snapshot, _) => Furniture.fromJson(snapshot.data()!),
+    toFirestore: (furniture, _) => furniture.toJson(),
   );
 }

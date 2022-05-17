@@ -144,29 +144,3 @@ class _ListPageState extends State<ListPage> {
     );
   }
 }
-
-
-/*Container(
-            padding: const EdgeInsets.fromLTRB(70,80,70,0),
-            child: ElevatedButton(
-              onPressed: (){
-                  Navigator.pushReplacement<void, void>(
-                  context,
-                  MaterialPageRoute<void>(
-                  builder: (BuildContext context) =>RegistrationScreen(isAdmin: true),));
-              },
-              child: Text(
-                buttonName,
-                style: TextStyle(
-                  fontSize: 22,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-              primary: Colors.white,
-              onPrimary: Color(0xFF71A2B5),
-              fixedSize: const Size(200, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)),
-              ),
-            )
-          )*/
