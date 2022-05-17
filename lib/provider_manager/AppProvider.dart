@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 class AppProvider extends ChangeNotifier {
    Person? loggedUser;
+   bool? _isAdmin;
 
   bool checkLoggedUser(){
     //FirebaseAuth.instance.signOut();
@@ -27,9 +28,13 @@ class AppProvider extends ChangeNotifier {
     final firebaseCurrentUser = FirebaseAuth.instance.currentUser;
     if (firebaseCurrentUser != null) {
       String _collectionName = app_user.User.CollectionName;
-      _checkAdmin(firebaseCurrentUser.uid).then((value) => _collectionName = Admin.CollectionName);
+      await _checkAdmin(firebaseCurrentUser.uid).then((value){
+        value? _collectionName = Admin.CollectionName : _collectionName;
+        _isAdmin = value;
+        }
+      );
       print(_collectionName);
-      await _fetchUsers(_collectionName, firebaseCurrentUser).then((value) => loggedUser = value);
+      _fetchUsers(_collectionName, firebaseCurrentUser).then((value) => loggedUser = value);
       //print(loggedUser!.email+'+++++++++++++++++++++++'+loggedUser!.id+'++++++++++++++++'+loggedUser!.name);
     }
   }
@@ -41,8 +46,8 @@ class AppProvider extends ChangeNotifier {
         .get()
         .then((user) {
           if (user.data() != null) {
-            collectionPerson =  app_user.User();
-            _checkAdmin(firebaseCurrentUser.uid).then((value) => collectionPerson = Admin());
+            collectionPerson = collectionName == Admin.CollectionName? Admin() : app_user.User();
+            //_checkAdmin(firebaseCurrentUser.uid).then((value) => collectionPerson = Admin());
             collectionPerson = user.data()!;
             //notifyListeners();
             //print(collectioPerson!.email+'----------'+collectioPerson!.id+'------------------'+collectioPerson!.name);
@@ -59,11 +64,8 @@ class AppProvider extends ChangeNotifier {
   }
 
   void updateLoggedUser(Person user) {
-    print("from ap provider update");
     loggedUser = user;
-    print('-----------------------to be notified---------------------');
     notifyListeners();
-    print('-----------------------to be notified---------------------');
   }
 
   Person getLoggedUser(){
@@ -82,5 +84,14 @@ class AppProvider extends ChangeNotifier {
       },
     );
     return adminReference.exists;
+  }
+
+  Future<bool> isLoggedUserAdmin() async {
+    print('[]][][][][[][][][ $_isAdmin');
+    while(_isAdmin == null) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+    print('[]][][][][[][][][ $_isAdmin');
+    return _isAdmin ?? false;
   }
 }
