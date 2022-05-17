@@ -16,6 +16,7 @@ TextFormField textFormFieldComponent(
     obscureText: isPasswordHidden,
     onChanged: (newValue){
       onChangedText(newValue);
+      print("----------------------------------------------------------new value: $newValue");
     },
     decoration: InputDecoration(
       hintText: hintText,
