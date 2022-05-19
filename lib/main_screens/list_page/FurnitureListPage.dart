@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corner_ar_gp/authentication/registration/registration_screen.dart';
 import 'package:corner_ar_gp/main_screens/add_category/AddCategoryPage.dart';
+import 'package:corner_ar_gp/main_screens/add_furniture/add_furniture_screen.dart';
 import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:flutter/material.dart';
 
@@ -163,17 +164,13 @@ class _FunitureListPageState extends State<FurnitureListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          // if(collectionName == Admin.CollectionName){
-          //   Navigator.pushReplacement<void, void>(
-          //       context,
-          //       MaterialPageRoute<void>(
-          //         builder: (BuildContext context) =>RegistrationScreen(isAdmin: true),));
-          // }else{
-          //   Navigator.pushReplacement<void, void>(
-          //       context,
-          //       MaterialPageRoute<void>(
-          //         builder: (BuildContext context) =>AddCategoryPage("Add Category"),));
-          // }
+          if(true || collectionName == Admin.CollectionName){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) =>AddFurnitureScreen(categoryID: "idPVJPs0DABSz5acDFiQ"),)
+            );
+          }
         }
 
         ,child: Icon(Icons.add),
