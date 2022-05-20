@@ -30,6 +30,7 @@ class _FunitureListPageState extends State<FurnitureListPage> {
   var data;
   var originalData;
   var categoryData;
+  String categoryID = '';
   var furnitureInCategory;
   int dataLength;
   _FunitureListPageState(this.title,this.collectionName,this.data,this.dataLength,this.categoryData,this.furnitureInCategory){
@@ -61,6 +62,7 @@ class _FunitureListPageState extends State<FurnitureListPage> {
     for(int i=0;i<categoryData.length;i++){
       if(dropdownValue == "All") {
         setState(() {
+          categoryID = '';
           data = originalData;
           dataLength = data.length;
         });
@@ -68,6 +70,7 @@ class _FunitureListPageState extends State<FurnitureListPage> {
       else if(categoryData[i]['name'] == dropdownValue){
         print("${categoryData[i]['name']} == $dropdownValue");
           setState(() {
+            categoryID = categoryData[i]["id"];
             data = furnitureInCategory[i];
             dataLength = furnitureInCategory[i].length;
           });
@@ -151,7 +154,7 @@ class _FunitureListPageState extends State<FurnitureListPage> {
 
                                         var newData;
                                         await FirebaseFirestore.instance.collection("Category")
-                                            .doc(dropdownValue).collection(collectionName).doc(data[index]['id'])
+                                            .doc(data[index]["categoryID"]).collection(collectionName).doc(data[index]['id'])
                                             .delete()
                                             .then((_) async {
                                           print('Deleted');
@@ -249,12 +252,13 @@ class _FunitureListPageState extends State<FurnitureListPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: categoryID== ''? null
+            :(){
           if(true || collectionName == Admin.CollectionName){
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) =>AddFurnitureScreen(categoryID: "idPVJPs0DABSz5acDFiQ"),)
+                  builder: (BuildContext context) =>AddFurnitureScreen(categoryID: categoryID),)
             );
           }
         }
