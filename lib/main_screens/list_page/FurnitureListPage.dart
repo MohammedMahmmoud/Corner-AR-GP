@@ -251,9 +251,9 @@ class _FunitureListPageState extends State<FurnitureListPage> {
           // ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: categoryID== ''? null
-            :(){
+      floatingActionButton: categoryID== ''? null :
+      FloatingActionButton(
+        onPressed: (){
           if(true || collectionName == Admin.CollectionName){
             Navigator.push(
                 context,
