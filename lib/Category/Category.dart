@@ -5,6 +5,7 @@ import '../components/getdata_components.dart';
 import '../database/DatabaseHelper.dart';
 
 class Category{
+  static const collectionName = "Category";
   late String name,id;
   var data;
   Category({String name = '',String id = ''}){
@@ -15,9 +16,15 @@ class Category{
   void setName(String name){
     this.name = name;
   }
+  void setId(String id){
+    this.id = id;
+  }
 
   String getName(){
     return this.name;
+  }
+  String getId(){
+    return id;
   }
 
   Category.fromJson(Map<String, Object?> json)

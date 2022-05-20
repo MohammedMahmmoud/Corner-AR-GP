@@ -1,33 +1,42 @@
 class Furniture{
+  static const collectionName = "Furniture";
+  late String categoryID;
   late String modelName;
   late String modelUrl;
   late String id;
   late String imageUrl;
 
-  Furniture({String modelName=' ',String modelUrl=' ',String id=' ',String imageUrl=' '}){
-    this.id = id;
-    this.imageUrl = imageUrl;
-    this.modelName = modelName;
-    this.modelUrl = modelUrl;
-  }
+  Furniture({this.modelName='' ,this.modelUrl='', this.id='', this.imageUrl='', this.categoryID = ''});
 
   void setModelName(String modelName){
     this.modelName = modelName;
   }
   String getModelName(){
-    return this.modelName;
+    return modelName;
   }
   void setModelUrl(String modelUrl){
     this.modelUrl = modelUrl;
   }
   String getModelUrl(){
-    return this.modelUrl;
+    return modelUrl;
   }
   void setImageUrl(String imageUrl){
     this.imageUrl = imageUrl;
   }
   String getImageUrl(){
-    return this.imageUrl;
+    return imageUrl;
+  }
+  void setId(String id){
+    this.id = id;
+  }
+  String getId(){
+    return id;
+  }
+  void setCategory(String category){
+    this.categoryID = category;
+  }
+  String getCategory(){
+    return categoryID;
   }
 
   Furniture.fromJson(Map<String, Object?> json)
@@ -36,6 +45,7 @@ class Furniture{
     modelName: json['modelName']! as String,
     imageUrl: json['imageUrl']! as String,
     id: json['id']! as String,
+    categoryID: json['categoryID']! as String,
   );
 
   //to write in db
@@ -45,6 +55,7 @@ class Furniture{
       'modelUrl': modelUrl,
       'imageUrl': imageUrl,
       'id': id,
+      'categoryID': categoryID
     };
   }
 }
