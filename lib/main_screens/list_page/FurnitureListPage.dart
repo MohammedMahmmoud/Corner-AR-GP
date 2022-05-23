@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:corner_ar_gp/authentication/registration/registration_screen.dart';
-import 'package:corner_ar_gp/main_screens/add_category/AddCategoryPage.dart';
 import 'package:corner_ar_gp/main_screens/add_furniture/add_furniture_screen.dart';
 import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +11,18 @@ class FurnitureListPage extends StatefulWidget {
   String title;
   String collectionName;
   var Data;
-  var categoryData;
+  var parentData;
   var furnitureInCategory;
   int dataLength;
+  bool isViewing;
+  String parentCollection;
   FurnitureListPage({required this.title,required this.collectionName,
-    required this.Data,required this.dataLength,required this.categoryData,required this.furnitureInCategory});
+    required this.Data,required this.dataLength,
+    required this.parentData,required this.furnitureInCategory,required this.isViewing,required this.parentCollection});
   @override
   _FunitureListPageState createState() =>
-      _FunitureListPageState(this.title,this.collectionName,this.Data,this.dataLength,this.categoryData,this.furnitureInCategory);
+      _FunitureListPageState(this.title,this.collectionName,this.Data,this.dataLength,
+          this.parentData,this.furnitureInCategory,this.isViewing,parentCollection);
 }
 
 class _FunitureListPageState extends State<FurnitureListPage> {
@@ -29,11 +31,14 @@ class _FunitureListPageState extends State<FurnitureListPage> {
   String buttonName="Add Admin";
   var data;
   var originalData;
-  var categoryData;
+  var parentData;
   String categoryID = '';
   var furnitureInCategory;
   int dataLength;
-  _FunitureListPageState(this.title,this.collectionName,this.data,this.dataLength,this.categoryData,this.furnitureInCategory){
+  bool isViewing;
+  String parentCollection;
+  _FunitureListPageState(this.title,this.collectionName,this.data,
+      this.dataLength,this.parentData,this.furnitureInCategory,this.isViewing,this.parentCollection){
     originalData = this.data;
   }
 
@@ -43,8 +48,8 @@ class _FunitureListPageState extends State<FurnitureListPage> {
   List<String> convertDataToList(){
     List<String> list = [];
     list.add("All");
-    for(int i=0;i<categoryData.length;i++){
-      list.add(categoryData[i]['name']);
+    for(int i=0;i<parentData.length;i++){
+      list.add(parentData[i]['name']);
     }
     return list;
   }
@@ -59,7 +64,7 @@ class _FunitureListPageState extends State<FurnitureListPage> {
 
   void changeDropListValue(String? newValue)  {
     dropdownValue = newValue!;
-    for(int i=0;i<categoryData.length;i++){
+    for(int i=0;i<parentData.length;i++){
       if(dropdownValue == "All") {
         setState(() {
           categoryID = '';
@@ -67,10 +72,10 @@ class _FunitureListPageState extends State<FurnitureListPage> {
           dataLength = data.length;
         });
       }
-      else if(categoryData[i]['name'] == dropdownValue){
-        print("${categoryData[i]['name']} == $dropdownValue");
+      else if(parentData[i]['name'] == dropdownValue){
+        print("${parentData[i]['name']} == $dropdownValue");
           setState(() {
-            categoryID = categoryData[i]["id"];
+            categoryID = parentData[i]["id"];
             data = furnitureInCategory[i];
             dataLength = furnitureInCategory[i].length;
           });
@@ -127,65 +132,73 @@ class _FunitureListPageState extends State<FurnitureListPage> {
                   crossAxisCount: 2,
                   //padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
                   children: List.generate(dataLength, (index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20)
+                    return ElevatedButton(
+                      onPressed: () {  },
+                      style:ElevatedButton.styleFrom(
+                        primary: Color.fromRGBO(0, 0, 0, 0),
+                        onPrimary: Colors.white,
                       ),
-                      padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: Image(
-                              image: NetworkImage(data[index]['imageUrl']),
-                              fit: BoxFit.fill,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Image(
+                                image: NetworkImage(data[index]['imageUrl']),
+                                fit: BoxFit.fill,
+                              ),
                             ),
-                          ),
-                          Container(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(data[index]['modelName'],style: TextStyle(fontSize: 15),),
-                                ),
-                                Align(
-                                    child: IconButton(
-                                      onPressed: ()async{
-                                        print(data[index]['id']);
+                            Container(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(data[index]['modelName'],style: TextStyle(fontSize: 15,color: Colors.blueGrey),),
+                                  ),
+                                  Align(
+                                      child: isViewing? IconButton(
+                                        onPressed: ()async{
+                                        },
+                                        icon: const Icon(
+                                          Icons.save,
+                                          color: Colors.blueGrey,
+                                          //size: 30.0,
+                                        ),
+                                      )
+                                          :IconButton(
+                                        onPressed: ()async{
+                                          var newData;
+                                          await FirebaseFirestore.instance.collection(parentCollection)
+                                              .doc(data[index]["parentID"]).collection(collectionName).doc(data[index]['id'])
+                                              .delete()
+                                              .then((_) async {
+                                            newData = await getDataFurniture(collectionName,parentCollection);
+                                            print(newData);
+                                            setState((){});
+                                            print("-------------------------------------------------------");
+                                          }).catchError((error) => print('Delete failed: $error'));
+                                          setState((){
+                                            data = newData[0];
+                                            furnitureInCategory = newData[1];
+                                            dataLength = data.length;
+                                          });
 
-                                        var newData;
-                                        await FirebaseFirestore.instance.collection("Category")
-                                            .doc(data[index]["categoryID"]).collection(collectionName).doc(data[index]['id'])
-                                            .delete()
-                                            .then((_) async {
-                                          print('Deleted');
-
-                                          newData = await getDataFurniture(collectionName);
-                                          print(newData);
-                                          print(newData.length);
-                                          print("finsih");
-                                          print(index);
-                                          setState((){});
-                                        }).catchError((error) => print('Delete failed: $error'));
-                                        print("out");
-                                        print(index);
-                                        setState((){
-                                          data = newData[0];
-                                          furnitureInCategory = newData[1];
-                                          dataLength = data.length;
-                                        });
-
-                                      },
-                                      icon: const ImageIcon(
-                                        AssetImage("assets/remove.png"),
-                                        color: Colors.red,
+                                        },
+                                        icon: const ImageIcon(
+                                          AssetImage("assets/remove.png"),
+                                          color: Colors.red,
+                                        ),
                                       ),
-                                    ),
-                                    alignment: Alignment.centerLeft,
-                                  )
-                              ],
+                                      alignment: Alignment.centerLeft,
+                                    )
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   }),
@@ -193,62 +206,6 @@ class _FunitureListPageState extends State<FurnitureListPage> {
               ),
             ],
           ),
-          // ListView.builder(
-          //   itemCount: dataLength,
-          //   itemBuilder: (BuildContext context, int index) {
-          //     return Container(
-          //         padding: EdgeInsets.fromLTRB(30, 30, 30, 0),
-          //         child: Container(
-          //           decoration: BoxDecoration(
-          //               color: Colors.white,
-          //               borderRadius: BorderRadius.circular(15)
-          //           ),
-          //           child: Row(
-          //             children: [
-          //               Expanded(
-          //                 child: Container(
-          //                   child: Text(data[index]['modelName'],style: TextStyle(fontSize: 20),),
-          //                   padding: const EdgeInsets.only(left: 10),
-          //                 ),
-          //               ),
-          //               Align(
-          //                 child: IconButton(
-          //                   onPressed: ()async{
-          //                     // print(data[index]['id']);
-          //                     //
-          //                     // await FirebaseFirestore.instance.collection(collectionName)
-          //                     //     .doc(data[index]['id'])
-          //                     //     .delete()
-          //                     //     .then((_) async {
-          //                     //   print('Deleted');
-          //                     //   data = await getData(collectionName);
-          //                     //   print(data);
-          //                     //   print(data.length);
-          //                     //   print("finsih");
-          //                     //   print(index);
-          //                     //   setState((){});
-          //                     // }).catchError((error) => print('Delete failed: $error'));
-          //                     // print("out");
-          //                     // print(index);
-          //                     // setState((){
-          //                     //   dataLength = data.length;
-          //                     // });
-          //
-          //                   },
-          //                   icon: const ImageIcon(
-          //                     AssetImage("assets/remove.png"),
-          //                     color: Colors.red,
-          //                   ),
-          //                 ),
-          //                 alignment: Alignment.centerLeft,
-          //               )
-          //
-          //             ],
-          //           ),
-          //         )
-          //     );
-          //   },
-          // ),
         ],
       ),
       floatingActionButton: categoryID== ''? null :

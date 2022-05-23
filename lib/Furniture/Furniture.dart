@@ -1,12 +1,12 @@
 class Furniture{
   static const collectionName = "Furniture";
-  late String categoryID;
+  late String parentID;
   late String modelName;
   late String modelUrl;
   late String id;
   late String imageUrl;
 
-  Furniture({this.modelName='' ,this.modelUrl='', this.id='', this.imageUrl='', this.categoryID = ''});
+  Furniture({this.modelName='' ,this.modelUrl='', this.id='', this.imageUrl='', this.parentID = ''});
 
   void setModelName(String modelName){
     this.modelName = modelName;
@@ -33,10 +33,10 @@ class Furniture{
     return id;
   }
   void setCategory(String category){
-    this.categoryID = category;
+    this.parentID = category;
   }
   String getCategory(){
-    return categoryID;
+    return parentID;
   }
 
   Furniture.fromJson(Map<String, Object?> json)
@@ -45,7 +45,7 @@ class Furniture{
     modelName: json['modelName']! as String,
     imageUrl: json['imageUrl']! as String,
     id: json['id']! as String,
-    categoryID: json['categoryID']! as String,
+    parentID: json['parentID']! as String,
   );
 
   //to write in db
@@ -55,7 +55,7 @@ class Furniture{
       'modelUrl': modelUrl,
       'imageUrl': imageUrl,
       'id': id,
-      'categoryID': categoryID
+      'parentID': parentID
     };
   }
 }

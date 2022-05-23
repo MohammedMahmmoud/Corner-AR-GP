@@ -135,3 +135,26 @@ Future<Set<String>> uploadToStorage(String modelId, File modelBytes, File pictur
 
   return {modelUrl, pictureUrl};
 }
+
+//
+// Future<bool> saveFurniture(String UserId, Furniture furniture, File modelBytes, File pictureBytes) async{
+//   bool isSuccessful = true;
+//   furniture.setCategory(UserId);
+//
+//   final furnitureDoc = FirebaseFirestore.instance
+//       .collection(Category.collectionName)
+//       .doc(UserId)
+//       .collection(Furniture.collectionName)
+//       .doc();
+//
+//   print("here the id :             ${furnitureDoc.id}");
+//   furniture.setId(furnitureDoc.id);
+//   furniture.setModelUrl(furniture.getModelUrl());
+//   furniture.setImageUrl(furniture.getModelUrl());
+//
+//   await furnitureDoc.set(furniture.toJson()).onError((e, _){print("Error writing document: $e"); isSuccessful = false;});
+//
+//   print("added to fireStore");
+//
+//   return isSuccessful;
+// }

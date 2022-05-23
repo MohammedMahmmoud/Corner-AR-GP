@@ -45,7 +45,7 @@ ElevatedButton AdminHomeScreenButton(
         print("innnnnnnished");
         if(collectionName == "Furniture"){
           Data = await getData("Category");
-          furnitureData = await getDataFurniture(collectionName);
+          furnitureData = await getDataFurniture(collectionName,"Category");
           Navigator.push(
               context,
               MaterialPageRoute<void>(
@@ -55,8 +55,10 @@ ElevatedButton AdminHomeScreenButton(
                         collectionName:collectionName,
                         Data: furnitureData[0],
                         dataLength: furnitureData[0].length,
-                        categoryData: Data,
+                        parentData: Data,
                       furnitureInCategory: furnitureData[1],
+                      isViewing: false,
+                        parentCollection: "Category"
                     ),
               )
           );

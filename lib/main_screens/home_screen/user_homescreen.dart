@@ -5,6 +5,10 @@ import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/bottomBar_components.dart';
+import '../../components/getdata_components.dart';
+import '../list_page/FurnitureListPage.dart';
+
 class UserHomeScreen extends StatefulWidget {
   static const routeName = 'userHomeScreen';
 
@@ -18,6 +22,46 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   late String sideMenuContent;
   int pageIndex = 0;
 
+  List <BottomNavigationBarItem>bottomBarItems=[
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.home),
+      label: 'Home',
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.add),
+      label: 'Add',
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.auto_delete),
+      label: 'Delete',
+    ),
+  ];
+
+  int selectedIndex = 0;
+
+  Future<void> onCahngedbottomBarItems(index) async {
+    setState(() {
+      selectedIndex = index;
+    });
+    if(index == 1){
+      var Data = await getData("Category");
+      var furnitureData = await getDataFurniture("Furniture","Category");
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) =>FurnitureListPage(
+              title: "Spawn Furniture",
+              collectionName: "Furniture",
+              furnitureInCategory: furnitureData[1],
+              parentData: Data,
+              dataLength: furnitureData[0].length,
+              Data: furnitureData[0],
+              isViewing: true,
+              parentCollection: "User",
+            ),)
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +99,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           ),
           pageIndex == 1 ? EditPersonInformation(loggedUser) : const SizedBox(height: 0,)
         ],
-      )
+      ),
+      bottomNavigationBar: userBottomBar(
+        selectedIndex: selectedIndex,
+          items: bottomBarItems,
+        onTap: (index)=>onCahngedbottomBarItems(index)
+      ),
 
 
     );

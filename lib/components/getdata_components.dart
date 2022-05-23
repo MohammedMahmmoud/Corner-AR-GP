@@ -10,17 +10,17 @@ Future<dynamic> getData(collectionName) async{
   return Data;
 }
 
-Future<List> getDataFurniture(collectionName) async{
+Future<List> getDataFurniture(collectionName,parentCollectionName) async{
   final _fireStore = FirebaseFirestore.instance;
-  var dataCategory = await getData("Category");
+  var dataParent = await getData(parentCollectionName);
   var dataFurniture;
   var dataFurnitureTemp;
-  List categroyFurniture = [];
+  List parentFurniture = [];
   QuerySnapshot querySnapshot;
-  for(int i=0;i<dataCategory.length;i++){
-    querySnapshot = await _fireStore.collection("Category").doc(dataCategory[i]['id']).collection(collectionName).get();
+  for(int i=0;i<dataParent.length;i++){
+    querySnapshot = await _fireStore.collection(parentCollectionName).doc(dataParent[i]['id']).collection(collectionName).get();
     dataFurnitureTemp = await querySnapshot.docs.map((doc) => doc.data()).toList();
-    categroyFurniture.add(dataFurnitureTemp);
+    parentFurniture.add(dataFurnitureTemp);
     if(i==0)
       dataFurniture = dataFurnitureTemp;
     else
@@ -28,7 +28,7 @@ Future<List> getDataFurniture(collectionName) async{
   }
   print(dataFurniture);
   print("innnnaddddmin paaage daaaata");
-  return [dataFurniture,categroyFurniture];
+  return [dataFurniture,parentFurniture];
 }
 //
 // Future<dynamic> getCategoryFurniture(collectionName, int id) async{

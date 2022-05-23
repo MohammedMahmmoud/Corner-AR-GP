@@ -4,7 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../authentication/login/LoginPage.dart';
+import '../main_screens/list_page/FurnitureListPage.dart';
 import '../person/Person.dart';
+import 'getdata_components.dart';
 
 
 Drawer sideMenu(
@@ -14,7 +16,7 @@ Drawer sideMenu(
   required String userName,
   required bool isAdmin,
   required BuildContext buildContext,
-  required Person personObject
+  required Person personObject,
 }
     ){
   return Drawer(
@@ -51,7 +53,24 @@ Drawer sideMenu(
         isAdmin?Container(child:null):
         listMenuButtons(
             buttonName: 'Saved Furniture',
-          onPressedButton: (){}
+          onPressedButton: () async {
+            var Data = await getData("Category");
+            var furnitureData = await getDataFurniture("Furniture","User");
+            Navigator.push(
+                buildContext,
+                MaterialPageRoute(
+                  builder: (BuildContext context) =>FurnitureListPage(
+                    title: "Saved Furniture",
+                    collectionName: "Furniture",
+                    furnitureInCategory: furnitureData[1],
+                      parentData: Data,
+                    dataLength: furnitureData[0].length,
+                    Data: furnitureData[0],
+                    isViewing: false,
+                    parentCollection: "User"
+                  ),)
+            );
+          }
         ),
         TextButton.icon(
             onPressed: (){
