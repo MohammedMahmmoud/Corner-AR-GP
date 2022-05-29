@@ -3,8 +3,10 @@ import 'package:corner_ar_gp/main_screens/add_furniture/add_furniture_screen.dar
 import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:flutter/material.dart';
 
+import '../../Furniture/Furniture.dart';
 import '../../components/dropDownList_components.dart';
 import '../../components/getdata_components.dart';
+import '../../database/DatabaseHelper.dart';
 
 
 class FurnitureListPage extends StatefulWidget {
@@ -16,13 +18,15 @@ class FurnitureListPage extends StatefulWidget {
   int dataLength;
   bool isViewing;
   String parentCollection;
+  String parentID;
   FurnitureListPage({required this.title,required this.collectionName,
     required this.Data,required this.dataLength,
-    required this.parentData,required this.furnitureInCategory,required this.isViewing,required this.parentCollection});
+    required this.parentData,required this.furnitureInCategory,required this.isViewing,
+    required this.parentCollection,required this.parentID});
   @override
   _FunitureListPageState createState() =>
       _FunitureListPageState(this.title,this.collectionName,this.Data,this.dataLength,
-          this.parentData,this.furnitureInCategory,this.isViewing,parentCollection);
+          this.parentData,this.furnitureInCategory,this.isViewing,parentCollection,parentID);
 }
 
 class _FunitureListPageState extends State<FurnitureListPage> {
@@ -37,8 +41,9 @@ class _FunitureListPageState extends State<FurnitureListPage> {
   int dataLength;
   bool isViewing;
   String parentCollection;
+  String parentID;
   _FunitureListPageState(this.title,this.collectionName,this.data,
-      this.dataLength,this.parentData,this.furnitureInCategory,this.isViewing,this.parentCollection){
+      this.dataLength,this.parentData,this.furnitureInCategory,this.isViewing,this.parentCollection,this.parentID){
     originalData = this.data;
   }
 
@@ -161,6 +166,16 @@ class _FunitureListPageState extends State<FurnitureListPage> {
                                   Align(
                                       child: isViewing? IconButton(
                                         onPressed: ()async{
+                                          print(parentID);
+                                          print(data[index]['modelName']);
+                                          Furniture furniture = Furniture(
+                                            parentID: parentID,
+                                            id: data[index]['id'],
+                                            imageUrl: data[index]['imageUrl'],
+                                            modelName: data[index]['modelName'],
+                                            modelUrl: data[index]['modelUrl']
+                                          );
+                                          await saveFurniture(furniture).then((value) => print("heeeeellllllllllllllllll"));
                                         },
                                         icon: const Icon(
                                           Icons.save,
@@ -171,6 +186,7 @@ class _FunitureListPageState extends State<FurnitureListPage> {
                                           :IconButton(
                                         onPressed: ()async{
                                           var newData;
+
                                           await FirebaseFirestore.instance.collection(parentCollection)
                                               .doc(data[index]["parentID"]).collection(collectionName).doc(data[index]['id'])
                                               .delete()

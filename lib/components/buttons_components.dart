@@ -58,7 +58,8 @@ ElevatedButton AdminHomeScreenButton(
                         parentData: Data,
                       furnitureInCategory: furnitureData[1],
                       isViewing: false,
-                        parentCollection: "Category"
+                        parentCollection: "Category",
+                      parentID: "",
                     ),
               )
           );

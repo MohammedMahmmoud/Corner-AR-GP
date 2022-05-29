@@ -46,6 +46,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     if(index == 1){
       var Data = await getData("Category");
       var furnitureData = await getDataFurniture("Furniture","Category");
+      print("---------------------------------------------${loggedUser.id}");
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -58,6 +59,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               Data: furnitureData[0],
               isViewing: true,
               parentCollection: "User",
+              parentID: loggedUser.id,
             ),)
       );
     }

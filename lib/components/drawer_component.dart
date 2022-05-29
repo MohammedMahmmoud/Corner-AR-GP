@@ -67,7 +67,8 @@ Drawer sideMenu(
                     dataLength: furnitureData[0].length,
                     Data: furnitureData[0],
                     isViewing: false,
-                    parentCollection: "User"
+                    parentCollection: "User",
+                    parentID: "",
                   ),)
             );
           }
