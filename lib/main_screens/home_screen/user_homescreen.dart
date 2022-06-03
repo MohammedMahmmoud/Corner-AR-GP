@@ -74,7 +74,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
 
     return Scaffold(
-      drawer: sideMenu(changeToEditPage: _setToEditPage, isAdmin: false,userName: sideMenuContent,buildContext:context,personObject: loggedUser),
+      drawer: sideMenu(changeToEditPage: _setToEditPage, isAdmin: false,buildContext:context,personObject: loggedUser),
       appBar: AppBar(
         title: Text("User"),
         backgroundColor: Colors.blueGrey,

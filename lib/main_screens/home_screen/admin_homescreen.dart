@@ -26,7 +26,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     sideMenuContent = loggedUser.name;
 
     return Scaffold(
-      drawer: sideMenu(changeToEditPage: (){}, isAdmin: true,userName: sideMenuContent,buildContext: context, personObject: loggedUser),
+      drawer: sideMenu(changeToEditPage: (){}, isAdmin: true,buildContext: context, personObject: loggedUser),
       appBar: AppBar(
         title: Text("Admin"),
         backgroundColor: Colors.blueGrey,

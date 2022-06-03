@@ -140,15 +140,48 @@ Future<Set<String>> uploadToStorage(String modelId, File modelBytes, File pictur
 Future<bool> saveFurniture(Furniture furniture) async{
   bool isSuccessful = true;
 
+  // final categoryRef = getCategoryCollectionWithConverter("Category");
+  //
+  // String temp = categoryRef.doc().id;
+  //
+  // try{
+  //   categoryRef.doc(temp).set(
+  //       Category(
+  //           name: name,
+  //           id: temp
+  //       )
+  //   )
+
+  //furniture.setId(id)
   final furnitureDoc = FirebaseFirestore.instance
       .collection(User.CollectionName)
       .doc(furniture.getCategory())
-      .collection(Furniture.collectionName)
-      .doc();
+      .collection(Furniture.collectionName);
 
-  await furnitureDoc.set(furniture.toJson()).onError((e, _){print("Error writing document: $e"); isSuccessful = false;});
+  await furnitureDoc.doc(furniture.id).set(furniture.toJson()).onError((e, _){print("Error writing document: $e"); isSuccessful = false;});
 
   print("added to fireStore");
 
   return isSuccessful;
+}
+
+Future<void> deleteAllCategroyFurniture(String categoryId) async{
+
+  final _fireStore = FirebaseFirestore.instance;
+  QuerySnapshot querySnapshot = await _fireStore.collection("Category").doc(categoryId).collection("Furniture").get();
+  var dataFurnitureTemp;
+  dataFurnitureTemp = await querySnapshot.docs.map((doc) => doc.data()).toList();
+  for(int i=0 ;i<dataFurnitureTemp.length;i++){
+    await deleteFromStorage(dataFurnitureTemp[i]['imageUrl']);
+    await deleteFromStorage(dataFurnitureTemp[i]['modelUrl']);
+  }
+}
+
+Future<void> deleteFromStorage(String path)async {
+  try {
+    await FirebaseStorage.instance.refFromURL(path).delete().then((value) => print("5555555555555555555555555555555"));
+  } catch (e) {
+    print('failed deleted storage item ============> $e');
+  }
+
 }

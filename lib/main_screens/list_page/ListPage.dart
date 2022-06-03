@@ -5,6 +5,7 @@ import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/getdata_components.dart';
+import '../../database/DatabaseHelper.dart';
 
 
 class ListPage extends StatefulWidget {
@@ -25,6 +26,7 @@ class _ListPageState extends State<ListPage> {
   var data;
   int dataLength;
   _ListPageState(this.title,this.collectionName,this.data,this.dataLength);
+  bool isLoading = false;
 
   final _fireStore = FirebaseFirestore.instance;
   late QuerySnapshot querySnapshot;
@@ -86,8 +88,12 @@ class _ListPageState extends State<ListPage> {
                       Align(
                         child: IconButton(
                           onPressed: ()async{
+
                             print(data[index]['id']);
 
+                            if(collectionName == "Category"){
+                              deleteAllCategroyFurniture(data[index]['id']);
+                            }
                             await FirebaseFirestore.instance.collection(collectionName)
                                 .doc(data[index]['id'])
                                 .delete()

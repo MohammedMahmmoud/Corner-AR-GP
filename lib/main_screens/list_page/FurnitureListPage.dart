@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../Furniture/Furniture.dart';
 import '../../components/dropDownList_components.dart';
 import '../../components/getdata_components.dart';
+import '../../components/gridview_component.dart';
 import '../../database/DatabaseHelper.dart';
 
 
@@ -94,6 +95,8 @@ class _FunitureListPageState extends State<FurnitureListPage> {
     }
     setState(() {});
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,7 +136,79 @@ class _FunitureListPageState extends State<FurnitureListPage> {
                 )
               ),
               Expanded(
-                child: GridView.count(
+                child: gridview_furnitureList(
+                  dataLength: dataLength,
+                  data: data,
+                  icon: isViewing?const Icon(
+                    Icons.save,
+                    color: Colors.blueGrey,
+                  ):const ImageIcon(
+                    AssetImage("assets/remove.png"),
+                    color: Colors.red,
+                  ),
+                  onPressed: isViewing?(index)async{
+                    print(parentID);
+                    print(data[index]['modelName']);
+                    Furniture furniture = Furniture(
+                        parentID: parentID,
+                        id: data[index]['id'],
+                        imageUrl: data[index]['imageUrl'],
+                        modelName: data[index]['modelName'],
+                        modelUrl: data[index]['modelUrl']
+                    );
+                    await saveFurniture(furniture).then((value) => print("heeeeellllllllllllllllll"));
+                  }:(index)async{
+                    var newData;
+
+                    //deleteing from storage
+                    await deleteFromStorage(data[index]["imageUrl"]);
+                    await deleteFromStorage(data[index]["modelUrl"]);
+                    ////////////////////////////
+                    await FirebaseFirestore.instance.collection(parentCollection)
+                        .doc(data[index]["parentID"]).collection(collectionName).doc(data[index]['id'])
+                        .delete()
+                        .then((_) async {
+                      newData = await getDataFurniture(collectionName,parentCollection);
+                      print(newData);
+                      setState((){});
+                      print("-------------------------------------------------------");
+                    }).catchError((error) => print('Delete failed: $error'));
+                    setState((){
+                      data = newData[0];
+                      furnitureInCategory = newData[1];
+                      dataLength = data.length;
+                    });
+
+                  }
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      floatingActionButton: categoryID== ''? null :
+      FloatingActionButton(
+        onPressed: (){
+          if(true || collectionName == Admin.CollectionName){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) =>AddFurnitureScreen(categoryID: categoryID),)
+            );
+          }
+        }
+
+        ,child: Icon(Icons.add),
+        backgroundColor: Colors.blueGrey,
+      ),
+    );
+  }
+}
+
+
+
+/*
+GridView.count(
                   crossAxisCount: 2,
                   //padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
                   children: List.generate(dataLength, (index) {
@@ -218,27 +293,5 @@ class _FunitureListPageState extends State<FurnitureListPage> {
                       ),
                     );
                   }),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-      floatingActionButton: categoryID== ''? null :
-      FloatingActionButton(
-        onPressed: (){
-          if(true || collectionName == Admin.CollectionName){
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) =>AddFurnitureScreen(categoryID: categoryID),)
-            );
-          }
-        }
-
-        ,child: Icon(Icons.add),
-        backgroundColor: Colors.blueGrey,
-      ),
-    );
-  }
-}
+                )
+ */

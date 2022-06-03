@@ -1,43 +1,35 @@
 import 'package:corner_ar_gp/components/buttons_components.dart';
-import 'package:corner_ar_gp/main_screens/edit_info/edit_person_info.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../authentication/login/LoginPage.dart';
-import '../main_screens/list_page/FurnitureListPage.dart';
+import '../main_screens/list_page/SavedFurntiureListPage.dart';
 import '../person/Person.dart';
 import 'getdata_components.dart';
 
 
 Drawer sideMenu(
 {
-  //required BuildContext context,
   required Function changeToEditPage,
-  required String userName,
   required bool isAdmin,
   required BuildContext buildContext,
   required Person personObject,
 }
     ){
   return Drawer(
-    backgroundColor: Color(0xFF71A2B5),
+    backgroundColor: const Color(0xFF71A2B5),
     child: Column(
       children: [
         DrawerHeader(
           child: Row(
             children: [
-              Container(
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Image.asset(
-                    'assets/profile.png',
-                  ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Image.asset(
+                  'assets/profile.png',
                 ),
               ),
               const SizedBox(width: 15),
               Expanded(
                 child: Text(
-                  userName,
+                  personObject.name,
                   style: const TextStyle(color: Colors.white, fontSize: 25),
                 ),
               ),
@@ -54,21 +46,16 @@ Drawer sideMenu(
         listMenuButtons(
             buttonName: 'Saved Furniture',
           onPressedButton: () async {
-            var Data = await getData("Category");
-            var furnitureData = await getDataFurniture("Furniture","User");
+            var furnitureData = await getUserDataFurniture("Furniture","User",personObject.id);
             Navigator.push(
                 buildContext,
                 MaterialPageRoute(
-                  builder: (BuildContext context) =>FurnitureListPage(
+                  builder: (BuildContext context) =>SavedFurnitureListPage(
                     title: "Saved Furniture",
                     collectionName: "Furniture",
-                    furnitureInCategory: furnitureData[1],
-                      parentData: Data,
-                    dataLength: furnitureData[0].length,
-                    Data: furnitureData[0],
-                    isViewing: false,
+                    dataLength: furnitureData.length,
+                    Data: furnitureData,
                     parentCollection: "User",
-                    parentID: "",
                   ),)
             );
           }
@@ -77,12 +64,12 @@ Drawer sideMenu(
             onPressed: (){
               personObject.logOut(buildContext);
             },
-            icon: ImageIcon(
+            icon: const ImageIcon(
               AssetImage("assets/log_out.png"),
               color: Colors.white,
               size: 40,
             ),
-            label: Text("Log out",style: TextStyle(fontSize: 20),),
+            label: const Text("Log out",style: TextStyle(fontSize: 20),),
             style:TextButton.styleFrom(
               primary: Colors.white,
             )

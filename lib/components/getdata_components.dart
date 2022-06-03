@@ -30,6 +30,15 @@ Future<List> getDataFurniture(collectionName,parentCollectionName) async{
   print("innnnaddddmin paaage daaaata");
   return [dataFurniture,parentFurniture];
 }
+
+Future<List> getUserDataFurniture(collectionName,parentCollectionName,curruntuser) async{
+  final _fireStore = FirebaseFirestore.instance;
+  QuerySnapshot querySnapshot = await _fireStore.collection(parentCollectionName).doc(curruntuser).collection(collectionName).get();
+  var Data = await querySnapshot.docs.map((doc) => doc.data()).toList();
+  print(Data);
+  print("innnnaddddmin paaage daaaata");
+  return Data;
+}
 //
 // Future<dynamic> getCategoryFurniture(collectionName, int id) async{
 //   final _fireStore = FirebaseFirestore.instance;
