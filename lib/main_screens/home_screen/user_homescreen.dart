@@ -21,6 +21,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   late Person loggedUser;
   late String sideMenuContent;
   int pageIndex = 0;
+  bool isLoading = false;
+
+  void setIsLoading(value){
+    setState(() {
+      isLoading = value;
+    });
+  }
 
   List <BottomNavigationBarItem>bottomBarItems=[
     const BottomNavigationBarItem(
@@ -40,6 +47,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   int selectedIndex = 0;
 
   Future<void> onCahngedbottomBarItems(index) async {
+    setIsLoading(true);
     setState(() {
       selectedIndex = index;
     });
@@ -63,6 +71,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             ),)
       );
     }
+    setIsLoading(false);
   }
 
   @override
@@ -74,7 +83,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
 
     return Scaffold(
-      drawer: sideMenu(changeToEditPage: _setToEditPage, isAdmin: false,buildContext:context,personObject: loggedUser),
+      drawer: sideMenu(
+          changeToEditPage:_setToEditPage,
+          isAdmin: false,
+          buildContext:context,
+          personObject:loggedUser,
+          isLoading: (value)=>setIsLoading(value)
+      ),
       appBar: AppBar(
         title: Text("User"),
         backgroundColor: Colors.blueGrey,
@@ -99,7 +114,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               width: double.infinity,
             ),
           ),
-          pageIndex == 1 ? EditPersonInformation(loggedUser) : const SizedBox(height: 0,)
+          pageIndex == 1 ? EditPersonInformation(loggedUser) : const SizedBox(height: 0,),
+          if (isLoading) const Center(
+            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
+          ),
         ],
       ),
       bottomNavigationBar: userBottomBar(

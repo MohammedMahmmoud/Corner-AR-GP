@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../components/getdata_components.dart';
 import '../database/DatabaseHelper.dart';
+import '../main_screens/list_page/ListPage.dart';
 
 class Category{
   static const collectionName = "Category";
@@ -41,10 +42,11 @@ class Category{
     };
   }
 
-  Future<bool> addCategory(BuildContext context,GlobalKey<FormState> formKey) async {
+  Future<void> addCategory(BuildContext context,GlobalKey<FormState> formKey,Function isLoading) async {
+    isLoading(true);
     data = await getData("Category");
     if(formKey.currentState?.validate() ==false)
-      return false;
+      return;
     final categoryRef = getCategoryCollectionWithConverter("Category");
 
     String temp = categoryRef.doc().id;
@@ -56,12 +58,17 @@ class Category{
               id: temp
           )
       ).then((value) async{
-        print("aaaaaaaasssssssssssssssssssssssssssssssssssssssss");
+        data = await getData("Category");
         Navigator.pushReplacement<void, void>(
             context,
             MaterialPageRoute<void>(
               builder: (BuildContext context) =>
-                  AdminHomeScreen(),
+                  ListPage(
+                    title: "Add Admin",
+                    collectionName: collectionName,
+                    Data: data,
+                    dataLength: data.length,
+                  ),
             )
         );
         print("aaaaaaaaaaaaaaaaddddddddddddddddddddddddddddddddddddddddddddd");
@@ -69,7 +76,6 @@ class Category{
     } catch (e) {
       print("adddddd cateeegory eerrrror:   $e");
     }
-    return false;
   }
 
   String? categroyValidator([String? value]){

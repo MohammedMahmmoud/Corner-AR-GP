@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corner_ar_gp/main_screens/add_furniture/add_furniture_screen.dart';
 import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:flutter/material.dart';
-
 import '../../Furniture/Furniture.dart';
 import '../../components/dropDownList_components.dart';
 import '../../components/getdata_components.dart';
@@ -43,13 +42,20 @@ class _FunitureListPageState extends State<FurnitureListPage> {
   bool isViewing;
   String parentCollection;
   String parentID;
+  bool isLoading = false;
+
   _FunitureListPageState(this.title,this.collectionName,this.data,
       this.dataLength,this.parentData,this.furnitureInCategory,this.isViewing,this.parentCollection,this.parentID){
     originalData = this.data;
   }
 
+  void setIsLoading(value){
+    setState(() {
+      isLoading = value;
+    });
+  }
+
   String dropdownValue = "All";
-  //originalData = data;
 
   List<String> convertDataToList(){
     List<String> list = [];
@@ -120,7 +126,6 @@ class _FunitureListPageState extends State<FurnitureListPage> {
             child: Image.asset(
               'assets/backgroundTop.png',
               fit: BoxFit.fill,
-              //height: double.infinity,
               width: double.infinity,
             ),
           ),
@@ -147,6 +152,7 @@ class _FunitureListPageState extends State<FurnitureListPage> {
                     color: Colors.red,
                   ),
                   onPressed: isViewing?(index)async{
+                    setIsLoading(true);
                     print(parentID);
                     print(data[index]['modelName']);
                     Furniture furniture = Furniture(
@@ -157,9 +163,10 @@ class _FunitureListPageState extends State<FurnitureListPage> {
                         modelUrl: data[index]['modelUrl']
                     );
                     await saveFurniture(furniture).then((value) => print("heeeeellllllllllllllllll"));
+                    setIsLoading(false);
                   }:(index)async{
+                    setIsLoading(true);
                     var newData;
-
                     //deleteing from storage
                     await deleteFromStorage(data[index]["imageUrl"]);
                     await deleteFromStorage(data[index]["modelUrl"]);
@@ -171,18 +178,20 @@ class _FunitureListPageState extends State<FurnitureListPage> {
                       newData = await getDataFurniture(collectionName,parentCollection);
                       print(newData);
                       setState((){});
-                      print("-------------------------------------------------------");
                     }).catchError((error) => print('Delete failed: $error'));
                     setState((){
                       data = newData[0];
                       furnitureInCategory = newData[1];
                       dataLength = data.length;
                     });
-
+                    setIsLoading(false);
                   }
                 ),
               ),
             ],
+          ),
+          if (isLoading) const Center(
+            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
           ),
         ],
       ),
@@ -204,94 +213,3 @@ class _FunitureListPageState extends State<FurnitureListPage> {
     );
   }
 }
-
-
-
-/*
-GridView.count(
-                  crossAxisCount: 2,
-                  //padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
-                  children: List.generate(dataLength, (index) {
-                    return ElevatedButton(
-                      onPressed: () {  },
-                      style:ElevatedButton.styleFrom(
-                        primary: Color.fromRGBO(0, 0, 0, 0),
-                        onPrimary: Colors.white,
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20)
-                        ),
-                        padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Image(
-                                image: NetworkImage(data[index]['imageUrl']),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            Container(
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(data[index]['modelName'],style: TextStyle(fontSize: 15,color: Colors.blueGrey),),
-                                  ),
-                                  Align(
-                                      child: isViewing? IconButton(
-                                        onPressed: ()async{
-                                          print(parentID);
-                                          print(data[index]['modelName']);
-                                          Furniture furniture = Furniture(
-                                            parentID: parentID,
-                                            id: data[index]['id'],
-                                            imageUrl: data[index]['imageUrl'],
-                                            modelName: data[index]['modelName'],
-                                            modelUrl: data[index]['modelUrl']
-                                          );
-                                          await saveFurniture(furniture).then((value) => print("heeeeellllllllllllllllll"));
-                                        },
-                                        icon: const Icon(
-                                          Icons.save,
-                                          color: Colors.blueGrey,
-                                          //size: 30.0,
-                                        ),
-                                      )
-                                          :IconButton(
-                                        onPressed: ()async{
-                                          var newData;
-
-                                          await FirebaseFirestore.instance.collection(parentCollection)
-                                              .doc(data[index]["parentID"]).collection(collectionName).doc(data[index]['id'])
-                                              .delete()
-                                              .then((_) async {
-                                            newData = await getDataFurniture(collectionName,parentCollection);
-                                            print(newData);
-                                            setState((){});
-                                            print("-------------------------------------------------------");
-                                          }).catchError((error) => print('Delete failed: $error'));
-                                          setState((){
-                                            data = newData[0];
-                                            furnitureInCategory = newData[1];
-                                            dataLength = data.length;
-                                          });
-
-                                        },
-                                        icon: const ImageIcon(
-                                          AssetImage("assets/remove.png"),
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      alignment: Alignment.centerLeft,
-                                    )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-                )
- */

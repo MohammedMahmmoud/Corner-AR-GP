@@ -17,6 +17,13 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   String title;
   Category category = Category();
   _AddCategoryPageState(this.title);
+  bool isLoading = false;
+
+  void setIsLoading(value){
+    setState(() {
+      isLoading = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +67,11 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
               padding: const EdgeInsets.fromLTRB(70,180,70,0),
               child: LogAndRegisterButton(
                   buttonText: "Add Category",
-                  onPressedButton:  ()=>category.addCategory(context,validator)
+                  onPressedButton:  ()=>category.addCategory(context, validator, (value)=>setIsLoading(value))
               )
+          ),
+          if (isLoading) const Center(
+            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
           ),
         ])
     );

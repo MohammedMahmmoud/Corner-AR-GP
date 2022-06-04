@@ -18,6 +18,13 @@ class AdminHomeScreen extends StatefulWidget {
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   late Person loggedUser;
   late String sideMenuContent;
+  bool isLoading = false;
+
+  void setIsLoading(value){
+    setState(() {
+      isLoading = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +33,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     sideMenuContent = loggedUser.name;
 
     return Scaffold(
-      drawer: sideMenu(changeToEditPage: (){}, isAdmin: true,buildContext: context, personObject: loggedUser),
+      drawer: sideMenu(changeToEditPage: (){}, isAdmin: true,buildContext: context, personObject:loggedUser,isLoading: (){}),
       appBar: AppBar(
         title: Text("Admin"),
         backgroundColor: Colors.blueGrey,
@@ -57,22 +64,28 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                     pageName: "Admins List",
                     context: context,
                     collectionName: Admin.CollectionName,
-                    buttonName: "Admins List"
+                    buttonName: "Admins List",
+                    isLoading: (value)=>setIsLoading(value)
                 ),
                 AdminHomeScreenButton(
-                  pageName: "Categorios List",
-                  context: context,
-                  collectionName: "Category",
-                  buttonName: "Category List"
+                    pageName: "Categorios List",
+                    context: context,
+                    collectionName: "Category",
+                    buttonName: "Category List",
+                    isLoading: (value)=>setIsLoading(value)
                 ),
                 AdminHomeScreenButton(
                     pageName: "Furnitures List",
                     context: context,
                     collectionName: "Furniture",
-                    buttonName: "Furnitures List"
+                    buttonName: "Furnitures List",
+                    isLoading: (value)=>setIsLoading(value)
                 )
               ],
-            )
+            ),
+            if (isLoading) const Center(
+              child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
+            ),
           ],
         )
 

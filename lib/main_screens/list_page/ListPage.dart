@@ -31,6 +31,12 @@ class _ListPageState extends State<ListPage> {
   final _fireStore = FirebaseFirestore.instance;
   late QuerySnapshot querySnapshot;
 
+  void setIsLoading(value){
+    setState(() {
+      isLoading = value;
+    });
+  }
+
 
   @override
   void initState() {
@@ -88,7 +94,7 @@ class _ListPageState extends State<ListPage> {
                       Align(
                         child: IconButton(
                           onPressed: ()async{
-
+                            setIsLoading(true);
                             print(data[index]['id']);
 
                             if(collectionName == "Category"){
@@ -111,7 +117,7 @@ class _ListPageState extends State<ListPage> {
                             setState((){
                               dataLength = data.length;
                             });
-
+                            setIsLoading(false);
                           },
                           icon: const ImageIcon(
                             AssetImage("assets/remove.png"),
@@ -127,6 +133,9 @@ class _ListPageState extends State<ListPage> {
               );
             },
           ),
+          if (isLoading) const Center(
+            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -141,6 +150,11 @@ class _ListPageState extends State<ListPage> {
                 context,
                 MaterialPageRoute<void>(
                   builder: (BuildContext context) =>AddCategoryPage("Add Category"),));
+
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (BuildContext context) =>AddCategoryPage("Add Category"),),
+            // );
           }
         }
 

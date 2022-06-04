@@ -26,6 +26,7 @@ class _SavedFunitureListPageState extends State<SavedFurnitureListPage> {
   String categoryID = '';
   int dataLength;
   String parentCollection;
+  bool isLoading = false;
   _SavedFunitureListPageState(this.title,this.collectionName,this.data,
       this.dataLength,this.parentCollection){
     originalData = this.data;
@@ -36,6 +37,12 @@ class _SavedFunitureListPageState extends State<SavedFurnitureListPage> {
     print(dataLength);
     setState(() {});
     super.initState();
+  }
+
+  void setIsLoading(value){
+    setState(() {
+      isLoading = value;
+    });
   }
 
 
@@ -74,6 +81,7 @@ class _SavedFunitureListPageState extends State<SavedFurnitureListPage> {
                 color: Colors.red,
               ),
               onPressed: (index)async{
+                setIsLoading(true);
                 var newData;
                 print("$parentCollection     =========   $collectionName");
                 print("${data[index]}");
@@ -87,13 +95,14 @@ class _SavedFunitureListPageState extends State<SavedFurnitureListPage> {
                   print("-------------------------------------------------------");
                 }).catchError((error) => print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Delete failed: $error'));
                 setState((){
-                  print("+++++++++++++++++++++++++++++++++++++++++++++:${data.length}");
                   data = newData;
-                  print("+++++++++++++++++++++++++++++++++++++++++++++:${data.length}");
                   dataLength = data.length;
                 });
-
+                setIsLoading(false);
               }
+          ),
+          if (isLoading) const Center(
+            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
           ),
         ],
       ),

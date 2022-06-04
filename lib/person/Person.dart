@@ -54,7 +54,8 @@ class Person{
     };
   }
 
-  Future<bool> registration(GlobalKey<FormState> formKey, String password, bool isAdmin, BuildContext context) async {
+  Future<bool> registration(GlobalKey<FormState> formKey, String password,bool isAdmin,BuildContext context,Function isLoading) async {
+    isLoading(true);
     if(formKey.currentState?.validate() == true){
       final personRef = getPersonCollectionWithConverter(isAdmin? Admin.CollectionName :
                           app_user.User.CollectionName);
@@ -101,10 +102,12 @@ class Person{
         // somethingWentWrong()
       }
     }
+    isLoading(false);
     return false;
   }
 
-  Future<bool> logIn(GlobalKey<FormState> formKey, String password, BuildContext context) async{
+  Future<bool> logIn(GlobalKey<FormState> formKey, String password, BuildContext context,Function isLoading) async{
+    isLoading(true);
     if(formKey.currentState?.validate() == true) {
       try {
         print("loooooged222222222222333333333");
@@ -155,6 +158,7 @@ class Person{
         print("errrrrrrrrrrrrrrrrrrorr");
       }
     }
+    isLoading(false);
     return false;
   }
 

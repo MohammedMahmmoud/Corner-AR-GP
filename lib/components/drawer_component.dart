@@ -11,6 +11,7 @@ Drawer sideMenu(
   required bool isAdmin,
   required BuildContext buildContext,
   required Person personObject,
+  required Function isLoading
 }
     ){
   return Drawer(
@@ -45,19 +46,20 @@ Drawer sideMenu(
         isAdmin?Container(child:null):
         listMenuButtons(
             buttonName: 'Saved Furniture',
-          onPressedButton: () async {
-            var furnitureData = await getUserDataFurniture("Furniture","User",personObject.id);
-            Navigator.push(
-                buildContext,
-                MaterialPageRoute(
-                  builder: (BuildContext context) =>SavedFurnitureListPage(
-                    title: "Saved Furniture",
-                    collectionName: "Furniture",
-                    dataLength: furnitureData.length,
-                    Data: furnitureData,
-                    parentCollection: "User",
-                  ),)
-            );
+            onPressedButton: () async {
+              isLoading(true);
+              var furnitureData = await getUserDataFurniture("Furniture","User",personObject.id);
+              Navigator.push(
+                  buildContext,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>SavedFurnitureListPage(
+                      title: "Saved Furniture",
+                      collectionName: "Furniture",
+                      dataLength: furnitureData.length,
+                      Data: furnitureData,
+                      parentCollection: "User",
+                    )));
+              isLoading(false);
           }
         ),
         TextButton.icon(

@@ -20,9 +20,16 @@ class _registrationScreenState extends State<RegistrationScreen> {
   String password = '';
   bool isAdmin;
   bool isPasswordHidden = true;
+  bool isLoading =false;
 
   _registrationScreenState(this.isAdmin) {
     person = isAdmin? Admin() : User();
+  }
+
+  void setIsLoading(value){
+    setState(() {
+      isLoading = value;
+    });
   }
 
   @override
@@ -127,7 +134,8 @@ class _registrationScreenState extends State<RegistrationScreen> {
                           padding: const EdgeInsets.fromLTRB(70,80,70,0),
                             child: LogAndRegisterButton(
                                 buttonText: isAdmin?"Add Admin":"Sign Up",
-                                onPressedButton:  ()=>person.registration(_formKey, password, isAdmin, context)
+                                onPressedButton:  ()=>
+                                    person.registration(_formKey, password, isAdmin, context,(value)=>setIsLoading(value))
                             )
                         ),
 
@@ -137,6 +145,9 @@ class _registrationScreenState extends State<RegistrationScreen> {
                 ],
               ),
             )
+          ),
+          if (isLoading) const Center(
+            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
           ),
         ],
       )

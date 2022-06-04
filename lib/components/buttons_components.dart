@@ -33,7 +33,8 @@ ElevatedButton AdminHomeScreenButton(
   required String collectionName,
   required BuildContext context,
   required String buttonName,
-  required String pageName
+  required String pageName,
+  required Function isLoading
 }
     ){
   var Data;
@@ -41,6 +42,7 @@ ElevatedButton AdminHomeScreenButton(
 
   return ElevatedButton(
       onPressed: ()async{
+        isLoading(true);
         //Data = await getData(collectionName);
         print(Data);
         print("innnnnnnished");
@@ -79,7 +81,7 @@ ElevatedButton AdminHomeScreenButton(
               )
           );
         }
-
+        isLoading(false);
       },
       child: Text(buttonName));
 }

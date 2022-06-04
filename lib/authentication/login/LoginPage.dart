@@ -17,7 +17,15 @@ class _LoginState extends State<Login> {
   Person person = Person();
   String password = '';
   bool isPasswordHidden = true;
+  bool isLoading =false;
+
   _LoginState();
+
+  void setIsLoading(value){
+    setState(() {
+      isLoading = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +105,7 @@ class _LoginState extends State<Login> {
                         padding: const EdgeInsets.fromLTRB(70,80,70,0),
                         child: LogAndRegisterButton(
                             buttonText: "Log In",
-                            onPressedButton:  ()=>person.logIn(_loginFormKey, password,context)
+                            onPressedButton:  ()=>person.logIn(_loginFormKey, password,context,(value)=>setIsLoading(value))
                         ),
                       ),
                       Container(
@@ -132,6 +140,9 @@ class _LoginState extends State<Login> {
                     ],
                   )
               ),
+            ),
+            if (isLoading) const Center(
+              child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
             ),
           ],
         )
