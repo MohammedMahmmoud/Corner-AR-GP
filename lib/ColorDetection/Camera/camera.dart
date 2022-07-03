@@ -30,9 +30,10 @@ class _CameraState extends State<Camera> {
 
   @override
   initState(){
-    // print('ssssssssssssssssssssfffffffffffffffffffffffffffffffffffffffffffff');
-    // print(cameras[0]);
-    // cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+    print('ssssssssssssssssssssfffffffffffffffffffffffffffffffffffffffffffff');
+    print(cameras[0]);
+    cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+    _initializeControllerFuture= cameraController.initialize();
     // cameraController.initialize().then((value){
     //   print("xxxxxxxxxxxxxxxxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     //   if(!mounted) {
@@ -41,8 +42,6 @@ class _CameraState extends State<Camera> {
     //   _initializeControllerFuture= cameraController.initialize();
     //   setState(() {});
     // });
-    _initializeControllerFuture= cameraController.initialize();
-    setState(() {});
     super.initState();
   }
 
@@ -83,6 +82,7 @@ class _CameraState extends State<Camera> {
             future: _initializeControllerFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
+                print("dddddddddddddddddddddddddddddoooooooooooooooooooonnnnnnnnnnnnnneeeeeeeeeeeeeeeeeee");
                 return Center(child: Padding(
                   padding: const EdgeInsets.fromLTRB(0,0,0,20),
                   child: CameraPreview(cameraController),

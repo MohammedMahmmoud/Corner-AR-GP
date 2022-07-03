@@ -31,21 +31,23 @@ class LoadingScreen extends StatelessWidget {
     //   })
     // });
 
-    _myAppProvider.isLoggedUserAdmin().then((value){
+    _myAppProvider.isLoggedUserAdmin().then((value)async{
+      WidgetsFlutterBinding.ensureInitialized();
+      List<CameraDescription> cameras = await availableCameras();
+      print("ccccccccccccccccccccaaaaaaaaaammmmmmmmmmmmeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+      Navigator.pushReplacement<void, void>(
+        context,
+        value?MaterialPageRoute<void>(
+          builder: (BuildContext context) => AdminHomeScreen()
+        ):MaterialPageRoute<void>(
+          builder: (BuildContext context) => Camera(cameras),
+        ),
+      );
 
-      // Navigator.pushReplacement<void, void>(
-      //   context,
-      //   value?MaterialPageRoute<void>(
-      //     builder: (BuildContext context) => AdminHomeScreen()
-      //   ):MaterialPageRoute<void>(
-      //     builder: (BuildContext context) => Camera(cameras),
-      //   ),
-      // );
-
-      print("theeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-      Navigator.pushReplacementNamed(context,
-          value? AdminHomeScreen.routeName: Camera.routeName);
-      print("theeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+      // print("theeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+      // Navigator.pushReplacementNamed(context,
+      //     value? AdminHomeScreen.routeName: Camera.routeName);
+      // print("theeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     });
 
 
