@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:corner_ar_gp/main_screens/home_screen/user_homescreen.dart';
 import 'package:flutter/material.dart';
@@ -30,18 +29,8 @@ class _CameraState extends State<Camera> {
 
   @override
   initState(){
-    print('ssssssssssssssssssssfffffffffffffffffffffffffffffffffffffffffffff');
-    print(cameras[0]);
     cameraController = CameraController(cameras[0], ResolutionPreset.medium);
     _initializeControllerFuture= cameraController.initialize();
-    // cameraController.initialize().then((value){
-    //   print("xxxxxxxxxxxxxxxxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    //   if(!mounted) {
-    //     return;
-    //   }
-    //   _initializeControllerFuture= cameraController.initialize();
-    //   setState(() {});
-    // });
     super.initState();
   }
 
@@ -59,7 +48,7 @@ class _CameraState extends State<Camera> {
           TextButton(
               child:Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [
+                children: const [
                   Text("Skip",style: TextStyle(fontSize: 20,color: Colors.white),),
                   Icon(Icons.navigate_next,color: Colors.white,),
                 ],
@@ -68,7 +57,7 @@ class _CameraState extends State<Camera> {
               Navigator.pushReplacement<void, void>(
                 context,
                 MaterialPageRoute<void>(
-                  builder: (context) => UserHomeScreen([]),
+                  builder: (context) => UserHomeScreen(const []),
                 ),
               );
             },
@@ -82,7 +71,6 @@ class _CameraState extends State<Camera> {
             future: _initializeControllerFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                print("dddddddddddddddddddddddddddddoooooooooooooooooooonnnnnnnnnnnnnneeeeeeeeeeeeeeeeeee");
                 return Center(child: Padding(
                   padding: const EdgeInsets.fromLTRB(0,0,0,20),
                   child: CameraPreview(cameraController),
@@ -101,10 +89,6 @@ class _CameraState extends State<Camera> {
                 // Attempt to take a picture and get the file `image` where it was saved.
                 final image = await cameraController.takePicture();
 
-                print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-                print(image.path);
-                print(image.name);
-
                 final ImageProvider imageprovide = Image.file(File(image.path)).image;
                 // If the picture was taken, display it on a new screen.
 
@@ -118,32 +102,28 @@ class _CameraState extends State<Camera> {
 
                 List paletteColors = [];
 
-                if(paletteGenerator.dominantColor!=null)
+                if(paletteGenerator.dominantColor!=null) {
                   paletteColors.add(paletteGenerator.dominantColor?.color);
-                if(paletteGenerator.lightMutedColor!=null)
+                }
+                if(paletteGenerator.lightMutedColor!=null) {
                   paletteColors.add(paletteGenerator.lightMutedColor?.color);
-                if(paletteGenerator.lightVibrantColor!=null)
+                }
+                if(paletteGenerator.lightVibrantColor!=null) {
                   paletteColors.add(paletteGenerator.lightVibrantColor?.color);
-                if(paletteGenerator.darkVibrantColor!=null)
+                }
+                if(paletteGenerator.darkVibrantColor!=null) {
                   paletteColors.add(paletteGenerator.darkVibrantColor?.color);
-                if(paletteGenerator.darkMutedColor!=null)
+                }
+                if(paletteGenerator.darkMutedColor!=null) {
                   paletteColors.add(paletteGenerator.darkMutedColor?.color);
-                if(paletteGenerator.vibrantColor!=null)
+                }
+                if(paletteGenerator.vibrantColor!=null) {
                   paletteColors.add(paletteGenerator.vibrantColor?.color);
-                if(paletteGenerator.mutedColor!=null)
+                }
+                if(paletteGenerator.mutedColor!=null) {
                   paletteColors.add(paletteGenerator.mutedColor?.color);
+                }
 
-                // print("--------------------------------------------------------------------------");
-                // print("palette generator:");
-                // print(paletteGenerator.paletteColors);
-                // print(paletteGenerator.darkMutedColor);
-                // print(paletteGenerator.dominantColor);
-                // setState(() {});
-                // for(int i=0;i<paletteColors.length;i++){
-                //   print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa   ${paletteColors[i]}");
-                // }
-
-                print("sssssssssssssssssssssssssssssddddddddddddddddddddd");
                 Navigator.pushReplacement<void, void>(
                   context,
                   MaterialPageRoute<void>(
@@ -151,12 +131,14 @@ class _CameraState extends State<Camera> {
                   ),
                 );
               } catch (e) {
-                print("errrrrrrrrrrrrrrrrrrrrrrrrrrrrpr $e");
+                print("camera error: $e");
               }
             },
-            color: Colors.white,
+            color: Colors.black,
             padding: const EdgeInsets.all(30),
-            shape: const CircleBorder(),
+            shape: const CircleBorder(
+              side: BorderSide(color: Colors.white, width: 5)
+            ),
           )
         ],
       ),

@@ -36,51 +36,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
-  List <BottomNavigationBarItem>bottomBarItems=[
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: 'Home',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.add),
-      label: 'Add',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.auto_delete),
-      label: 'Delete',
-    ),
-  ];
-
-  int selectedIndex = 0;
-
-  Future<void> onCahngedbottomBarItems(index) async {
-    setIsLoading(true);
-    setState(() {
-      selectedIndex = index;
-    });
-    if(index == 1){
-      var Data = await getData("Category");
-      var furnitureData = await getDataFurniture("Furniture","Category");
-      print("---------------------------------------------${loggedUser.id}");
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) =>FurnitureListPage(
-              title: "Spawn Furniture",
-              collectionName: "Furniture",
-              furnitureInCategory: furnitureData[1],
-              parentData: Data,
-              dataLength: furnitureData[0].length,
-              Data: furnitureData[0],
-              isViewing: true,
-              parentCollection: "User",
-              parentID: loggedUser.id,
-            ),)
-      );
-    }
-    setIsLoading(false);
-  }
-
   @override
   Widget build(BuildContext context) {
 
@@ -134,10 +89,31 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: userBottomBar(
-        selectedIndex: selectedIndex,
-          items: bottomBarItems,
-        onTap: (index)=>onCahngedbottomBarItems(index)
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async{
+          setIsLoading(true);
+          var Data = await getData("Category");
+          var furnitureData = await getDataFurniture("Furniture","Category");
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) =>FurnitureListPage(
+                  title: "Spawn Furniture",
+                  collectionName: "Furniture",
+                  furnitureInCategory: furnitureData[1],
+                  parentData: Data,
+                  dataLength: furnitureData[0].length,
+                  Data: furnitureData[0],
+                  isViewing: true,
+                  parentCollection: "User",
+                  parentID: loggedUser.id,
+                ),
+              )
+          );
+          setIsLoading(false);
+        }
+        ,child: Icon(Icons.add),
+        backgroundColor: Colors.blueGrey,
       ),
 
 
