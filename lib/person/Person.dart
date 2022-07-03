@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:corner_ar_gp/components/getdata_components.dart';
 import 'package:corner_ar_gp/database/DatabaseHelper.dart';
 import 'package:corner_ar_gp/main_screens/home_screen/admin_homescreen.dart';
@@ -8,17 +9,25 @@ import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../ColorDetection/Camera/camera.dart';
 import '../authentication/login/LoginPage.dart';
 import '../main_screens/list_page/ListPage.dart';
 
 class Person{
   late String name, email, id, lstName = '';
   var _errorMsg = null;
+  List<CameraDescription> cameras = [];
 
   Person({String name = '', String email = '', String id = ''}){
     this.name = name;
     this.email = email;
     this.id = id;
+  }
+
+  Future setCamera() async{
+    WidgetsFlutterBinding.ensureInitialized();
+    cameras = await availableCameras();
+    return cameras;
   }
 
 
@@ -77,6 +86,7 @@ class Person{
         ).then((user)async{
           _myAppProvider.updateLoggedUser(this);
           var data = await getData(Admin.CollectionName);
+          cameras = await setCamera();
           Navigator.pushReplacement<void, void>(
             context,
             isAdmin?MaterialPageRoute<void>(
@@ -89,7 +99,7 @@ class Person{
                   ),
             ):MaterialPageRoute<void>(
               builder: (BuildContext context) =>
-                  UserHomeScreen(),
+                  Camera(cameras),
             ),
           );
         });
@@ -137,6 +147,7 @@ class Person{
 
                 _myAppProvider.updateLoggedUser(this);
 
+                cameras = await setCamera();
                 Navigator.pushReplacement<void, void>(
                   context,
                   adminRefrence.exists?MaterialPageRoute<void>(
@@ -144,7 +155,8 @@ class Person{
                         AdminHomeScreen(),
                   ):MaterialPageRoute<void>(
                     builder: (BuildContext context) =>
-                        UserHomeScreen(),
+                        //UserHomeScreen(),
+                      Camera(cameras)
                   ),
                 );
               });

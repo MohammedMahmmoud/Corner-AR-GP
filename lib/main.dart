@@ -1,3 +1,5 @@
+import 'package:camera/camera.dart';
+import 'package:corner_ar_gp/ColorDetection/Camera/CameraArguments.dart';
 import 'package:corner_ar_gp/authentication/registration/registration_screen.dart';
 import 'package:corner_ar_gp/main_screens/home_screen/admin_homescreen.dart';
 import 'package:corner_ar_gp/main_screens/home_screen/user_homescreen.dart';
@@ -6,6 +8,7 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'ColorDetection/Camera/camera.dart';
 import 'authentication/login/LoginPage.dart';
 import 'main_screens/home_screen/loading_screen.dart';
 
@@ -27,11 +30,19 @@ void main() async {
   print("==========================>>>>>>>>>>>>>>>> $token");
   });
 
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  List<CameraDescription> cameras = await availableCameras();
+  CameraController cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+  cameraController.initialize().then((value){});
+  CameraArguments(cameras);
+  runApp(MyApp(cameras,cameraController));
 }
 
 
 class MyApp extends StatelessWidget {
+  var camera;
+  var cameraController;
+  MyApp(this.camera,this.cameraController);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -52,9 +63,10 @@ class MyApp extends StatelessWidget {
             RegistrationScreen.routeName: (context) =>
                 RegistrationScreen(isAdmin: false),
             Login.routeName: (context) => Login(),
-            UserHomeScreen.routeName: (context) => UserHomeScreen(),
+            //UserHomeScreen.routeName: (context) => UserHomeScreen(),
             AdminHomeScreen.routeName: (context) => AdminHomeScreen(),
-            LoadingScreen.routeName: (context) =>LoadingScreen()
+            LoadingScreen.routeName: (context) =>LoadingScreen(),
+            Camera.routeName: (context)=>Camera(camera)//,cameraController),
           },
           initialRoute: isUserLoggedIn?
               //isAdmin? AdminHomeScreen.routeName : UserHomeScreen.routeName

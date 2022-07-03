@@ -5,23 +5,30 @@ import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../color_picker/ColorPicker.dart';
 import '../../components/bottomBar_components.dart';
 import '../../components/getdata_components.dart';
 import '../list_page/FurnitureListPage.dart';
 
 class UserHomeScreen extends StatefulWidget {
   static const routeName = 'userHomeScreen';
+  late var paletteGenerator;
+  UserHomeScreen(this.paletteGenerator);
 
-  UserHomeScreen();
   @override
-  _UserHomeScreenState createState() => _UserHomeScreenState();
+  _UserHomeScreenState createState() => _UserHomeScreenState(this.paletteGenerator);
 }
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
+  late var paletteGenerator;
+  _UserHomeScreenState(this.paletteGenerator);
   late Person loggedUser;
   late String sideMenuContent;
   int pageIndex = 0;
   bool isLoading = false;
+  Color currentColor = Colors.amber;
+  void changeColor(Color color) => setState(() => currentColor = color);
+
 
   void setIsLoading(value){
     setState(() {
@@ -112,6 +119,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               fit: BoxFit.fill,
               //height: double.infinity,
               width: double.infinity,
+            ),
+          ),
+          Container(
+            child:ColorPicker(
+              pickerColor: currentColor,
+              onColorChanged: changeColor,
+              paletteColors: paletteGenerator
             ),
           ),
           pageIndex == 1 ? EditPersonInformation(loggedUser) : const SizedBox(height: 0,),
