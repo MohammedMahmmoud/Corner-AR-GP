@@ -2,7 +2,6 @@ import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:corner_ar_gp/person/Person.dart';
 import 'package:corner_ar_gp/person/User.dart';
 import 'package:flutter/material.dart';
-
 import '../../components/buttons_components.dart';
 import '../../components/textField_components.dart';
 

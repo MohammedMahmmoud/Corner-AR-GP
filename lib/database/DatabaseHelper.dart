@@ -159,9 +159,6 @@ Future<bool> saveFurniture(Furniture furniture) async{
       .collection(Furniture.collectionName);
 
   await furnitureDoc.doc(furniture.id).set(furniture.toJson()).onError((e, _){print("Error writing document: $e"); isSuccessful = false;});
-
-  print("added to fireStore");
-
   return isSuccessful;
 }
 

@@ -3,7 +3,6 @@ import 'package:corner_ar_gp/authentication/registration/registration_screen.dar
 import 'package:corner_ar_gp/main_screens/add_category/AddCategoryPage.dart';
 import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:flutter/material.dart';
-
 import '../../components/getdata_components.dart';
 import '../../database/DatabaseHelper.dart';
 
@@ -69,7 +68,6 @@ class _ListPageState extends State<ListPage> {
             child: Image.asset(
               'assets/backgroundTop.png',
               fit: BoxFit.fill,
-              //height: double.infinity,
               width: double.infinity,
             ),
           ),
@@ -112,8 +110,6 @@ class _ListPageState extends State<ListPage> {
                                   print(index);
                                   setState((){});
                                 }).catchError((error) => print('Delete failed: $error'));
-                            print("out");
-                            print(index);
                             setState((){
                               dataLength = data.length;
                             });
@@ -126,7 +122,6 @@ class _ListPageState extends State<ListPage> {
                         ),
                         alignment: Alignment.centerLeft,
                       )
-
                     ],
                   ),
                 )
@@ -150,14 +145,8 @@ class _ListPageState extends State<ListPage> {
                 context,
                 MaterialPageRoute<void>(
                   builder: (BuildContext context) =>AddCategoryPage("Add Category"),));
-
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (BuildContext context) =>AddCategoryPage("Add Category"),),
-            // );
           }
         }
-
         ,child: Icon(Icons.add),
         backgroundColor: Colors.blueGrey,
       ),

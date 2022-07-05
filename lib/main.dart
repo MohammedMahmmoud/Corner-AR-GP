@@ -6,7 +6,6 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'ColorDetection/Camera/camera.dart';
 import 'authentication/login/LoginPage.dart';
 import 'main_screens/home_screen/loading_screen.dart';
 
@@ -16,19 +15,11 @@ import 'main_screens/home_screen/loading_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // await FirebaseAppCheck.instance.activate(
-  //   webRecaptchaSiteKey: 'recaptcha-v3-site-key',
-  // );
-
   await FirebaseAppCheck.instance.activate();
   String? token = await FirebaseAppCheck.instance.getToken();
-  print("------------===========================----------- $token");
   await FirebaseAppCheck.instance.setTokenAutoRefreshEnabled(true);
   FirebaseAppCheck.instance.onTokenChange.listen((token) {
-  print("==========================>>>>>>>>>>>>>>>> $token");
   });
-
-
   runApp(MyApp());
 }
 
@@ -43,11 +34,9 @@ class MyApp extends StatelessWidget {
       builder: (context,widget) {
         final myAppProvider = Provider.of<AppProvider>(context);
         final isUserLoggedIn = myAppProvider.checkLoggedUser();
-        bool isAdmin = false;
+
         if(isUserLoggedIn){
           myAppProvider.fetchLoggedUser();
-          // isAdmin = myAppProvider.isLoggedUserAdmin();
-          // print("===>  $isAdmin");
         }
 
         return MaterialApp(
@@ -55,14 +44,10 @@ class MyApp extends StatelessWidget {
             RegistrationScreen.routeName: (context) =>
                 RegistrationScreen(isAdmin: false),
             Login.routeName: (context) => Login(),
-            //UserHomeScreen.routeName: (context) => UserHomeScreen(),
             AdminHomeScreen.routeName: (context) => AdminHomeScreen(),
             LoadingScreen.routeName: (context) =>LoadingScreen(),
           },
-          initialRoute: isUserLoggedIn?
-              //isAdmin? AdminHomeScreen.routeName : UserHomeScreen.routeName
-          LoadingScreen.routeName
-          : Login.routeName,
+          initialRoute: isUserLoggedIn?LoadingScreen.routeName:Login.routeName,
         );
       }
     );

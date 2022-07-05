@@ -2,17 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-const List<Color> col = [
-  Colors.black,
-  Colors.pink,
-  Colors.purple,
-  Colors.deepPurple,
-  Colors.indigo,
-  Colors.blue,
-  Colors.lightBlue,
-];
-
-
 class ColorPicker extends StatefulWidget {
   final Color pickerColor;
   final List paletteColors;
@@ -37,11 +26,9 @@ class _ColorPickerState extends State<ColorPicker> {
   int size=0;
 
 
-
   Widget pickerLayoutBuilder(BuildContext context, List<Color> colors, PickerItem child) {
     if(widget.paletteColors.isNotEmpty)
       size = widget.paletteColors.length;
-    print("$size ++++++++++++++++++++++++++++++++++++++++  ${widget.paletteColors.length}");
     return SizedBox(
       height: 100,
       child: size!=0?GridView.count(
@@ -129,15 +116,3 @@ class _ColorPickerState extends State<ColorPicker> {
     );
   }
 }
-
-
-/*
-shape: RoundedRectangleBorder(
-                    borderRadius: MediaQuery.of(context).orientation == Orientation.portrait
-                        ? const BorderRadius.vertical(
-                      top: Radius.circular(500),
-                      bottom: Radius.circular(100),
-                    )
-                        : const BorderRadius.horizontal(right: Radius.circular(500)),
-                  ),
- */

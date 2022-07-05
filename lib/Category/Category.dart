@@ -71,10 +71,9 @@ class Category{
                   ),
             )
         );
-        print("aaaaaaaaaaaaaaaaddddddddddddddddddddddddddddddddddddddddddddd");
       });
     } catch (e) {
-      print("adddddd cateeegory eerrrror:   $e");
+      print("add category error:   $e");
     }
   }
 

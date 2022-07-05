@@ -4,9 +4,7 @@ import 'package:corner_ar_gp/person/Person.dart';
 import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../color_picker/ColorPicker.dart';
-import '../../components/bottomBar_components.dart';
 import '../../components/getdata_components.dart';
 import '../list_page/FurnitureListPage.dart';
 
@@ -27,6 +25,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   int pageIndex = 0;
   bool isLoading = false;
   Color currentColor = Colors.amber;
+
+  //late UnityWidgetController _unityWidgetController;
   void changeColor(Color color) => setState(() => currentColor = color);
 
 
@@ -76,6 +76,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               width: double.infinity,
             ),
           ),
+          // Container(
+          //   height: 500,
+          //   color: Colors.yellowAccent,
+          //   child: UnityWidget(
+          //     onUnityCreated: onUnityCreated,
+          //     onUnityMessage: onUnityMessage,
+          //     fullscreen: false,
+          //   ),
+          // ),
           Container(
             child:ColorPicker(
               pickerColor: currentColor,
@@ -115,15 +124,21 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         ,child: Icon(Icons.add),
         backgroundColor: Colors.blueGrey,
       ),
-
-
     );
   }
-
   _setToEditPage()
   {
     setState(() {
       pageIndex = 1;
     });
   }
+
+  // Callback that connects the created controller to the unity controller
+  // void onUnityCreated(controller) {
+  //   this._unityWidgetController = controller;
+  // }
+  //
+  // void onUnityMessage(message) {
+  //   print('Received message from unity: ${message.toString()}');
+  // }
 }
