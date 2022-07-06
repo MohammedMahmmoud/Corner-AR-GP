@@ -64,7 +64,7 @@ class Category{
             MaterialPageRoute<void>(
               builder: (BuildContext context) =>
                   ListPage(
-                    title: "Add Admin",
+                    title: "Add Category",
                     collectionName: collectionName,
                     Data: data,
                     dataLength: data.length,
