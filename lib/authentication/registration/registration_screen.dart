@@ -37,7 +37,7 @@ class _registrationScreenState extends State<RegistrationScreen> {
     return Scaffold(
       appBar: isAdmin?AppBar(
         title: Text("Add Admin"),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Color(0xFFF87217),
       ):null,
       body: Stack(
         children: [
