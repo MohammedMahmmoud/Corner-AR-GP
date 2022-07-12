@@ -6,14 +6,20 @@ GridView gridview_furnitureList(
   required int dataLength,
   required var data,
   required Function onPressed,
-  required var icon
+  required var icon,
+   Function? spwan,
+   BuildContext? context
 }
     ){
   return GridView.count(
     crossAxisCount: 2,
     children: List.generate(dataLength, (index) {
       return ElevatedButton(
-        onPressed: () {  },
+        onPressed: (){
+
+          spwan!(data[index]['modelUrl']);
+
+        },
         style:ElevatedButton.styleFrom(
           primary: Color.fromRGBO(0, 0, 0, 0),
           onPrimary: Colors.white,

@@ -10,6 +10,8 @@ import '../../database/DatabaseHelper.dart';
 
 
 class FurnitureListPage extends StatefulWidget {
+  Function? spwan;
+  BuildContext? context;
   String title;
   String collectionName;
   var Data;
@@ -19,10 +21,12 @@ class FurnitureListPage extends StatefulWidget {
   bool isViewing;
   String parentCollection;
   String parentID;
+  bool spawned;
   FurnitureListPage({required this.title,required this.collectionName,
     required this.Data,required this.dataLength,
     required this.parentData,required this.furnitureInCategory,required this.isViewing,
-    required this.parentCollection,required this.parentID});
+    required this.parentCollection,required this.parentID,required this.spawned,
+  this.spwan,this.context});
   @override
   _FunitureListPageState createState() =>
       _FunitureListPageState(this.title,this.collectionName,this.Data,this.dataLength,
@@ -86,12 +90,12 @@ class _FunitureListPageState extends State<FurnitureListPage> {
       }
       else if(parentData[i]['name'] == dropdownValue){
         print("${parentData[i]['name']} == $dropdownValue");
-          setState(() {
-            categoryID = parentData[i]["id"];
-            data = furnitureInCategory[i];
-            dataLength = furnitureInCategory[i].length;
-          });
-          break;
+        setState(() {
+          categoryID = parentData[i]["id"];
+          data = furnitureInCategory[i];
+          dataLength = furnitureInCategory[i].length;
+        });
+        break;
       }else{
         setState(() {
           data = [];
@@ -106,7 +110,8 @@ class _FunitureListPageState extends State<FurnitureListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: widget.spawned?null
+          :AppBar(
         title: Text(title),
         backgroundColor: Colors.blueGrey,
       ),
@@ -135,57 +140,59 @@ class _FunitureListPageState extends State<FurnitureListPage> {
               Container(
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: categoryDropDownList(
-                  dropdownValue: dropdownValue,
-                  onPressedButton: (String? newValue) => changeDropListValue(newValue),
-                  categoryList: convertDataToList(),
-                )
+                    dropdownValue: dropdownValue,
+                    onPressedButton: (String? newValue) => changeDropListValue(newValue),
+                    categoryList: convertDataToList(),
+                  )
               ),
               Expanded(
                 child: gridview_furnitureList(
-                  dataLength: dataLength,
-                  data: data,
-                  icon: isViewing?const Icon(
-                    Icons.save,
-                    color: Colors.blueGrey,
-                  ):const ImageIcon(
-                    AssetImage("assets/remove.png"),
-                    color: Colors.red,
-                  ),
-                  onPressed: isViewing?(index)async{
-                    setIsLoading(true);
-                    print(parentID);
-                    print(data[index]['modelName']);
-                    Furniture furniture = Furniture(
-                        parentID: parentID,
-                        id: data[index]['id'],
-                        imageUrl: data[index]['imageUrl'],
-                        modelName: data[index]['modelName'],
-                        modelUrl: data[index]['modelUrl']
-                    );
-                    await saveFurniture(furniture).then((value) => print("heeeeellllllllllllllllll"));
-                    setIsLoading(false);
-                  }:(index)async{
-                    setIsLoading(true);
-                    var newData;
-                    //deleteing from storage
-                    await deleteFromStorage(data[index]["imageUrl"]);
-                    await deleteFromStorage(data[index]["modelUrl"]);
-                    ////////////////////////////
-                    await FirebaseFirestore.instance.collection(parentCollection)
-                        .doc(data[index]["parentID"]).collection(collectionName).doc(data[index]['id'])
-                        .delete()
-                        .then((_) async {
-                      newData = await getDataFurniture(collectionName,parentCollection);
-                      print(newData);
-                      setState((){});
-                    }).catchError((error) => print('Delete failed: $error'));
-                    setState((){
-                      data = newData[0];
-                      furnitureInCategory = newData[1];
-                      dataLength = data.length;
-                    });
-                    setIsLoading(false);
-                  }
+                    context: widget.context ,
+                    spwan: widget.spwan,
+                    dataLength: dataLength,
+                    data: data,
+                    icon: isViewing?const Icon(
+                      Icons.save,
+                      color: Colors.blueGrey,
+                    ):const ImageIcon(
+                      AssetImage("assets/remove.png"),
+                      color: Colors.red,
+                    ),
+                    onPressed: isViewing?(index)async{
+                      setIsLoading(true);
+                      print(parentID);
+                      print(data[index]['modelName']);
+                      Furniture furniture = Furniture(
+                          parentID: parentID,
+                          id: data[index]['id'],
+                          imageUrl: data[index]['imageUrl'],
+                          modelName: data[index]['modelName'],
+                          modelUrl: data[index]['modelUrl']
+                      );
+                      await saveFurniture(furniture).then((value) => print("heeeeellllllllllllllllll"));
+                      setIsLoading(false);
+                    }:(index)async{
+                      setIsLoading(true);
+                      var newData;
+                      //deleteing from storage
+                      await deleteFromStorage(data[index]["imageUrl"]);
+                      await deleteFromStorage(data[index]["modelUrl"]);
+                      ////////////////////////////
+                      await FirebaseFirestore.instance.collection(parentCollection)
+                          .doc(data[index]["parentID"]).collection(collectionName).doc(data[index]['id'])
+                          .delete()
+                          .then((_) async {
+                        newData = await getDataFurniture(collectionName,parentCollection);
+                        print(newData);
+                        setState((){});
+                      }).catchError((error) => print('Delete failed: $error'));
+                      setState((){
+                        data = newData[0];
+                        furnitureInCategory = newData[1];
+                        dataLength = data.length;
+                      });
+                      setIsLoading(false);
+                    }
                 ),
               ),
             ],

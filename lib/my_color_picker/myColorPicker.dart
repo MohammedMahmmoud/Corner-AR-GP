@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-class ColorPicker extends StatefulWidget {
+class MyColorPicker extends StatefulWidget {
   final Color pickerColor;
   final List paletteColors;
   final ValueChanged<Color> onColorChanged;
 
-  const ColorPicker({
+  const MyColorPicker({
     Key? key,
     required this.pickerColor,
     required this.onColorChanged,
@@ -15,10 +15,10 @@ class ColorPicker extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ColorPicker> createState() => _ColorPickerState();
+  State<MyColorPicker> createState() => _MyColorPickerState();
 }
 
-class _ColorPickerState extends State<ColorPicker> {
+class _MyColorPickerState extends State<MyColorPicker> {
 
   double _borderRadius = 30;
   double _iconSize = 24;
@@ -68,51 +68,39 @@ class _ColorPickerState extends State<ColorPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
+    return FloatingActionButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              titlePadding: const EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.all(0),
 
-        ElevatedButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  titlePadding: const EdgeInsets.all(0),
-                  contentPadding: const EdgeInsets.all(0),
-
-                  content: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        HueRingPicker(
-                          pickerColor: widget.pickerColor,
-                          onColorChanged: widget.onColorChanged,
-                        ),
-                        Container(child: const Text("Suggested Colors:"),padding: const EdgeInsets.all(10.0),),
-                        BlockPicker(
-                          pickerColor: widget.pickerColor,
-                          onColorChanged: widget.onColorChanged,
-                          layoutBuilder: pickerLayoutBuilder,
-                          itemBuilder: pickerItemBuilder,
-                        ),
-                      ],
+              content: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    HueRingPicker(
+                      pickerColor: widget.pickerColor,
+                      onColorChanged: widget.onColorChanged,
                     ),
-                  ),
-                );
-              },
+                    Container(child: const Text("Suggested Colors:"),padding: const EdgeInsets.all(10.0),),
+                    BlockPicker(
+                      pickerColor: widget.pickerColor,
+                      onColorChanged: widget.onColorChanged,
+                      layoutBuilder: pickerLayoutBuilder,
+                      itemBuilder: pickerItemBuilder,
+                    ),
+                  ],
+                ),
+              ),
             );
           },
-          child: Text(
-            'Hue Ring Picker with Hex Input',
-            style: TextStyle(color: useWhiteForeground(widget.pickerColor) ? Colors.white : Colors.black),
-          ),
-          style: ElevatedButton.styleFrom(
-            primary: widget.pickerColor,
-            shadowColor: widget.pickerColor.withOpacity(1),
-            elevation: 10,
-          ),
-        ),
-      ],
+        );
+      },
+      child: Icon(Icons.color_lens_outlined),
+      backgroundColor: Colors.blueGrey,
     );
   }
 }

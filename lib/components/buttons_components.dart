@@ -54,7 +54,8 @@ ElevatedButton AdminHomeScreenButton(
               MaterialPageRoute<void>(
                 builder: (BuildContext context) =>
                     FurnitureListPage(
-                        title:pageName,
+                      spawned: true,
+                      title:pageName,
                         collectionName:collectionName,
                         Data: furnitureData[0],
                         dataLength: furnitureData[0].length,
