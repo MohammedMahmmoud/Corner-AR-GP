@@ -30,7 +30,7 @@ class _AddFurnitureScreenState extends State<AddFurnitureScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text(AddFurnitureScreen.title),
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Color(0xFFF87217),
         ),
         body: Stack(children: [
           Container(

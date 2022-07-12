@@ -3,6 +3,7 @@ import 'package:corner_ar_gp/main_screens/add_furniture/add_furniture_screen.dar
 import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:flutter/material.dart';
 import '../../Furniture/Furniture.dart';
+import '../../components/bottomBar_components.dart';
 import '../../components/dropDownList_components.dart';
 import '../../components/getdata_components.dart';
 import '../../components/gridview_component.dart';
@@ -31,6 +32,7 @@ class FurnitureListPage extends StatefulWidget {
   _FunitureListPageState createState() =>
       _FunitureListPageState(this.title,this.collectionName,this.Data,this.dataLength,
           this.parentData,this.furnitureInCategory,this.isViewing,parentCollection,parentID);
+
 }
 
 class _FunitureListPageState extends State<FurnitureListPage> {
@@ -113,7 +115,7 @@ class _FunitureListPageState extends State<FurnitureListPage> {
       appBar: widget.spawned?null
           :AppBar(
         title: Text(title),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor:Color(0xFFF87217),
       ),
       body: Stack(
         children: [
@@ -217,6 +219,7 @@ class _FunitureListPageState extends State<FurnitureListPage> {
         ,child: Icon(Icons.add),
         backgroundColor: Colors.blueGrey,
       ),
+
     );
   }
 }

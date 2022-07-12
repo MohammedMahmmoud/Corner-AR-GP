@@ -20,7 +20,7 @@ ElevatedButton LogAndRegisterButton(
     ),
     style: ElevatedButton.styleFrom(
       primary: Colors.white,
-      onPrimary: Color(0xFF71A2B5),
+      onPrimary: Color(0xFFF87217),
       fixedSize: const Size(200, 50),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30)),
@@ -102,7 +102,7 @@ Container listMenuButtons(
         onPressed: onPressedButton,
         child: Text(buttonName,style: TextStyle(fontSize: 20),),
         style:ElevatedButton.styleFrom(
-          primary: Color(0xFF4F6E7B),
+          primary: Color(0xFFE56717),
           onPrimary: Colors.white,
         )
     ),

@@ -51,7 +51,7 @@ class _SavedFunitureListPageState extends State<SavedFurnitureListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Color(0xFFF87217),
       ),
       body: Stack(
         children: [

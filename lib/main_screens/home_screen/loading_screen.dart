@@ -1,6 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:corner_ar_gp/ColorDetection/Camera/camera.dart';
 import 'package:corner_ar_gp/main_screens/home_screen/admin_homescreen.dart';
+import 'package:corner_ar_gp/main_screens/home_screen/admin_homescreen.dart';
+import 'package:corner_ar_gp/main_screens/home_screen/user_homescreen.dart';
 import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,10 +53,9 @@ class LoadingScreen extends StatelessWidget {
     });
 
 
-
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Color(0xFFF87217)
         ),
         body: Stack(
           children: [

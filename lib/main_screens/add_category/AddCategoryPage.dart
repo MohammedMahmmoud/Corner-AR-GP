@@ -30,7 +30,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(title),
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Color(0xFFF87217),
         ),
         body: Stack(children: [
           Container(

@@ -64,16 +64,17 @@ class Category{
             MaterialPageRoute<void>(
               builder: (BuildContext context) =>
                   ListPage(
-                    title: "Add Category",
+                    title: "Add Admin",
                     collectionName: collectionName,
                     Data: data,
                     dataLength: data.length,
                   ),
             )
         );
+        print("aaaaaaaaaaaaaaaaddddddddddddddddddddddddddddddddddddddddddddd");
       });
     } catch (e) {
-      print("add category error:   $e");
+      print("adddddd cateeegory eerrrror:   $e");
     }
   }
 

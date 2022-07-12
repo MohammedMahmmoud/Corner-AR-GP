@@ -99,7 +99,7 @@ class _EditPersonInformationState extends State<EditPersonInformation> {
                           ),
                           style: ElevatedButton.styleFrom(
                             primary: Colors.white,
-                            onPrimary: const Color(0xFF71A2B5),
+                            onPrimary: const Color(0xFFF87217),
                             fixedSize: const Size(200, 50),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30)),

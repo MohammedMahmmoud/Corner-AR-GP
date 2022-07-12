@@ -2,6 +2,7 @@ import 'package:corner_ar_gp/person/Admin.dart';
 import 'package:corner_ar_gp/person/Person.dart';
 import 'package:corner_ar_gp/person/User.dart';
 import 'package:flutter/material.dart';
+
 import '../../components/buttons_components.dart';
 import '../../components/textField_components.dart';
 
@@ -43,23 +44,19 @@ class _registrationScreenState extends State<RegistrationScreen> {
           Container(
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: Image.asset(
-                'assets/backgroundBottom.png',
-                fit: BoxFit.fill,
-                width: double.infinity,
-              ),
+
             ),
           ),
           Container(
             child: Image.asset(
-              'assets/backgroundTop.png',
+              'assets/background2.png',
               fit: BoxFit.fill,
               //height: double.infinity,
               width: double.infinity,
             ),
           ),
           Container(
-              padding: const EdgeInsets.fromLTRB(30, 170, 30, 12),
+              padding: const EdgeInsets.fromLTRB(30, 130, 30, 12),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -81,7 +78,7 @@ class _registrationScreenState extends State<RegistrationScreen> {
                             },
                           isPasswordTextForm: false
                         ),
-                        const SizedBox(height: 5),
+                        const SizedBox(height: 3),
                         textFormFieldComponent(
                             hintText:'Last Name',
                             onChangedText: person.setLastName,
@@ -146,7 +143,7 @@ class _registrationScreenState extends State<RegistrationScreen> {
             )
           ),
           if (isLoading) const Center(
-            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
+            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.orange,),
           ),
         ],
       )

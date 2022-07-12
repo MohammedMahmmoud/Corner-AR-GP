@@ -35,23 +35,19 @@ class _LoginState extends State<Login> {
             Container(
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: Image.asset(
-                  'assets/backgroundBottom.png',
-                  fit: BoxFit.fill,
-                  width: double.infinity,
-                ),
+
               ),
             ),
             Container(
               child: Image.asset(
-                'assets/backgroundTop.png',
+                'assets/background2.png',
                 fit: BoxFit.fill,
                 //height: double.infinity,
                 width: double.infinity,
               ),
             ),
             Container(
-              padding: const EdgeInsets.fromLTRB(30, 170, 30, 12),
+              padding: const EdgeInsets.fromLTRB(30, 130, 30, 12),
               child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -65,10 +61,12 @@ class _LoginState extends State<Login> {
                             ),
                             const SizedBox(height: 70),
                             textFormFieldComponent(
-                                hintText:"Email",
+                                hintText:"Email address",
                                 onChangedText: person.setEmail,
                                 validator:  person.mailValidator,
+
                                 isPasswordTextForm: false
+
                             ),
                             const SizedBox(height: 20),
                             TextFormField(
@@ -79,7 +77,8 @@ class _LoginState extends State<Login> {
                               decoration: InputDecoration(
                                 hintText: "Password",
                                 enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Color(0xFFbdc6cf)),
+                                  borderSide: BorderSide(color: Color(
+                                      0xFFbdc6cf)),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Color(0xFFbdc6cf)),
@@ -96,7 +95,7 @@ class _LoginState extends State<Login> {
 
                               ),
                               validator: (value) => person.passwordValidator(value),
-                              style: TextStyle(color: const Color(0xFFbdc6cf)),
+                              style: TextStyle(color:  Colors.black),
                             ),
                           ],
                         ),
@@ -105,6 +104,7 @@ class _LoginState extends State<Login> {
                         padding: const EdgeInsets.fromLTRB(70,80,70,0),
                         child: LogAndRegisterButton(
                             buttonText: "Log In",
+
                             onPressedButton:  ()=>person.logIn(_loginFormKey, password,context,(value)=>setIsLoading(value))
                         ),
                       ),
@@ -121,7 +121,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.fromLTRB(15, 50, 15, 12),
+                        padding: const EdgeInsets.fromLTRB(15, 15, 15, 12),
                         child: TextButton(
                           onPressed: () {
                             Navigator.pushNamed(

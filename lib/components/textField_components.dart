@@ -38,7 +38,7 @@ TextFormField textFormFieldComponent(
         )
     ),
     validator: (value) => validator(value),
-    style: const TextStyle(color: Color(0xFFbdc6cf)),
+    style: const TextStyle(color: Colors.black),
 
   );
 }
