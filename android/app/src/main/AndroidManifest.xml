@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.corner_ar_gp">
    <application
-        android:label="corner_ar_gp"
+        android:label="Corner"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

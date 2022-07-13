@@ -64,15 +64,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       ),
       body: Stack(
         children: [
-          // Container(
-          //   height: 800,
-          //   color: Colors.yellowAccent,
-          //   child: UnityWidget(
-          //     onUnityCreated: onUnityCreated,
-          //     onUnityMessage: onUnityMessage,
-          //     fullscreen: false,
-          //   ),
-          // ),
+          Container(
+            height: double.infinity,
+            child: UnityWidget(
+              onUnityCreated: onUnityCreated,
+              onUnityMessage: onUnityMessage,
+              fullscreen: false,
+            ),
+          ),
           if (isLoading) const Center(
             child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.orange,),
           ),

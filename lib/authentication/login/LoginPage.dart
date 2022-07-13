@@ -47,7 +47,7 @@ class _LoginState extends State<Login> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.fromLTRB(30, 130, 30, 12),
+              padding: const EdgeInsets.fromLTRB(30, 200, 30, 12),
               child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -55,6 +55,7 @@ class _LoginState extends State<Login> {
                       Form(
                         key: _loginFormKey,
                         child: Column(
+
                           children: [
                             Container(
                               child: Image.asset('assets/logAndRegisterIcon.png'),

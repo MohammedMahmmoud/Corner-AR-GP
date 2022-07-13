@@ -56,7 +56,7 @@ class _registrationScreenState extends State<RegistrationScreen> {
             ),
           ),
           Container(
-              padding: const EdgeInsets.fromLTRB(30, 130, 30, 12),
+              padding: const EdgeInsets.fromLTRB(30, 160, 30, 12),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

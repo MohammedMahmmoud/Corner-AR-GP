@@ -44,6 +44,7 @@ Drawer sideMenu(
           listMenuButtons(
               buttonName: 'Edit Profile',
               onPressedButton: (){
+                Navigator.pop(buildContext);
                 Navigator.push(
                     buildContext,
                     MaterialPageRoute<void>(

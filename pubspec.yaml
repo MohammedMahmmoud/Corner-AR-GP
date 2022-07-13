@@ -46,6 +46,7 @@ dependencies:
   palette_generator: ^0.3.3
   flutter_colorpicker: ^1.0.3
   flutter_native_splash: ^2.2.4
+  flutter_launcher_icons: ^0.9.3
 
 
 dev_dependencies:
@@ -106,3 +107,10 @@ flutter_native_splash:
   #color: "#FEFCFF"
   background_image: assets/splash4.png
   web: false
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon2.png"
+  adaptive_icon_foreground: "assets/icon4.png"
+  adaptive_icon_background: "#ffffff"
