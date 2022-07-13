@@ -45,6 +45,7 @@ dependencies:
   camera: ^0.9.4+14
   palette_generator: ^0.3.3
   flutter_colorpicker: ^1.0.3
+  flutter_native_splash: ^2.2.4
 
 
 dev_dependencies:
@@ -99,3 +100,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+flutter_native_splash:
+  #color: "#FEFCFF"
+  background_image: assets/splash4.png
+  web: false
