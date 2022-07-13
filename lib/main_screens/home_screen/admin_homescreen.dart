@@ -5,9 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../components/buttons_components.dart';
-import '../../components/getdata_components.dart';
 import '../../person/Admin.dart';
-import '../edit_info/edit_person_info.dart';
 import '../list_page/FurnitureListPage.dart';
 import '../list_page/ListPage.dart';
 
@@ -34,21 +32,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   String title = "Admins List";
 
 
-  List <BottomNavigationBarItem>bottomBarItems=[
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: 'Admin',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.add),
-      label: 'Categories',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.auto_delete),
-      label: 'Funriture',
-    ),
-  ];
-
   late final List<Widget> _widgetOptions = <Widget>[
       ListPage(
         title:"Admins List",
@@ -58,8 +41,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         loggeduser: loggedUser,
     ),
     Container(
-      //color: Colors.black,
-      //padding: EdgeInsets.all(20),
       child: ListPage(
           title:"Category List",
           collectionName:"Category",
@@ -126,35 +107,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             child: Image.asset(
               'assets/backgroundTop.png',
               fit: BoxFit.fill,
-              //height: double.infinity,
+              height: double.infinity,
               width: double.infinity,
             ),
           ),
           Container(
             child: _widgetOptions.elementAt(_selectedIndex),
           ),
-          // Column(
-          //   children: [
-          //     AdminHomeScreenButton(
-          //         pageName: "Admins List",
-          //         context: context,
-          //         collectionName: Admin.CollectionName,
-          //         buttonName: "Admins List",
-          //         isLoading: (value) => setIsLoading(value)),
-          //     AdminHomeScreenButton(
-          //         pageName: "Categorios List",
-          //         context: context,
-          //         collectionName: "Category",
-          //         buttonName: "Category List",
-          //         isLoading: (value) => setIsLoading(value)),
-          //     AdminHomeScreenButton(
-          //         pageName: "Furnitures List",
-          //         context: context,
-          //         collectionName: "Furniture",
-          //         buttonName: "Furnitures List",
-          //         isLoading: (value) => setIsLoading(value))
-          //   ],
-          // ),
           if (isLoading)
             const Center(
               child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.orange,),
@@ -163,11 +122,24 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        items: bottomBarItems,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Admin',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Categories',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.auto_delete),
+            label: 'Furniture',
+          ),
+        ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        selectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
-        unselectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
+        selectedItemColor: const Color(0xFFF87217),
+        selectedIconTheme: const IconThemeData(opacity: 0.0, size: 0),
+        unselectedIconTheme: const IconThemeData(opacity: 0.0, size: 0),
         onTap: _onItemTapped,
       ),
     );

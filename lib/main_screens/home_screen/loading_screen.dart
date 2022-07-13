@@ -15,25 +15,6 @@ class LoadingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     late final _myAppProvider =  Provider.of<AppProvider>(context);
-    // List<CameraDescription> cameras = [];
-    // WidgetsFlutterBinding.ensureInitialized();
-    //
-    // availableCameras().then((theValue) => {
-    //   _myAppProvider.isLoggedUserAdmin().then((value){
-    //
-    //     Navigator.pushReplacement<void, void>(
-    //       context,
-    //       value?MaterialPageRoute<void>(
-    //           builder: (BuildContext context) => AdminHomeScreen()
-    //       ):MaterialPageRoute<void>(
-    //         builder: (BuildContext context) => Camera(theValue),
-    //       ),
-    //     );
-    //
-    //     // Navigator.pushReplacementNamed(context,
-    //     //     value? AdminHomeScreen.routeName: MyCamera(cameras));
-    //   })
-    // });
 
     _myAppProvider.isLoggedUserAdmin().then((value)async{
       WidgetsFlutterBinding.ensureInitialized();
@@ -49,11 +30,6 @@ class LoadingScreen extends StatelessWidget {
           builder: (BuildContext context) => Camera(cameras),
         ),
       );
-
-      // print("theeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-      // Navigator.pushReplacementNamed(context,
-      //     value? AdminHomeScreen.routeName: Camera.routeName);
-      // print("theeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     });
 
 

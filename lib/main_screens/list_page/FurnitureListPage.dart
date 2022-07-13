@@ -112,11 +112,6 @@ class _FunitureListPageState extends State<FurnitureListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: widget.spawned?null
-      //     :AppBar(
-      //   title: Text(title),
-      //   backgroundColor:Color(0xFFF87217),
-      // ),
       body: Stack(
         children: [
           Container(

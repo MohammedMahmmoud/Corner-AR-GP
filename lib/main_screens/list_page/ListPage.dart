@@ -137,19 +137,11 @@ class _ListPageState extends State<ListPage> {
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) =>RegistrationScreen(isAdmin: true),));
-            // Navigator.pushReplacement<void, void>(
-            //     context,
-            //     MaterialPageRoute<void>(
-            //       builder: (BuildContext context) =>RegistrationScreen(isAdmin: true),));
           }else{
             Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) =>AddCategoryPage("Add Category"),));
-            // Navigator.pushReplacement<void, void>(
-            //     context,
-            //     MaterialPageRoute<void>(
-            //       builder: (BuildContext context) =>AddCategoryPage("Add Category"),));
           }
         }
         ,child: Icon(Icons.add),
