@@ -177,10 +177,11 @@ class _AddFurnitureScreenState extends State<AddFurnitureScreen> {
                           var Data = await getData("Admin");
                           var categoryData = await getData("Category");
                           var furnitureData = await getDataFurniture("Furniture","Category");
+                          Navigator.pop(context);
                           Navigator.pushReplacement<void, void>(
                             context,
                             MaterialPageRoute<void>(
-                                builder: (BuildContext context) => AdminHomeScreen(Data,categoryData,furnitureData,2)
+                                builder: (BuildContext context) => AdminHomeScreen(Data,categoryData,furnitureData,2,"Furniture List")
                             )
                           );
                         }

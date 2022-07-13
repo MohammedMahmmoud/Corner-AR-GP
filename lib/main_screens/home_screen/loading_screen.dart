@@ -25,7 +25,7 @@ class LoadingScreen extends StatelessWidget {
       Navigator.pushReplacement<void, void>(
         context,
         value?MaterialPageRoute<void>(
-          builder: (BuildContext context) => AdminHomeScreen(Data,categoryData,furnitureData,0)
+          builder: (BuildContext context) => AdminHomeScreen(Data,categoryData,furnitureData,0,"Admin List")
         ):MaterialPageRoute<void>(
           builder: (BuildContext context) => Camera(cameras),
         ),

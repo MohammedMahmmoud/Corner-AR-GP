@@ -15,21 +15,22 @@ class AdminHomeScreen extends StatefulWidget {
   var categoryData;
   var furnitureData;
   int _selectedIndex;
-  AdminHomeScreen(this.adminData,this.categoryData,this.furnitureData,this._selectedIndex);
+  String title;
+  AdminHomeScreen(this.adminData,this.categoryData,this.furnitureData,this._selectedIndex,this.title);
   @override
-  _AdminHomeScreenState createState() => _AdminHomeScreenState(adminData,categoryData,furnitureData,_selectedIndex);
+  _AdminHomeScreenState createState() => _AdminHomeScreenState(adminData,categoryData,furnitureData,_selectedIndex,title);
 }
 
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   var adminData;
   var categoryData;
   var furnitureData;
+  String title;
   int _selectedIndex = 0;
-  _AdminHomeScreenState(this.adminData,this.categoryData,this.furnitureData,this._selectedIndex);
+  _AdminHomeScreenState(this.adminData,this.categoryData,this.furnitureData,this._selectedIndex,this.title);
   late Person loggedUser;
   late String sideMenuContent;
   bool isLoading = false;
-  String title = "Admins List";
 
 
   late final List<Widget> _widgetOptions = <Widget>[

@@ -61,16 +61,11 @@ class Category{
         data = await getData("Category");
         var adminData = await getData("Admin");
         var furnitureData = await getDataFurniture("Furniture","Category");
+        Navigator.pop(context);
         Navigator.pushReplacement<void, void>(
             context,
             MaterialPageRoute<void>(
-              builder: (BuildContext context) =>AdminHomeScreen(adminData,data,furnitureData,1)
-                  // ListPage(
-                  //   title: "Add Category",
-                  //   collectionName: collectionName,
-                  //   Data: data,
-                  //   dataLength: data.length,
-                  // ),
+              builder: (BuildContext context) =>AdminHomeScreen(adminData,data,furnitureData,1,"Categories List")
             )
         );
         print("aaaaaaaaaaaaaaaaddddddddddddddddddddddddddddddddddddddddddddd");

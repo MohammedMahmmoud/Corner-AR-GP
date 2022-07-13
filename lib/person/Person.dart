@@ -89,11 +89,12 @@ class Person{
           var categoryData = await getData("Category");
           var furnitureData = await getDataFurniture("Furniture","Category");
           cameras = await setCamera();
+          Navigator.pop(context);
           Navigator.pushReplacement<void, void>(
             context,
             isAdmin?MaterialPageRoute<void>(
               builder: (BuildContext context) =>
-                  AdminHomeScreen(data,categoryData,furnitureData,0)
+                  AdminHomeScreen(data,categoryData,furnitureData,0,"Admins List")
             ):MaterialPageRoute<void>(
               builder: (BuildContext context) =>
                   Camera(cameras),
@@ -152,7 +153,7 @@ class Person{
                   context,
                   adminRefrence.exists?MaterialPageRoute<void>(
                     builder: (BuildContext context) =>
-                        AdminHomeScreen(Data,categoryData,furnitureData,0),
+                        AdminHomeScreen(Data,categoryData,furnitureData,0,"Admins List"),
                   ):MaterialPageRoute<void>(
                     builder: (BuildContext context) =>
                         //UserHomeScreen(),
