@@ -14,7 +14,8 @@ class ListPage extends StatefulWidget {
   String collectionName;
   var Data;
   int dataLength;
-  ListPage({required this.title,required this.collectionName,required this.Data,required this.dataLength});
+  var loggeduser;
+  ListPage({required this.title,required this.collectionName,required this.Data,required this.dataLength,this.loggeduser});
   @override
   _ListPageState createState() => _ListPageState(this.title,this.collectionName,this.Data,this.dataLength);
 }
@@ -22,13 +23,11 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   String title;
   String collectionName;
-  String buttonName="Add Admin";
   var data;
   int dataLength;
   _ListPageState(this.title,this.collectionName,this.data,this.dataLength);
   bool isLoading = false;
 
-  final _fireStore = FirebaseFirestore.instance;
   late QuerySnapshot querySnapshot;
 
   void setIsLoading(value){
@@ -40,6 +39,8 @@ class _ListPageState extends State<ListPage> {
 
   @override
   void initState() {
+    print("**********************************");
+    print(data);
     print(dataLength);
     setState(() {});
     super.initState();
@@ -49,22 +50,8 @@ class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        backgroundColor: Color(0xFFF87217),
-      ),
       body: Stack(
         children: [
-          Container(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Image.asset(
-                'assets/backgroundBottom.png',
-                fit: BoxFit.fill,
-                width: double.infinity,
-              ),
-            ),
-          ),
           Container(
             child: Image.asset(
               'assets/backgroundTop.png',
@@ -100,6 +87,7 @@ class _ListPageState extends State<ListPage> {
                             if(collectionName == "Category"){
                               deleteAllCategroyFurniture(data[index]['id']);
                             }
+                            var prevID = data[index]['id'];
                             await FirebaseFirestore.instance.collection(collectionName)
                                 .doc(data[index]['id'])
                                 .delete()
@@ -117,6 +105,10 @@ class _ListPageState extends State<ListPage> {
                             setState((){
                               dataLength = data.length;
                             });
+                            if(collectionName == "Admin"){
+                              if(widget.loggeduser.id == prevID)
+                              widget.loggeduser.logOut(context);
+                            }
                             setIsLoading(false);
                           },
                           icon: const ImageIcon(
@@ -134,26 +126,26 @@ class _ListPageState extends State<ListPage> {
             },
           ),
           if (isLoading) const Center(
-            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
+            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.orange,),
           )
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           if(collectionName == Admin.CollectionName){
-            Navigator.pushReplacement<void, void>(
+            Navigator.push(
                 context,
-                MaterialPageRoute<void>(
+                MaterialPageRoute(
                   builder: (BuildContext context) =>RegistrationScreen(isAdmin: true),));
           }else{
-            Navigator.pushReplacement<void, void>(
+            Navigator.push(
                 context,
-                MaterialPageRoute<void>(
+                MaterialPageRoute(
                   builder: (BuildContext context) =>AddCategoryPage("Add Category"),));
           }
         }
         ,child: Icon(Icons.add),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Color(0xFFF87217),
       ),
     );
   }

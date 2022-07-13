@@ -7,6 +7,9 @@ import 'package:corner_ar_gp/Furniture/Furniture.dart';
 import 'package:corner_ar_gp/components/buttons_components.dart';
 import 'package:file_picker/file_picker.dart';
 
+import '../../components/getdata_components.dart';
+import '../home_screen/admin_homescreen.dart';
+
 class AddFurnitureScreen extends StatefulWidget {
   static const String title = "Add a Furniture";
   String categoryID;
@@ -73,8 +76,14 @@ class _AddFurnitureScreenState extends State<AddFurnitureScreen> {
                           }
                         },
                         child: const Text(
-                          "Pick a Furniture Model"
+                          "Pick a Furniture Model",
+                          style: TextStyle(
+                            color: Color(0xFFE56717)
+                          )
                         ),
+                      style:ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                      ),
                     ),
                     firstScreenView? const SizedBox(height: 0,):
                       isModelPicked? const SizedBox(height: 0,)
@@ -107,7 +116,13 @@ class _AddFurnitureScreenState extends State<AddFurnitureScreen> {
                         }
                       },
                       child: const Text(
-                        "Pick the Model Picture"
+                        "Pick the Model Picture",
+                          style: TextStyle(
+                              color: Color(0xFFE56717)
+                          )
+                      ),
+                      style:ElevatedButton.styleFrom(
+                        primary: Colors.white,
                       ),
                     ),
                     firstScreenView? const SizedBox(height: 0,)
@@ -158,6 +173,17 @@ class _AddFurnitureScreenState extends State<AddFurnitureScreen> {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           print("added successfully");
+
+                          var Data = await getData("Admin");
+                          var categoryData = await getData("Category");
+                          var furnitureData = await getDataFurniture("Furniture","Category");
+                          Navigator.pop(context);
+                          Navigator.pushReplacement<void, void>(
+                            context,
+                            MaterialPageRoute<void>(
+                                builder: (BuildContext context) => AdminHomeScreen(Data,categoryData,furnitureData,2,"Furniture List")
+                            )
+                          );
                         }
                       }
                   )

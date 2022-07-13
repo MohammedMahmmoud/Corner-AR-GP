@@ -1,5 +1,6 @@
 import 'package:corner_ar_gp/components/buttons_components.dart';
 import 'package:flutter/material.dart';
+import '../main_screens/edit_info/edit_person_info.dart';
 import '../main_screens/list_page/SavedFurntiureListPage.dart';
 import '../person/Person.dart';
 import 'getdata_components.dart';
@@ -7,11 +8,11 @@ import 'getdata_components.dart';
 
 Drawer sideMenu(
 {
-  required Function changeToEditPage,
   required bool isAdmin,
   required BuildContext buildContext,
   required Person personObject,
-  required Function isLoading
+  required Function isLoading,
+  Function? spwan
 }
     ){
   return Drawer(
@@ -42,8 +43,16 @@ Drawer sideMenu(
           ),
           listMenuButtons(
               buttonName: 'Edit Profile',
-
-              onPressedButton: (){changeToEditPage(); Navigator.pop(buildContext);}
+              onPressedButton: (){
+                Navigator.push(
+                    buildContext,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => EditPersonInformation(personObject)
+                    )
+                );
+                //changeToEditPage();
+                //Navigator.pop(buildContext);
+              }
           ),
           const SizedBox(height: 5,),
           //if user show saved furniture button

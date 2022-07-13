@@ -7,49 +7,29 @@ import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/getdata_components.dart';
+
 class LoadingScreen extends StatelessWidget {
   static const routeName = 'loadingScreen';
 
   @override
   Widget build(BuildContext context) {
     late final _myAppProvider =  Provider.of<AppProvider>(context);
-    // List<CameraDescription> cameras = [];
-    // WidgetsFlutterBinding.ensureInitialized();
-    //
-    // availableCameras().then((theValue) => {
-    //   _myAppProvider.isLoggedUserAdmin().then((value){
-    //
-    //     Navigator.pushReplacement<void, void>(
-    //       context,
-    //       value?MaterialPageRoute<void>(
-    //           builder: (BuildContext context) => AdminHomeScreen()
-    //       ):MaterialPageRoute<void>(
-    //         builder: (BuildContext context) => Camera(theValue),
-    //       ),
-    //     );
-    //
-    //     // Navigator.pushReplacementNamed(context,
-    //     //     value? AdminHomeScreen.routeName: MyCamera(cameras));
-    //   })
-    // });
 
     _myAppProvider.isLoggedUserAdmin().then((value)async{
       WidgetsFlutterBinding.ensureInitialized();
       List<CameraDescription> cameras = await availableCameras();
-      print("ccccccccccccccccccccaaaaaaaaaammmmmmmmmmmmeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+      var Data = await getData("Admin");
+      var categoryData = await getData("Category");
+      var furnitureData = await getDataFurniture("Furniture","Category");
       Navigator.pushReplacement<void, void>(
         context,
         value?MaterialPageRoute<void>(
-          builder: (BuildContext context) => AdminHomeScreen()
+          builder: (BuildContext context) => AdminHomeScreen(Data,categoryData,furnitureData,0,"Admin List")
         ):MaterialPageRoute<void>(
           builder: (BuildContext context) => Camera(cameras),
         ),
       );
-
-      // print("theeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-      // Navigator.pushReplacementNamed(context,
-      //     value? AdminHomeScreen.routeName: Camera.routeName);
-      // print("theeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     });
 
 
@@ -78,7 +58,7 @@ class LoadingScreen extends StatelessWidget {
               ),
             ),
             const Center(
-              child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
+              child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.orange,),
             )
           ],
         )

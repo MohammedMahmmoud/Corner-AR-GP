@@ -10,9 +10,10 @@ class SavedFurnitureListPage extends StatefulWidget {
   var Data;
   int dataLength;
   String parentCollection;
+  Function? spwan;
   SavedFurnitureListPage({required this.title,required this.collectionName,
     required this.Data,required this.dataLength,
-    required this.parentCollection});
+    required this.parentCollection,this.spwan});
   @override
   _SavedFunitureListPageState createState() =>
       _SavedFunitureListPageState(this.title,this.collectionName,this.Data,this.dataLength,parentCollection);
@@ -75,6 +76,8 @@ class _SavedFunitureListPageState extends State<SavedFurnitureListPage> {
           ),
           gridview_furnitureList(
               dataLength: dataLength,
+              spwan: widget.spwan,
+              isSpwaned: true,
               data: data,
               icon: const ImageIcon(
                 AssetImage("assets/remove.png"),
@@ -102,7 +105,7 @@ class _SavedFunitureListPageState extends State<SavedFurnitureListPage> {
               }
           ),
           if (isLoading) const Center(
-            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
+            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.orange,),
           ),
         ],
       ),

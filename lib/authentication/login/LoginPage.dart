@@ -42,7 +42,7 @@ class _LoginState extends State<Login> {
               child: Image.asset(
                 'assets/background2.png',
                 fit: BoxFit.fill,
-                //height: double.infinity,
+                height: double.infinity,
                 width: double.infinity,
               ),
             ),
@@ -108,18 +108,18 @@ class _LoginState extends State<Login> {
                             onPressedButton:  ()=>person.logIn(_loginFormKey, password,context,(value)=>setIsLoading(value))
                         ),
                       ),
-                      Container(
-                        child: TextButton(
-                          onPressed: () {  },
-                          child: const Text(
-                            "Forget Password?",
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black54
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   child: TextButton(
+                      //     onPressed: () {  },
+                      //     child: const Text(
+                      //       "Forget Password?",
+                      //       style: TextStyle(
+                      //           fontSize: 15,
+                      //           color: Colors.black54
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       Container(
                         padding: const EdgeInsets.fromLTRB(15, 15, 15, 12),
                         child: TextButton(
@@ -142,7 +142,7 @@ class _LoginState extends State<Login> {
               ),
             ),
             if (isLoading) const Center(
-              child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
+              child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.orange,),
             ),
           ],
         )

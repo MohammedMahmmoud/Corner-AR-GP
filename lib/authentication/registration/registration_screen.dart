@@ -51,7 +51,7 @@ class _registrationScreenState extends State<RegistrationScreen> {
             child: Image.asset(
               'assets/background2.png',
               fit: BoxFit.fill,
-              //height: double.infinity,
+              height: double.infinity,
               width: double.infinity,
             ),
           ),
@@ -124,7 +124,7 @@ class _registrationScreenState extends State<RegistrationScreen> {
                             password = value;
                           },
                           validator: (value) => person.passwordValidator(value),
-                          style: TextStyle(color: const Color(0xFFbdc6cf)),
+                          //style: TextStyle(color: const Color(0xFFbdc6cf)),
                         ),
                         Container(
                           padding: const EdgeInsets.fromLTRB(70,80,70,0),

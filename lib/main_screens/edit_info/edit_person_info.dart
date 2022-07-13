@@ -33,105 +33,121 @@ class _EditPersonInformationState extends State<EditPersonInformation> {
     print('========================='+widget.loggedUser.id+'============================');
 
 
-    return Container(
-      child: Column(
-        children :[
-          Expanded(
-            child: ListView(
-            children: <Widget>[
-             const SizedBox(height: 25,),
-             TileEditCard(cardTitle: 'Edit Name', onTapFunction: _toggleEditNameOntTap, iconState: formsIconsStats[0]),
-             _editingUserName?
-                EditUserNameForm(
-                    formKey: _nameFormKey,
-                    nameReturner: _infoParameter.setNewName,
-                    lastNameReturner: _infoParameter.setNameToFullName,
-                    firstNameSavedValue: _infoParameter.getNewName(),
-                    lastNameSavedValue: _infoParameter.getLastNameTemp()
-                )
-                : const SizedBox(height: 10,),
-             TileEditCard(cardTitle: 'Edit Password', onTapFunction: _toggleEditPasswordOntTap, iconState: formsIconsStats[1]),
-             _editingPassword?
-                  EditPasswordForm(
-                      person: widget.loggedUser,
-                      passwordGetter: _infoParameter.setCurrPass,
-                      newPasswordGetter: _infoParameter.setNewPass,
-                      currentPasswordValidator: widget.loggedUser.passwordValidator,
-                      hideCurrentPassword: hidePassword,
-                      hideNewPassword: hideNewPassword,
-                      formCurrentKey: _currPassFormKey,
-                      passwordFormKey: _passwordFormKey,
-                      toggleCurrentPasswordVisibility: _toggleCurrentPasswordVisibility,
-                      toggleNewPasswordVisibility: _toggleNewEnteredPasswordVisibility,
-                  )
-                  : const SizedBox(height: 10,),
-             TileEditCard(cardTitle: 'Edit Email Address', onTapFunction: _toggleEditEmailOntTap, iconState: formsIconsStats[2]),
-             _editingEmail?
-                 EditEmailForm(
-                     formKey: _emailFormKey,
-                     emailReturner: _infoParameter.setNewEmail,
-                     passReturner: _infoParameter.setCurrPass,
-                     emailValidator: widget.loggedUser.mailValidator,
-                     passwordValidator: widget.loggedUser.passwordValidator,
-                     togglePasswordVisibility: _toggleCurrentPasswordVisibility,
-                     hidePassword: hidePassword,
-                     emailSavedValue: _infoParameter.getNewMail()
-                 ):const SizedBox(height: 0,),
-            ],
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Edit Account"),
+          backgroundColor: Color(0xFFF87217),
         ),
+      body: Stack(
+        children: [
+          Container(
+            child: Image.asset(
+              'assets/backgroundTop.png',
+              fit: BoxFit.fill,
+              height: double.infinity,
+              width: double.infinity,
+            ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Column(
-              children: [
-                Row(
+          Column(
+            children :[
+              Expanded(
+                child: ListView(
+                children: <Widget>[
+                 const SizedBox(height: 25,),
+                 TileEditCard(cardTitle: 'Edit Name', onTapFunction: _toggleEditNameOntTap, iconState: formsIconsStats[0]),
+                 _editingUserName?
+                    EditUserNameForm(
+                        formKey: _nameFormKey,
+                        nameReturner: _infoParameter.setNewName,
+                        lastNameReturner: _infoParameter.setNameToFullName,
+                        firstNameSavedValue: _infoParameter.getNewName(),
+                        lastNameSavedValue: _infoParameter.getLastNameTemp()
+                    )
+                    : const SizedBox(height: 10,),
+                 TileEditCard(cardTitle: 'Edit Password', onTapFunction: _toggleEditPasswordOntTap, iconState: formsIconsStats[1]),
+                 _editingPassword?
+                      EditPasswordForm(
+                          person: widget.loggedUser,
+                          passwordGetter: _infoParameter.setCurrPass,
+                          newPasswordGetter: _infoParameter.setNewPass,
+                          currentPasswordValidator: widget.loggedUser.passwordValidator,
+                          hideCurrentPassword: hidePassword,
+                          hideNewPassword: hideNewPassword,
+                          formCurrentKey: _currPassFormKey,
+                          passwordFormKey: _passwordFormKey,
+                          toggleCurrentPasswordVisibility: _toggleCurrentPasswordVisibility,
+                          toggleNewPasswordVisibility: _toggleNewEnteredPasswordVisibility,
+                      )
+                      : const SizedBox(height: 10,),
+                 TileEditCard(cardTitle: 'Edit Email Address', onTapFunction: _toggleEditEmailOntTap, iconState: formsIconsStats[2]),
+                 _editingEmail?
+                     EditEmailForm(
+                         formKey: _emailFormKey,
+                         emailReturner: _infoParameter.setNewEmail,
+                         passReturner: _infoParameter.setCurrPass,
+                         emailValidator: widget.loggedUser.mailValidator,
+                         passwordValidator: widget.loggedUser.passwordValidator,
+                         togglePasswordVisibility: _toggleCurrentPasswordVisibility,
+                         hidePassword: hidePassword,
+                         emailSavedValue: _infoParameter.getNewMail()
+                     ):const SizedBox(height: 0,),
+                ],
+            ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
                   children: [
-                    const SizedBox(width: 10,),
-                    Expanded(
-                        child: ElevatedButton(
-                          onPressed: ()=> _infoParameter.applyChanges(widget.loggedUser, _nameFormKey,
-                              _passwordFormKey, _emailFormKey, _iconResponseToApplyChanges, context),
-                          child: const Text(
-                            'Save Changes',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            onPrimary: const Color(0xFFF87217),
-                            fixedSize: const Size(200, 50),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                          ),
-                        )
-                    ),
-                    const SizedBox(width: 10,),
-                    Expanded(
-                        child: ElevatedButton(
-                          onPressed: (){},
-                          child: const Text(
-                            'Delete Account',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.redAccent,
-                            onPrimary: const Color(0xFFFCFCFC),
-                            fixedSize: const Size(200, 50),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                          ),
-                        )
-                    ),
-                    const SizedBox(width: 10,),
+                    Row(
+                      children: [
+                        const SizedBox(width: 10,),
+                        Expanded(
+                            child: ElevatedButton(
+                              onPressed: ()=> _infoParameter.applyChanges(widget.loggedUser, _nameFormKey,
+                                  _passwordFormKey, _emailFormKey, _iconResponseToApplyChanges, context),
+                              child: const Text(
+                                'Save Changes',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.white,
+                                onPrimary: const Color(0xFFF87217),
+                                fixedSize: const Size(200, 50),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30)),
+                              ),
+                            )
+                        ),
+                        const SizedBox(width: 10,),
+                        Expanded(
+                            child: ElevatedButton(
+                              onPressed: (){},
+                              child: const Text(
+                                'Delete Account',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.redAccent,
+                                onPrimary: const Color(0xFFFCFCFC),
+                                fixedSize: const Size(200, 50),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30)),
+                              ),
+                            )
+                        ),
+                        const SizedBox(width: 10,),
 
+                      ],
+                    ),
+                    const SizedBox(height: 30,),
                   ],
                 ),
-                const SizedBox(height: 30,),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       )

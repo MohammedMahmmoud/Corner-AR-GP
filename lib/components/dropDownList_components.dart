@@ -9,12 +9,12 @@ DropdownButton<String> categoryDropDownList({
     value: dropdownValue,
     isExpanded: true,
     icon: Align(child: const Icon(Icons.arrow_downward),alignment: Alignment.topRight,),
-    style: const TextStyle(color: Colors.white,fontSize: 17),
+    style: const TextStyle(color: Color(0xFFF87217),fontSize: 17),
     underline: Container(
       height: 2,
-      color: const Color(0xFF4F6E7B),
+      color: const Color(0xFFF87217),
     ),
-     dropdownColor: const Color(0xFF4F6E7B),
+     dropdownColor: Colors.white,
      onChanged: (String? newValue)async {await onPressedButton(newValue);},
     items: categoryList//<String>['One', 'Two', 'Free', 'Four']
         .map<DropdownMenuItem<String>>((String value) {
