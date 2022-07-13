@@ -7,6 +7,8 @@ import 'package:corner_ar_gp/provider_manager/AppProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/getdata_components.dart';
+
 class LoadingScreen extends StatelessWidget {
   static const routeName = 'loadingScreen';
 
@@ -36,11 +38,13 @@ class LoadingScreen extends StatelessWidget {
     _myAppProvider.isLoggedUserAdmin().then((value)async{
       WidgetsFlutterBinding.ensureInitialized();
       List<CameraDescription> cameras = await availableCameras();
-      print("ccccccccccccccccccccaaaaaaaaaammmmmmmmmmmmeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+      var Data = await getData("Admin");
+      var categoryData = await getData("Category");
+      var furnitureData = await getDataFurniture("Furniture","Category");
       Navigator.pushReplacement<void, void>(
         context,
         value?MaterialPageRoute<void>(
-          builder: (BuildContext context) => AdminHomeScreen()
+          builder: (BuildContext context) => AdminHomeScreen(Data,categoryData,furnitureData,0)
         ):MaterialPageRoute<void>(
           builder: (BuildContext context) => Camera(cameras),
         ),
@@ -78,7 +82,7 @@ class LoadingScreen extends StatelessWidget {
               ),
             ),
             const Center(
-              child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
+              child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.orange,),
             )
           ],
         )

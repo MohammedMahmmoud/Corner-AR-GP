@@ -86,17 +86,14 @@ class Person{
         ).then((user)async{
           _myAppProvider.updateLoggedUser(this);
           var data = await getData(Admin.CollectionName);
+          var categoryData = await getData("Category");
+          var furnitureData = await getDataFurniture("Furniture","Category");
           cameras = await setCamera();
           Navigator.pushReplacement<void, void>(
             context,
             isAdmin?MaterialPageRoute<void>(
               builder: (BuildContext context) =>
-                  ListPage(
-                    title: "Add Admin",
-                    collectionName: Admin.CollectionName,
-                    Data: data,
-                    dataLength: data.length,
-                  ),
+                  AdminHomeScreen(data,categoryData,furnitureData,0)
             ):MaterialPageRoute<void>(
               builder: (BuildContext context) =>
                   Camera(cameras),
@@ -148,11 +145,14 @@ class Person{
                 _myAppProvider.updateLoggedUser(this);
 
                 cameras = await setCamera();
+                var Data = await getData("Admin");
+                var categoryData = await getData("Category");
+                var furnitureData = await getDataFurniture("Furniture","Category");
                 Navigator.pushReplacement<void, void>(
                   context,
                   adminRefrence.exists?MaterialPageRoute<void>(
                     builder: (BuildContext context) =>
-                        AdminHomeScreen(),
+                        AdminHomeScreen(Data,categoryData,furnitureData,0),
                   ):MaterialPageRoute<void>(
                     builder: (BuildContext context) =>
                         //UserHomeScreen(),

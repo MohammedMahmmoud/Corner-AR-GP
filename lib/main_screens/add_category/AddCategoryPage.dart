@@ -63,15 +63,17 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
               ),
             ),
           ),
-          Container(
-              padding: const EdgeInsets.fromLTRB(70,180,70,0),
-              child: LogAndRegisterButton(
-                  buttonText: "Add Category",
-                  onPressedButton:  ()=>category.addCategory(context, validator, (value)=>setIsLoading(value))
-              )
+          Center(
+            child: Container(
+                //padding: const EdgeInsets.fromLTRB(70,180,70,0),
+                child: LogAndRegisterButton(
+                    buttonText: "Add Category",
+                    onPressedButton:  ()=>category.addCategory(context, validator, (value)=>setIsLoading(value))
+                )
+            ),
           ),
           if (isLoading) const Center(
-            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
+            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.orange,),
           ),
         ])
     );

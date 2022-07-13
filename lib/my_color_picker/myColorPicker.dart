@@ -100,7 +100,7 @@ class _MyColorPickerState extends State<MyColorPicker> {
         );
       },
       child: Icon(Icons.color_lens_outlined),
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Color(0xFFF87217),
     );
   }
 }

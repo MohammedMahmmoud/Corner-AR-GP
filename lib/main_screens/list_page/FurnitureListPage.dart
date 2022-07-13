@@ -112,11 +112,11 @@ class _FunitureListPageState extends State<FurnitureListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.spawned?null
-          :AppBar(
-        title: Text(title),
-        backgroundColor:Color(0xFFF87217),
-      ),
+      // appBar: widget.spawned?null
+      //     :AppBar(
+      //   title: Text(title),
+      //   backgroundColor:Color(0xFFF87217),
+      // ),
       body: Stack(
         children: [
           Container(
@@ -150,12 +150,13 @@ class _FunitureListPageState extends State<FurnitureListPage> {
               Expanded(
                 child: gridview_furnitureList(
                     context: widget.context ,
+                    isSpwaned: widget.spawned,
                     spwan: widget.spwan,
                     dataLength: dataLength,
                     data: data,
                     icon: isViewing?const Icon(
                       Icons.save,
-                      color: Colors.blueGrey,
+                      color: Color(0xFFF87217),
                     ):const ImageIcon(
                       AssetImage("assets/remove.png"),
                       color: Colors.red,
@@ -200,11 +201,11 @@ class _FunitureListPageState extends State<FurnitureListPage> {
             ],
           ),
           if (isLoading) const Center(
-            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
+            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.orange,),
           ),
         ],
       ),
-      floatingActionButton: categoryID== ''? null :
+      floatingActionButton: widget.spawned?Container():(categoryID== ''? null :
       FloatingActionButton(
         onPressed: (){
           if(true || collectionName == Admin.CollectionName){
@@ -217,8 +218,8 @@ class _FunitureListPageState extends State<FurnitureListPage> {
         }
 
         ,child: Icon(Icons.add),
-        backgroundColor: Colors.blueGrey,
-      ),
+        backgroundColor: Color(0xFFF87217),
+      )),
 
     );
   }

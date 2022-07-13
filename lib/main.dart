@@ -44,7 +44,6 @@ class MyApp extends StatelessWidget {
             RegistrationScreen.routeName: (context) =>
                 RegistrationScreen(isAdmin: false),
             Login.routeName: (context) => Login(),
-            AdminHomeScreen.routeName: (context) => AdminHomeScreen(),
             LoadingScreen.routeName: (context) =>LoadingScreen(),
           },
           initialRoute: isUserLoggedIn?LoadingScreen.routeName:Login.routeName,

@@ -25,7 +25,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   _UserHomeScreenState(this.paletteGenerator);
   late Person loggedUser;
   late String sideMenuContent;
-  int pageIndex = 0;
   bool isLoading = false;
   Color currentColor = Colors.amber;
   bool isSelected=false;
@@ -53,30 +52,29 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
     return Scaffold(
       drawer: sideMenu(
-          changeToEditPage:_setToEditPage,
           isAdmin: false,
           buildContext:context,
           personObject:loggedUser,
-          isLoading: (value)=>setIsLoading(value)
+          isLoading: (value)=>setIsLoading(value),
+        spwan: (value) =>spwan(value)
       ),
       appBar: AppBar(
         title: Text("User"),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Color(0xFFF87217),
       ),
       body: Stack(
         children: [
-          Container(
-            height: 800,
-            color: Colors.yellowAccent,
-            child: UnityWidget(
-              onUnityCreated: onUnityCreated,
-              onUnityMessage: onUnityMessage,
-              fullscreen: false,
-            ),
-          ),
-          pageIndex == 1 ? EditPersonInformation(loggedUser) : const SizedBox(height: 0,),
+          // Container(
+          //   height: 800,
+          //   color: Colors.yellowAccent,
+          //   child: UnityWidget(
+          //     onUnityCreated: onUnityCreated,
+          //     onUnityMessage: onUnityMessage,
+          //     fullscreen: false,
+          //   ),
+          // ),
           if (isLoading) const Center(
-            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.blueGrey,),
+            child: CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.orange,),
           ),
         ],
       ),
@@ -95,7 +93,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               Delete();
             }
             ,child: Icon(Icons.delete),
-            backgroundColor: Colors.blueGrey,
+            backgroundColor: Color(0xFFF87217),
           ):Container(),
 
           SizedBox(height: 10,),
@@ -131,17 +129,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               setIsLoading(false);
             }
             ,child: Icon(Icons.add),
-            backgroundColor: Colors.blueGrey,
+            backgroundColor: Color(0xFFF87217),
           ),
         ],
       ),
     );
-  }
-  _setToEditPage()
-  {
-    setState(() {
-      pageIndex = 1;
-    });
   }
 
   //Callback that connects the created controller to the unity controller
