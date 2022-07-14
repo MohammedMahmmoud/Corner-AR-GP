@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../ColorDetection/Camera/camera.dart';
+import '../Data/Data.dart';
 import '../authentication/login/LoginPage.dart';
 import '../main_screens/list_page/ListPage.dart';
 
@@ -85,21 +86,26 @@ class Person{
             )
         ).then((user)async{
           _myAppProvider.updateLoggedUser(this);
-          var data = await getData(Admin.CollectionName);
-          var categoryData = await getData("Category");
-          var furnitureData = await getDataFurniture("Furniture","Category");
-          cameras = await setCamera();
-          Navigator.pop(context);
+
+          late Widget nextPage;
+          if(isAdmin){
+            var adminData = await getData("Admin");
+            var categoryData = await getData("Category");
+            var furnitureData = await getDataFurniture("Furniture","Category");
+            Data dataObject = Data(adminData, categoryData, furnitureData);
+            nextPage = AdminHomeScreen(0,"Admins List",dataObject);
+          }else if(!isAdmin){
+            cameras = await setCamera();
+            nextPage = Camera(cameras);
+          }
+
           Navigator.pushReplacement<void, void>(
-            context,
-            isAdmin?MaterialPageRoute<void>(
-              builder: (BuildContext context) =>
-                  AdminHomeScreen(data,categoryData,furnitureData,0,"Admins List")
-            ):MaterialPageRoute<void>(
-              builder: (BuildContext context) =>
-                  Camera(cameras),
-            ),
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) => nextPage,
+              )
           );
+
         });
         print('done --------------------------------------------------------------');
         return true;
@@ -131,8 +137,7 @@ class Person{
         } else {
           final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
           //final db = FirebaseFirestore.instance;
-          final adminRefrence =
-            await getPersonCollectionWithConverter(Admin.CollectionName).doc(userCredential.user!.uid).get();
+          final adminRefrence = await getPersonCollectionWithConverter(Admin.CollectionName).doc(userCredential.user!.uid).get();
 
           final userRef = await getPersonCollectionWithConverter(adminRefrence.exists? Admin.CollectionName :
           app_user.User.CollectionName)
@@ -145,20 +150,23 @@ class Person{
 
                 _myAppProvider.updateLoggedUser(this);
 
-                cameras = await setCamera();
-                var Data = await getData("Admin");
-                var categoryData = await getData("Category");
-                var furnitureData = await getDataFurniture("Furniture","Category");
+                late Widget nextPage;
+                if(adminRefrence.exists){
+                  var adminData = await getData("Admin");
+                  var categoryData = await getData("Category");
+                  var furnitureData = await getDataFurniture("Furniture","Category");
+                  Data dataObject = Data(adminData, categoryData, furnitureData);
+                  nextPage = AdminHomeScreen(0,"Admins List",dataObject);
+                }else if(!adminRefrence.exists){
+                  cameras = await setCamera();
+                  nextPage = Camera(cameras);
+                }
+
                 Navigator.pushReplacement<void, void>(
                   context,
-                  adminRefrence.exists?MaterialPageRoute<void>(
-                    builder: (BuildContext context) =>
-                        AdminHomeScreen(Data,categoryData,furnitureData,0,"Admins List"),
-                  ):MaterialPageRoute<void>(
-                    builder: (BuildContext context) =>
-                        //UserHomeScreen(),
-                      Camera(cameras)
-                  ),
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) => nextPage,
+                  )
                 );
               });
         }
@@ -197,63 +205,68 @@ class Person{
           app_user.User.CollectionName);
 
       print('wait');
-      userRef.doc(id)
+      await userRef.doc(id)
           .update({'name': newName})
           .then((value){
-              name = newName;
-              final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
-              _myAppProvider.updateLoggedUser(this);
-              returnState = true;
-            })
+        name = newName;
+        final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
+        _myAppProvider.updateLoggedUser(this);
+        returnState = true;
+      })
           .catchError((error){
-            _errorMsg = error;
-            formKey.currentState?.validate();
-            print("name can't be changed" + error.toString());
+        _errorMsg = error;
+        formKey.currentState?.validate();
+        print("name can't be changed" + error.toString());
+        returnState =  false;
       });
     }
+    print("================> $returnState <=========================");
     return returnState;
   }
 
   Future<bool> updateEmail(GlobalKey<FormState> formKey, String newEmail, String currentPassword, BuildContext context) async {
     bool returnState = false;
-    if(formKey.currentState?.validate() == true) {
-      try {
-        AuthCredential credential = EmailAuthProvider.credential(email: email, password: currentPassword);
-        await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
-
-        final adminReference = await getPersonCollectionWithConverter(
-            Admin.CollectionName).doc(id).get();
-        final userRef = getPersonCollectionWithConverter(
-            adminReference.exists ? Admin.CollectionName :
-            app_user.User.CollectionName);
-
-        userRef.doc(id)
-            .update({'email': newEmail})
-            .then((value) => print("User Updated"))
-            .catchError((error){
-          _errorMsg = error;
-          formKey.currentState?.validate();
-          print("Email can't be changed" + error.toString());
-        });
-      } on FirebaseAuthException catch (e) {
-        _errorMsg = e;
-        formKey.currentState?.validate();
-      }
-      print('uupddaattiinngg emaillllllllll');
-      print('-------------------------------' + id);
-
-      var user = FirebaseAuth.instance.currentUser;
-      user?.updateEmail(newEmail).then((_) {
-        final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
-        _myAppProvider.updateLoggedUser(this);
-        print("Successfully changed Email");
-        returnState = true;
-      }).catchError((error) {
-        _errorMsg = error;
-        formKey.currentState?.validate();
-        print("Email can't be changed" + error.toString());
-      });
+    try {
+      AuthCredential credential = EmailAuthProvider.credential(email: email, password: currentPassword);
+      await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      _errorMsg = e;
+      formKey.currentState?.validate();
+      return false;
     }
+
+    final adminReference = await getPersonCollectionWithConverter(
+        Admin.CollectionName).doc(id).get();
+    final userRef = getPersonCollectionWithConverter(
+        adminReference.exists ? Admin.CollectionName :
+        app_user.User.CollectionName);
+
+    await userRef.doc(id)
+        .update({'email': newEmail})
+        .then((value) => print("User Updated"))
+        .catchError((error){
+      _errorMsg = error;
+      formKey.currentState?.validate();
+      print("Email can't be changed" + error.toString());
+      return false;
+    });
+
+    print('uupddaattiinngg emaillllllllll');
+    print('-------------------------------' + id);
+
+    var user = FirebaseAuth.instance.currentUser;
+    await user?.updateEmail(newEmail).then((_) {
+      final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
+      _myAppProvider.updateLoggedUser(this);
+      print("============>Successfully changed Email to :- $newEmail");
+      returnState = true;
+    }).catchError((error) {
+      _errorMsg = error;
+      formKey.currentState?.validate();
+      print("Email can't be changed" + error.toString());
+    });
+
+    print("================> $returnState <=========================");
     return returnState;
   }
 
@@ -266,16 +279,17 @@ class Person{
       try {
         AuthCredential credential = EmailAuthProvider.credential(email: email, password: currentPassword);
         await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
-        print('passordCorrect');
+        print('passwordCorrect');
       } on FirebaseAuthException catch (e) {
         _errorMsg = e;
         formKey.currentState?.validate();
         print('current password not correct');
         print(e.message);
+        return false;
       }
       var user = FirebaseAuth.instance.currentUser;
 
-      user?.updatePassword(newerPassword).then((_) {
+      await user?.updatePassword(newerPassword).then((_) {
         print("Successfully changed password");
         returnState = true;
       }).catchError((error) {
@@ -288,14 +302,37 @@ class Person{
     return returnState;
   }
 
-  Future<void> deleteAccount() async{
+  Future<bool> deleteAccount(BuildContext context) async{
+    bool isSuccess = true;
+
+    final adminReference = await getPersonCollectionWithConverter(
+        Admin.CollectionName).doc(id).get();
+    final userRef = getPersonCollectionWithConverter(
+        adminReference.exists ? Admin.CollectionName :
+        app_user.User.CollectionName);
+
+    await userRef.doc(id).delete().then(
+            (doc) => print("Document deleted"),
+        onError: (e) {
+          print("Error updating document $e");
+          isSuccess = false;
+          return false;
+        }
+    );
+
     try {
       await FirebaseAuth.instance.currentUser!.delete();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
         print('The user must reauthenticate before this operation can be executed.');
       }
+      isSuccess = false;
+      return false;
     }
+
+    final AppProvider _myAppProvider =  Provider.of<AppProvider>(context, listen: false);
+    _myAppProvider.updateLoggedUser(Person());
+    return isSuccess;
   }
 
   String? mailValidator([String? value])
@@ -336,7 +373,3 @@ class Person{
   }
 
 }
-
-
-
-

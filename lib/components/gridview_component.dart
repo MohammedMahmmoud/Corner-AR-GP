@@ -7,8 +7,8 @@ GridView gridview_furnitureList(
   required var data,
   required Function onPressed,
   required var icon,
-   Function? spwan,
-   BuildContext? context,
+  Function? spwan,
+  BuildContext? context,
   required bool isSpwaned
 }
     ){

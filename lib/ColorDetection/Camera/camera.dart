@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:corner_ar_gp/components/getdata_components.dart';
 import 'package:corner_ar_gp/main_screens/home_screen/user_homescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -9,9 +10,7 @@ class Camera extends StatefulWidget {
   static const routeName = 'camera';
 
   List<CameraDescription> cameras;
-  //CameraController cameraController;
   Camera(this.cameras);//,this.cameraController);
-
 
   @override
   _CameraState createState() => _CameraState(cameras);
@@ -23,7 +22,6 @@ class _CameraState extends State<Camera> {
 
   bool img = false;
   late CameraController cameraController;
-
   late Future<void> _initializeControllerFuture;
 
 
@@ -53,11 +51,13 @@ class _CameraState extends State<Camera> {
                   Icon(Icons.navigate_next,color: Colors.white,),
                 ],
               ),
-            onPressed: () {
+            onPressed: () async{
+              var categoryData = await getData("Category");
+              var furnitureData = await getDataFurniture("Furniture","Category");
               Navigator.pushReplacement<void, void>(
                 context,
                 MaterialPageRoute<void>(
-                  builder: (context) => UserHomeScreen(const []),
+                  builder: (context) => UserHomeScreen(const [],categoryData,furnitureData),
                 ),
               );
             },
@@ -85,18 +85,14 @@ class _CameraState extends State<Camera> {
               try {
                 // Ensure that the camera is initialized.
                 await _initializeControllerFuture;
-
                 // Attempt to take a picture and get the file `image` where it was saved.
                 final image = await cameraController.takePicture();
-
                 final ImageProvider imageprovide = Image.file(File(image.path)).image;
                 // If the picture was taken, display it on a new screen.
-
                 //AssetImage(image.name),
-
                 PaletteGenerator paletteGenerator = await PaletteGenerator.fromImageProvider(
                   imageprovide,
-                  size: Size(256.0, 170.0),
+                  size: const Size(256.0, 170.0),
                   maximumColorCount: 20,
                 );
 
@@ -124,10 +120,12 @@ class _CameraState extends State<Camera> {
                   paletteColors.add(paletteGenerator.mutedColor?.color);
                 }
 
+                var categoryData = await getData("Category");
+                var furnitureData = await getDataFurniture("Furniture","Category");
                 Navigator.pushReplacement<void, void>(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (context) => UserHomeScreen(paletteColors),
+                    builder: (context) => UserHomeScreen(paletteColors,categoryData,furnitureData),
                   ),
                 );
               } catch (e) {
